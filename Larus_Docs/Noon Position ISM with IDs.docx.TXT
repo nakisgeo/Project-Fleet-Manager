@@ -1,0 +1,202 @@
+NOON POSITION                                              SHIP NAME
+
+<204>
+<205>
+<206>
+<207>
+
+1.
+LATITUDE
+LONGITUDE
+TTL STEAM HRS
+TTL STEAM MILES
+
+
+
+
+
+
+
+
+<220>
+<209>
+<208>
+
+
+2.
+M/E RPM
+SHIP SPEED
+WIND DIRECTION
+
+
+
+
+
+
+
+
+
+<270+271+272+273>
+<219+232>
+<255>
+<258+259+260>
+
+3.
+FUEL CONS
+DIESEL CONS
+FRESH/W CONS
+BLR FO-DO CONS
+
+
+
+
+
+
+
+
+<274>
+<245+246>
+<275>
+
+
+4.
+M/E LO CONS
+CYL. OIL CONS
+D/G LO CONS
+
+
+
+
+
+
+
+
+
+<239/240>
+<241+242>
+<254>
+
+
+5.
+FUEL ROB 
+DIESEL ROB
+FRESH/W ROB
+
+
+
+
+
+
+
+
+
+<250>
+<248>
+<269/268>
+<252>
+<251>
+
+6.
+M/E LO ROB
+SUMP/T
+CYL. OIL ROB
+D/G OIL ROB
+M/E RENOVATING
+
+
+
+
+
+
+
+
+<227/228>
+<225>
+<214>
+
+7.
+M/E EXH. TEMP MAX/MIN
+SCAV TEMP
+SEA/W TEMP
+
+
+
+
+
+
+
+
+<278>
+<226>
+
+
+
+8.
+GOV. CONTR.
+LOAD IND.
+
+
+
+
+
+
+
+
+
+
+<222>
+<223>
+<224>
+
+
+9.
+T/C No1 RPM
+T/C No2 RPM
+SCAV AIR PRESS
+
+
+
+
+
+
+
+
+
+<279>
+<236+237+238>
+<256+257>
+
+
+10.
+D/G UNITS RUN
+ELEC. LOAD KW
+FRESH/W PRODUCT/DAY
+
+
+
+
+
+
+
+
+
+<210>
+<212>
+<211>
+
+
+11.
+SHIP SLIP
+ETA DAY/TIME
+NEXT PORT
+
+
+REMARKS:
+<267>
+
+
+
+
+
+
+

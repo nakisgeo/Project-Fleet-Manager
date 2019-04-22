@@ -1,0 +1,710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Name>FleetManager</Name>
+    <ProjectGuid>{70e5ec7d-6276-4981-8fcb-c04d0a3600e8}</ProjectGuid>
+    <SchemaVersion>2.0</SchemaVersion>
+    <OutputType>WinExe</OutputType>
+    <Nologo>true</Nologo>
+    <VOFloatLiterals>false</VOFloatLiterals>
+    <GenerateFullPaths>false</GenerateFullPaths>
+    <RootNamespace>FleetManager</RootNamespace>
+    <AssemblyName>FleetManager</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <ProjectName>$(MSBuildProjectName)</ProjectName>
+    <ProjectExt>$(MSBuildProjectExtension)</ProjectExt>
+    <ProjectDir>$(MSBuildProjectDirectory)</ProjectDir>
+    <ProjectFileName>$(MSBuildProjectFile)</ProjectFileName>
+    <ProjectPath>$(ProjectDir)$(ProjectFileName)</ProjectPath>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+    <AllowUnsafeCode>false</AllowUnsafeCode>
+    <CaseSensitiveIdentifiers>false</CaseSensitiveIdentifiers>
+    <ZeroBasedArrays>false</ZeroBasedArrays>
+    <AllMethodsVirtual>false</AllMethodsVirtual>
+    <VOCompatibleStringComparisons>false</VOCompatibleStringComparisons>
+    <VOCompatibleCallingConventions>false</VOCompatibleCallingConventions>
+    <VOCompatibleImplicitRetvals>false</VOCompatibleImplicitRetvals>
+    <AllowLateBinding>false</AllowLateBinding>
+    <ImplicitSignConversions>false</ImplicitSignConversions>
+    <VOCompatibleStringInit>false</VOCompatibleStringInit>
+    <VOResolveFunctionPointers>false</VOResolveFunctionPointers>
+    <VOCompatibleImplicitConversions>false</VOCompatibleImplicitConversions>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <CheckFloatOverflows>false</CheckFloatOverflows>
+    <IntegerDivisionsReturnFloat>false</IntegerDivisionsReturnFloat>
+    <VOCompatiblePreprocessor>false</VOCompatiblePreprocessor>
+    <VOCompatibleIIF>false</VOCompatibleIIF>
+    <VOCompatibleArithmeticConversions>false</VOCompatibleArithmeticConversions>
+    <ImplicitNamespaceLookup>true</ImplicitNamespaceLookup>
+    <UseDefaultNamespace>false</UseDefaultNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <EmitDebugInformation>true</EmitDebugInformation>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DisabledWarnings>3009</DisabledWarnings>
+    <OutputPath>$(SolutionDir)\Debug\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <AdditionalOptions />
+    <AdditionalLibPaths />
+    <IncludePaths />
+    <GeneratePreprocessorOutput>false</GeneratePreprocessorOutput>
+    <NoStandardDefs>false</NoStandardDefs>
+    <AssemblyOriginatorKeyFile />
+    <SignAssembly>false</SignAssembly>
+    <DelaySign>false</DelaySign>
+    <Nologo>true</Nologo>
+    <DocumentationFile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <EmitDebugInformation>false</EmitDebugInformation>
+    <DefineConstants>NDEBUG;TRACE</DefineConstants>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DisabledWarnings>3009</DisabledWarnings>
+    <OutputPath>$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AppModule.InterProcessComm, Version=1.0.0.23359, Culture=neutral, PublicKeyToken=null">
+      <Name>AppModule.InterProcessComm</Name>
+      <AssemblyName>AppModule.InterProcessComm.dll</AssemblyName>
+      <Private>True</Private>
+      <HintPath>..\_Softway.Common\AppModule.InterProcessComm.dll</HintPath>
+    </Reference>
+    <Reference Include="AppModule.NamedPipes, Version=1.0.1.23359, Culture=neutral, PublicKeyToken=null">
+      <Name>AppModule.NamedPipes</Name>
+      <AssemblyName>AppModule.NamedPipes.dll</AssemblyName>
+      <Private>True</Private>
+      <HintPath>..\_Softway.Common\AppModule.NamedPipes.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoUpdateLibrary, Version=1.3.1.0, Culture=neutral, PublicKeyToken=null">
+      <Name>AutoUpdateLibrary</Name>
+      <AssemblyName>AutoUpdateLibrary.dll</AssemblyName>
+      <HintPath>..\_Softway.Common\Vulcan\AutoUpdateLibrary.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.BonusSkins.v16.2, Version=16.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">
+      <Name>DevExpress.BonusSkins.v16.2</Name>
+      <AssemblyName>DevExpress.BonusSkins.v16.2.dll</AssemblyName>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\DevExpress 16.2\Components\Bin\Framework\DevExpress.BonusSkins.v16.2.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.Data.v16.2, Version=16.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">
+      <Name>DevExpress.Data.v16.2</Name>
+      <AssemblyName>DevExpress.Data.v16.2.dll</AssemblyName>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\DevExpress 16.2\Components\Bin\Framework\DevExpress.Data.v16.2.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.Printing.v16.2.Core, Version=16.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">
+      <Name>DevExpress.Printing.v16.2.Core</Name>
+      <AssemblyName>DevExpress.Printing.v16.2.Core.dll</AssemblyName>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\DevExpress 16.2\Components\Bin\Framework\DevExpress.Printing.v16.2.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.Utils.v16.2, Version=16.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">
+      <Name>DevExpress.Utils.v16.2</Name>
+      <AssemblyName>DevExpress.Utils.v16.2.dll</AssemblyName>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\DevExpress 16.2\Components\Bin\Framework\DevExpress.Utils.v16.2.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraBars.v16.2, Version=16.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">
+      <Name>DevExpress.XtraBars.v16.2</Name>
+      <AssemblyName>DevExpress.XtraBars.v16.2.dll</AssemblyName>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\DevExpress 16.2\Components\Bin\Framework\DevExpress.XtraBars.v16.2.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraEditors.v16.2, Version=16.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">
+      <Name>DevExpress.XtraEditors.v16.2</Name>
+      <AssemblyName>DevExpress.XtraEditors.v16.2.dll</AssemblyName>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\DevExpress 16.2\Components\Bin\Framework\DevExpress.XtraEditors.v16.2.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraGrid.v16.2, Version=16.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">
+      <Name>DevExpress.XtraGrid.v16.2</Name>
+      <AssemblyName>DevExpress.XtraGrid.v16.2.dll</AssemblyName>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\DevExpress 16.2\Components\Bin\Framework\DevExpress.XtraGrid.v16.2.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraLayout.v16.2, Version=16.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">
+      <Name>DevExpress.XtraLayout.v16.2</Name>
+      <AssemblyName>DevExpress.XtraLayout.v16.2.dll</AssemblyName>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\DevExpress 16.2\Components\Bin\Framework\DevExpress.XtraLayout.v16.2.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraNavBar.v16.2, Version=16.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">
+      <Name>DevExpress.XtraNavBar.v16.2</Name>
+      <AssemblyName>DevExpress.XtraNavBar.v16.2.dll</AssemblyName>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\DevExpress 16.2\Components\Bin\Framework\DevExpress.XtraNavBar.v16.2.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraPrinting.v16.2, Version=16.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">
+      <Name>DevExpress.XtraPrinting.v16.2</Name>
+      <AssemblyName>DevExpress.XtraPrinting.v16.2.dll</AssemblyName>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\DevExpress 16.2\Components\Bin\Framework\DevExpress.XtraPrinting.v16.2.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraReports.v16.2, Version=16.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">
+      <Name>DevExpress.XtraReports.v16.2</Name>
+      <AssemblyName>DevExpress.XtraReports.v16.2.dll</AssemblyName>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\DevExpress 16.2\Components\Bin\Framework\DevExpress.XtraReports.v16.2.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraRichEdit.v16.2, Version=16.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">
+      <Name>DevExpress.XtraRichEdit.v16.2</Name>
+      <AssemblyName>DevExpress.XtraRichEdit.v16.2.dll</AssemblyName>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\DevExpress 16.2\Components\Bin\Framework\DevExpress.XtraRichEdit.v16.2.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraTreeList.v16.2, Version=16.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">
+      <Name>DevExpress.XtraTreeList.v16.2</Name>
+      <AssemblyName>DevExpress.XtraTreeList.v16.2.dll</AssemblyName>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\DevExpress 16.2\Components\Bin\Framework\DevExpress.XtraTreeList.v16.2.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73">
+      <Name>ICSharpCode.SharpZipLib</Name>
+      <AssemblyName>ICSharpCode.SharpZipLib.dll</AssemblyName>
+      <HintPath>..\_Softway.Common\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="License, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f80b1601a4d8a9dd">
+      <Name>License</Name>
+      <AssemblyName>License.dll</AssemblyName>
+      <Private>True</Private>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Eziriz\.NET Reactor\SDK\Binaries\License.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Maps.MapControl.WPF, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <Name>Microsoft.Maps.MapControl.WPF</Name>
+      <AssemblyName>Microsoft.Maps.MapControl.WPF.dll</AssemblyName>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Bing Maps WPF Control\V1\Libraries\Microsoft.Maps.MapControl.WPF.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+      <Name>Microsoft.Office.Interop.Excel</Name>
+      <AssemblyName>Microsoft.Office.Interop.Excel.dll</AssemblyName>
+      <HintPath>..\_Softway.Common\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PdfSharp, Version=1.31.1789.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb">
+      <Name>PdfSharp</Name>
+      <AssemblyName>PdfSharp.dll</AssemblyName>
+      <HintPath>..\_Softway.Common\PdfSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PresentationCore, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <Name>PresentationCore</Name>
+      <AssemblyName>PresentationCore.dll</AssemblyName>
+    </Reference>
+    <Reference Include="PresentationFramework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <Name>PresentationFramework</Name>
+      <AssemblyName>PresentationFramework.dll</AssemblyName>
+    </Reference>
+    <Reference Include="SocketTools.InternetMail, Version=9.3.9300.2758, Culture=neutral, PublicKeyToken=27cecfc1a941d5cd">
+      <Name>SocketTools.InternetMail</Name>
+      <AssemblyName>SocketTools.InternetMail.dll</AssemblyName>
+      <HintPath>..\_Softway.Common\SocketTools.InternetMail.dll</HintPath>
+      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Softway.Common, Version=1.5.2.0, Culture=neutral, PublicKeyToken=null">
+      <Name>Softway.Common</Name>
+      <AssemblyName>Softway.Common.dll</AssemblyName>
+      <HintPath>..\_Softway.Common\Vulcan\Softway.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <Name>System.Web</Name>
+      <AssemblyName>System.Web.dll</AssemblyName>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Extensions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <Name>System.Web.Extensions</Name>
+      <AssemblyName>System.Web.Extensions.dll</AssemblyName>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Web.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Input.Manipulations, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <Name>System.Windows.Input.Manipulations</Name>
+      <AssemblyName>System.Windows.Input.Manipulations.dll</AssemblyName>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <Name>WindowsBase</Name>
+      <AssemblyName>WindowsBase.dll</AssemblyName>
+    </Reference>
+    <Reference Include="WindowsFormsIntegration, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <Name>WindowsFormsIntegration</Name>
+      <AssemblyName>WindowsFormsIntegration.dll</AssemblyName>
+    </Reference>
+    <Reference Include="_CompanyLicenses, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <Name>_CompanyLicenses</Name>
+      <AssemblyName>_CompanyLicenses.dll</AssemblyName>
+      <HintPath>..\_Softway.Common\_CompanyLicenses.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AboutDialog.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Alarms\Add_Alarm_Form.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Approval Form\Approval History\ApprovalHistoryForm.Methods.prg" />
+    <Compile Include="Approval Form\Approval History\ApprovalHistoryForm.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Approval Form\ApprovalForm.prg" />
+    <Compile Include="Approval Form\Approval_Form.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Approval Form\Approval_Form.Methods.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BingMaps\BingMapForm AllWaypoints.prg" />
+    <Compile Include="BingMaps\BingMapForm Methods.prg" />
+    <Compile Include="BingMaps\BingMapForm.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BingMaps\BingMapsForm ContextMenu.prg" />
+    <Compile Include="BingMaps\BingMapUserControl Methods.prg" />
+    <Compile Include="BingMaps\BingMapUserControl.prg">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Cargoes\AddCargo Methods.prg" />
+    <Compile Include="Cargoes\AddCargo.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Cargoes\Cargoes Form.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Excel Reports\SelectDatesAdvancedForm.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Files\ReportsTabForm.Files.prg" />
+    <Compile Include="Items\Lists\DMFLists Methods.prg" />
+    <Compile Include="Items\Lists\DMFLists.prg" />
+    <Compile Include="Items\Lists\ItemsForm.LinkedLists.prg" />
+    <Compile Include="Items\Lists\MainForm.LinkedLists.prg" />
+    <Compile Include="Items\Lists\ReportTabForm.LinkedLists.prg" />
+    <Compile Include="Items\Logs\ReportChangeLog.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Items\SelectReportForm Methods.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Items\SelectReportForm.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MRV Reporting\MRV.ResultForm.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MRV Reporting\MRV.ResutlForm.Code.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PDFSharp Methods.prg" />
+    <Compile Include="Excel Reports\ExcelReportItems.prg" />
+    <Compile Include="Excel Reports\SelectDatesSimpleForm.prg" />
+    <Compile Include="Files\Files_Form_Office.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fleet\FleetForm Methods.prg" />
+    <Compile Include="Fleet\FleetForm.prg" />
+    <Compile Include="Global Settings\MatchSettings Methods.prg" />
+    <Compile Include="Global Settings\MatchSettings.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="HaversineFormula\DistanceCalculation.prg" />
+    <Compile Include="HaversineFormula\HaversiveFormula.prg" />
+    <Compile Include="HaversineFormula\TrigonometricalFunctions.prg" />
+    <Compile Include="ISM Forms\ISM Form SearchAndReplace.prg" />
+    <Compile Include="ISM Forms\ISM_Forms.prg" />
+    <Compile Include="Items\AddColumnForm Methods.prg" />
+    <Compile Include="Items\AddColumnForm.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Items\ComboBoxDefinitionForm.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Items\FormulaCompiler.prg" />
+    <Compile Include="Items\ItemCategories.prg" />
+    <Compile Include="Items\ItemsForm Methods.prg" />
+    <Compile Include="Items\ItemsForm.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Items\RenameForm.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LBSuggest Methods.prg" />
+    <Compile Include="MainForm Methods.prg" />
+    <Compile Include="MainForm NavBar Methods.prg" />
+    <Compile Include="MainForm.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Match Methods\MatchForm Methods.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Match Methods\MatchForm.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.prg">
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Report Generators\Class CustomItems.prg" />
+    <Compile Include="Report Generators\CopyReportDialog Methods.prg" />
+    <Compile Include="Report Generators\CopyReportDialog.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Report Generators\CustomItemsForm Methods.prg" />
+    <Compile Include="Report Generators\CustomItemsForm.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Report Generators\FormulaEditorForm.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Report Generators\ReportDefinitionForm Compiler.prg" />
+    <Compile Include="Report Generators\ReportDefinitionForm Methods.prg" />
+    <Compile Include="Report Generators\ReportDefinitionForm.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Report Generators\ReportDefinitionRenameForm.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Report Generators\XtraReportCustom Methods.prg" />
+    <Compile Include="Report Generators\XtraReportCustom.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Report Generators\XtraReportCustom_DataSet.prg" />
+    <Compile Include="Reports\ComboboxColors\ComboboxColors.Methods.prg" />
+    <Compile Include="Reports\ComboboxColors\ComboboxColors.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reports\ComboboxColors\ComboboxColors.Variables.prg" />
+    <Compile Include="Reports\Forms\FormPrint.prg" />
+    <Compile Include="Reports\Forms\ReportTabForm.Methods.prg" />
+    <Compile Include="Reports\Forms\ReportTabForm.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reports\Forms\ReportTabForm.PrintTable.prg" />
+    <Compile Include="Reports\Forms\ReportTabForm.ShowForm.prg" />
+    <Compile Include="Reports\ReportsForm Methods.prg" />
+    <Compile Include="Reports\ReportsForm.Designer.prg">
+      <DependentUpon>ReportsForm.prg</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\ReportsForm.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reports\SelectVoyageForm Methods.prg" />
+    <Compile Include="Reports\SelectVoyageForm.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Samos.Reports\MainForm.ReportsOnTables.prg" />
+    <Compile Include="Samos.Reports\TableReports.ExportDetailsGridToExcel.prg" />
+    <Compile Include="Samos.Reports\TableReports.Methods.prg">
+    </Compile>
+    <Compile Include="Samos.Reports\TableReports.OverdueReport.prg" />
+    <Compile Include="Samos.Reports\TableReports.ReportPerCategoryVessel.prg" />
+    <Compile Include="Samos.Reports\TableReportsSelectionForm.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Samos.Reports\TableReports.GvDetails.prg" />
+    <Compile Include="ServerNamedPipe\MainForm ServerNamedPipe.prg" />
+    <Compile Include="ServerNamedPipe\MainForm SingleInstance.prg" />
+    <Compile Include="ServerNamedPipe\PipeManager.prg" />
+    <Compile Include="ServerNamedPipe\ServerNamedPipe.prg" />
+    <Compile Include="Setup\Groups\GroupsSetupForm Methods.prg" />
+    <Compile Include="Setup\Groups\GroupsSetupForm.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Setup\Users\UsersSetupForm Methods.prg" />
+    <Compile Include="Setup\Users\UsersSetupForm.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SplashScreen Methods.prg" />
+    <Compile Include="SplashScreen.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Start.prg">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.prg">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tools\BodyISMForm Methods.prg" />
+    <Compile Include="Tools\BodyISMForm.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Tools\Import ExcelNoonReport.prg" />
+    <Compile Include="Tools\ImportFleetManagerData.prg" />
+    <Compile Include="Tools\ToolsForm Methods.prg" />
+    <Compile Include="Tools\ToolsForm.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Vessels\VesselsForm Methods.prg" />
+    <Compile Include="Vessels\VesselsForm.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Voyages\RoutingDetails.prg">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Voyages\Routing_Details Methods.prg" />
+    <Compile Include="Voyages\Select_Company Methods.prg" />
+    <Compile Include="Voyages\Select_Company.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Voyages\Select_Operation Methods.prg" />
+    <Compile Include="Voyages\Select_Operation.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Voyages\VoyagesForm Methods.prg" />
+    <Compile Include="Voyages\VoyagesForm.GridRoutings.prg" />
+    <Compile Include="Voyages\VoyagesForm.MRV.prg" />
+    <Compile Include="Voyages\VoyagesForm.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_CreateMissingColumns.prg" />
+    <Compile Include="_CreateSQLTables.prg" />
+    <Compile Include="_GlobalVariables.prg" />
+    <EmbeddedResource Include="AboutDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AboutDialog.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Alarms\Add_Alarm_Form.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Add_Alarm_Form.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Approval Form\Approval History\ApprovalHistoryForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ApprovalHistoryForm.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Approval Form\Approval_Form.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Approval_Form.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BingMaps\BingMapForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>BingMapForm.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BingMaps\BingMapUserControl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>BingMapUserControl.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Cargoes\AddCargo.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AddCargo.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Cargoes\Cargoes Form.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Cargoes Form.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Excel Reports\SelectDatesAdvancedForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>SelectDatesAdvancedForm.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Excel Reports\SelectDatesSimpleForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>SelectDatesSimpleForm.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Files\Files_Form_Office.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Files_Form_Office.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Global Settings\MatchSettings.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>MatchSettings.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Items\AddColumnForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AddColumnForm.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Items\ComboBoxDefinitionForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ComboBoxDefinitionForm.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Items\ItemsForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ItemsForm.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Items\Logs\ReportChangeLog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ReportChangeLog.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Items\RenameForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>RenameForm.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>MainForm.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Match Methods\MatchForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>MatchForm.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MRV Reporting\MRV.ResultForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>MRV.ResultForm.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report Generators\CopyReportDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>CopyReportDialog.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report Generators\CustomItemsForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>CustomItemsForm.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report Generators\FormulaEditorForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FormulaEditorForm.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report Generators\ReportDefinitionForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ReportDefinitionForm.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report Generators\ReportDefinitionRenameForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ReportDefinitionRenameForm.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report Generators\XtraReportCustom.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>XtraReportCustom.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ComboboxColors\ComboboxColors.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ComboboxColors.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Forms\ReportTabForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ReportTabForm.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ReportsForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ReportsForm.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\SelectVoyageForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>SelectVoyageForm.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Samos.Reports\TableReportsSelectionForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>TableReportsSelectionForm.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Setup\Users\UsersSetupForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>UsersSetupForm.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SplashScreen.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>SplashScreen.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tools\BodyISMForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>BodyISMForm.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tools\ToolsForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ToolsForm.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Vessels\VesselsForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>VesselsForm.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Voyages\RoutingDetails.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>RoutingDetails.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Voyages\Select_Company.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Select_Company.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Voyages\Select_Operation.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Select_Operation.prg</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Voyages\VoyagesForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>VoyagesForm.prg</DependentUpon>
+    </EmbeddedResource>
+    <None Include="App.config" />
+    <None Include="BingMaps\BingMapUserControl.txt" />
+    <None Include="MainForm.txt" />
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+    </None>
+    <None Include="_Documentation.txt" />
+    <None Include="_README.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Approval Form\Approval History" />
+    <Folder Include="BingMaps" />
+    <Folder Include="Items" />
+    <Folder Include="ISM Forms" />
+    <Folder Include="Excel Reports" />
+    <Folder Include="HaversineFormula" />
+    <Folder Include="Files" />
+    <Folder Include="Cargoes" />
+    <Folder Include="Alarms" />
+    <Folder Include="Fleet" />
+    <Folder Include="Items\Lists" />
+    <Folder Include="Items\Logs" />
+    <Folder Include="Match Methods" />
+    <Folder Include="Global Settings" />
+    <Folder Include="Approval Form" />
+    <Folder Include="MRV Reporting" />
+    <Folder Include="Reports\ComboboxColors" />
+    <Folder Include="Samos.Reports" />
+    <Folder Include="Reports\Forms" />
+    <Folder Include="Setup" />
+    <Folder Include="Setup\Groups" />
+    <Folder Include="Setup\Users" />
+    <Folder Include="ServerNamedPipe" />
+    <Folder Include="Report Generators" />
+    <Folder Include="Voyages" />
+    <Folder Include="Tools" />
+    <Folder Include="Reports" />
+    <Folder Include="Vessels" />
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <NativeResource Include="Properties\AppIcon.rc" />
+    <NativeResource Include="Properties\version.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Project MapUserControl\WpfMapUserControl.vnproj">
+      <Name>WpfMapUserControl</Name>
+      <Project>{18175e59-0ad0-46f5-8b79-575ed27e1b47}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Vulcan.NET\v4.0\Vulcan.v4.5.targets" />
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+  </PropertyGroup>
+  <ProjectExtensions />
+</Project>

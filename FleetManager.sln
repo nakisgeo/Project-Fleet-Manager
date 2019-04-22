@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{5891B814-A2E0-4E64-9A2F-2C2ECAB940FE}") = "FleetManager", "FleetManager.vnproj", "{70E5EC7D-6276-4981-8FCB-C04D0A3600E8}"
+EndProject
+Project("{5891B814-A2E0-4E64-9A2F-2C2ECAB940FE}") = "WpfMapUserControl", "..\Project MapUserControl\WpfMapUserControl.vnproj", "{18175E59-0AD0-46F5-8B79-575ED27E1B47}"
+EndProject
+Project("{5891B814-A2E0-4E64-9A2F-2C2ECAB940FE}") = "FleetManagerVessel", "..\Project Fleet Manager Vessel\FleetManagerVessel.vnproj", "{868ED089-A194-4589-83C3-8460B53615BF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{70E5EC7D-6276-4981-8FCB-C04D0A3600E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70E5EC7D-6276-4981-8FCB-C04D0A3600E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70E5EC7D-6276-4981-8FCB-C04D0A3600E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70E5EC7D-6276-4981-8FCB-C04D0A3600E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18175E59-0AD0-46F5-8B79-575ED27E1B47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18175E59-0AD0-46F5-8B79-575ED27E1B47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18175E59-0AD0-46F5-8B79-575ED27E1B47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18175E59-0AD0-46F5-8B79-575ED27E1B47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{868ED089-A194-4589-83C3-8460B53615BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{868ED089-A194-4589-83C3-8460B53615BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{868ED089-A194-4589-83C3-8460B53615BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{868ED089-A194-4589-83C3-8460B53615BF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

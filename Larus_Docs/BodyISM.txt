@@ -1,0 +1,29 @@
+From: "LITO" <lito@gtships.com>
+To: <larus@larus.gr>
+Date: Thu, 08 May 2014 12:27:43 +0000
+
+TO: LARUS S.A.
+FM: MASTER MV LITO
+DD: 08/05/2014
+
+SUB: DAILY NOON REPORT
+
+NOON POSITION: SHIP NAME / MV LITO / ZD-4/GMT+4
+
+1) 2324N 05912E // 24H // 284NM//
+2) 66.10// 11.83 // S4//
+3) 19.48 // 2.12 / 12 // NIL//?????
+4) NIL // 120 // NIL//?????
+5) LS:251.80 // HS:1149.842 // 25.49 // 312//
+6) 16300 // 10379 // LS=6300 HS=13580 // 3600 // NIL//?????
+7) 345-330 // 40 // 28//
+8) 6.40// 44 // 3571//????
+9) 8360 // NIL // 0.70//??
+10) DG=3 // 475 // 19.20//
+11) -1.42 // (11KT) 07-JUNE-14 1511LT SANTOS
+
+REMARKS: DTG =8032NM - PORT: SANTOS, BRASIL
+
+1) ETA (11.50K) 06-JUNE-14 0726LT SANTOS
+
+BRGDS MASTER CHENG

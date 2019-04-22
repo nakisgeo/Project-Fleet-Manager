@@ -1,0 +1,4 @@
+// AppIcon.prg
+1 ICON "ReportTimeline.ico"
+2 ICON "cloudservice.ico"
+3 ICON "Softway.ico"

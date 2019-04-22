@@ -1,0 +1,366 @@
+PARTIAL CLASS MainForm INHERIT DevExpress.XtraEditors.XtraForm
+    PRIVATE defaultLookAndFeel AS DevExpress.LookAndFeel.DefaultLookAndFeel
+    PRIVATE splitContainerControl_Main AS DevExpress.XtraEditors.SplitContainerControl
+    PRIVATE splitContainerControl_LBC AS DevExpress.XtraEditors.SplitContainerControl
+    PRIVATE LBCVessels AS DevExpress.XtraEditors.ListBoxControl
+    PRIVATE BingMapUserControl AS BingMapUserControl
+    PRIVATE LBCReports AS DevExpress.XtraEditors.ListBoxControl
+    /// <summary>
+    /// Required designer variable.
+    /// </summary>
+    PRIVATE components AS System.ComponentModel.IContainer
+    CONSTRUCTOR()
+      SUPER()
+      SELF:InitializeComponent()
+      RETURN
+    
+   /// <summary>
+   /// Clean up any resources being used.
+   /// </summary>
+   /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+    PROTECTED METHOD Dispose( disposing AS LOGIC ) AS VOID
+      IF disposing && components != NULL
+         components:Dispose()
+      ENDIF
+      SUPER:Dispose( disposing )
+      RETURN
+    
+   /// <summary>
+   /// Required method for Designer support - do not modify
+   /// the contents of this method with the code editor.
+   /// </summary>
+    PRIVATE METHOD InitializeComponent() AS System.Void
+        SELF:components := System.ComponentModel.Container{}
+        LOCAL map1 := Microsoft.Maps.MapControl.WPF.Map{} AS Microsoft.Maps.MapControl.WPF.Map
+        LOCAL location1 := Microsoft.Maps.MapControl.WPF.Location{} AS Microsoft.Maps.MapControl.WPF.Location
+        LOCAL applicationIdCredentialsProvider1 := Microsoft.Maps.MapControl.WPF.ApplicationIdCredentialsProvider{} AS Microsoft.Maps.MapControl.WPF.ApplicationIdCredentialsProvider
+        LOCAL roadMode1 := Microsoft.Maps.MapControl.WPF.RoadMode{} AS Microsoft.Maps.MapControl.WPF.RoadMode
+        LOCAL canvas1 := System.Windows.Controls.Canvas{} AS System.Windows.Controls.Canvas
+        LOCAL canvas2 := System.Windows.Controls.Canvas{} AS System.Windows.Controls.Canvas
+        LOCAL canvas3 := System.Windows.Controls.Canvas{} AS System.Windows.Controls.Canvas
+        LOCAL canvas4 := System.Windows.Controls.Canvas{} AS System.Windows.Controls.Canvas
+        LOCAL canvas5 := System.Windows.Controls.Canvas{} AS System.Windows.Controls.Canvas
+        LOCAL canvas6 := System.Windows.Controls.Canvas{} AS System.Windows.Controls.Canvas
+        LOCAL canvas7 := System.Windows.Controls.Canvas{} AS System.Windows.Controls.Canvas
+        LOCAL image1 := System.Windows.Controls.Image{} AS System.Windows.Controls.Image
+        LOCAL matrixTransform1 := System.Windows.Media.MatrixTransform{} AS System.Windows.Media.MatrixTransform
+        LOCAL resources := System.ComponentModel.ComponentResourceManager{typeof(MainForm)} AS System.ComponentModel.ComponentResourceManager
+        LOCAL pathGeometry1 := System.Windows.Media.PathGeometry{} AS System.Windows.Media.PathGeometry
+        LOCAL canvas8 := System.Windows.Controls.Canvas{} AS System.Windows.Controls.Canvas
+        LOCAL image2 := System.Windows.Controls.Image{} AS System.Windows.Controls.Image
+        LOCAL matrixTransform2 := System.Windows.Media.MatrixTransform{} AS System.Windows.Media.MatrixTransform
+        LOCAL pathGeometry2 := System.Windows.Media.PathGeometry{} AS System.Windows.Media.PathGeometry
+        LOCAL canvas9 := System.Windows.Controls.Canvas{} AS System.Windows.Controls.Canvas
+        LOCAL image3 := System.Windows.Controls.Image{} AS System.Windows.Controls.Image
+        LOCAL matrixTransform3 := System.Windows.Media.MatrixTransform{} AS System.Windows.Media.MatrixTransform
+        LOCAL pathGeometry3 := System.Windows.Media.PathGeometry{} AS System.Windows.Media.PathGeometry
+        LOCAL canvas10 := System.Windows.Controls.Canvas{} AS System.Windows.Controls.Canvas
+        LOCAL image4 := System.Windows.Controls.Image{} AS System.Windows.Controls.Image
+        LOCAL matrixTransform4 := System.Windows.Media.MatrixTransform{} AS System.Windows.Media.MatrixTransform
+        LOCAL pathGeometry4 := System.Windows.Media.PathGeometry{} AS System.Windows.Media.PathGeometry
+        LOCAL canvas11 := System.Windows.Controls.Canvas{} AS System.Windows.Controls.Canvas
+        LOCAL image5 := System.Windows.Controls.Image{} AS System.Windows.Controls.Image
+        LOCAL matrixTransform5 := System.Windows.Media.MatrixTransform{} AS System.Windows.Media.MatrixTransform
+        LOCAL pathGeometry5 := System.Windows.Media.PathGeometry{} AS System.Windows.Media.PathGeometry
+        LOCAL canvas12 := System.Windows.Controls.Canvas{} AS System.Windows.Controls.Canvas
+        LOCAL image6 := System.Windows.Controls.Image{} AS System.Windows.Controls.Image
+        LOCAL matrixTransform6 := System.Windows.Media.MatrixTransform{} AS System.Windows.Media.MatrixTransform
+        LOCAL pathGeometry6 := System.Windows.Media.PathGeometry{} AS System.Windows.Media.PathGeometry
+        LOCAL canvas13 := System.Windows.Controls.Canvas{} AS System.Windows.Controls.Canvas
+        LOCAL image7 := System.Windows.Controls.Image{} AS System.Windows.Controls.Image
+        LOCAL matrixTransform7 := System.Windows.Media.MatrixTransform{} AS System.Windows.Media.MatrixTransform
+        LOCAL pathGeometry7 := System.Windows.Media.PathGeometry{} AS System.Windows.Media.PathGeometry
+        LOCAL canvas14 := System.Windows.Controls.Canvas{} AS System.Windows.Controls.Canvas
+        LOCAL image8 := System.Windows.Controls.Image{} AS System.Windows.Controls.Image
+        LOCAL matrixTransform8 := System.Windows.Media.MatrixTransform{} AS System.Windows.Media.MatrixTransform
+        LOCAL pathGeometry8 := System.Windows.Media.PathGeometry{} AS System.Windows.Media.PathGeometry
+        SELF:defaultLookAndFeel := DevExpress.LookAndFeel.DefaultLookAndFeel{SELF:components}
+        SELF:splitContainerControl_Main := DevExpress.XtraEditors.SplitContainerControl{}
+        SELF:splitContainerControl_LBC := DevExpress.XtraEditors.SplitContainerControl{}
+        SELF:LBCReports := DevExpress.XtraEditors.ListBoxControl{}
+        SELF:LBCVessels := DevExpress.XtraEditors.ListBoxControl{}
+        SELF:BingMapUserControl := BingMapUserControl{}
+        ((System.ComponentModel.ISupportInitialize)(SELF:splitContainerControl_Main)):BeginInit()
+        SELF:splitContainerControl_Main:SuspendLayout()
+        ((System.ComponentModel.ISupportInitialize)(SELF:splitContainerControl_LBC)):BeginInit()
+        SELF:splitContainerControl_LBC:SuspendLayout()
+        ((System.ComponentModel.ISupportInitialize)(SELF:LBCReports)):BeginInit()
+        ((System.ComponentModel.ISupportInitialize)(SELF:LBCVessels)):BeginInit()
+        SELF:SuspendLayout()
+        // 
+        // defaultLookAndFeel
+        // 
+        SELF:defaultLookAndFeel:LookAndFeel:SkinName := "The Asphalt World"
+        // 
+        // splitContainerControl_Main
+        // 
+        SELF:splitContainerControl_Main:Dock := System.Windows.Forms.DockStyle.Fill
+        SELF:splitContainerControl_Main:Location := System.Drawing.Point{0, 0}
+        SELF:splitContainerControl_Main:Name := "splitContainerControl_Main"
+        SELF:splitContainerControl_Main:Panel1:Controls:Add(SELF:splitContainerControl_LBC)
+        SELF:splitContainerControl_Main:Panel1:Text := "Panel1"
+        SELF:splitContainerControl_Main:Panel2:Controls:Add(SELF:BingMapUserControl)
+        SELF:splitContainerControl_Main:Panel2:Text := "Panel2"
+        SELF:splitContainerControl_Main:Size := System.Drawing.Size{888, 663}
+        SELF:splitContainerControl_Main:SplitterPosition := 190
+        SELF:splitContainerControl_Main:TabIndex := 0
+        SELF:splitContainerControl_Main:Text := "splitContainerControl1"
+        // 
+        // splitContainerControl_LBC
+        // 
+        SELF:splitContainerControl_LBC:Dock := System.Windows.Forms.DockStyle.Fill
+        SELF:splitContainerControl_LBC:Horizontal := FALSE
+        SELF:splitContainerControl_LBC:Location := System.Drawing.Point{0, 0}
+        SELF:splitContainerControl_LBC:Name := "splitContainerControl_LBC"
+        SELF:splitContainerControl_LBC:Panel1:Controls:Add(SELF:LBCReports)
+        SELF:splitContainerControl_LBC:Panel1:Text := "Panel1"
+        SELF:splitContainerControl_LBC:Panel2:Controls:Add(SELF:LBCVessels)
+        SELF:splitContainerControl_LBC:Panel2:Text := "Panel2"
+        SELF:splitContainerControl_LBC:Size := System.Drawing.Size{190, 663}
+        SELF:splitContainerControl_LBC:SplitterPosition := 197
+        SELF:splitContainerControl_LBC:TabIndex := 0
+        SELF:splitContainerControl_LBC:Text := "splitContainerControl1"
+        // 
+        // LBCReports
+        // 
+        SELF:LBCReports:Dock := System.Windows.Forms.DockStyle.Fill
+        SELF:LBCReports:Location := System.Drawing.Point{0, 0}
+        SELF:LBCReports:Name := "LBCReports"
+        SELF:LBCReports:Size := System.Drawing.Size{190, 197}
+        SELF:LBCReports:TabIndex := 0
+        // 
+        // LBCVessels
+        // 
+        SELF:LBCVessels:Dock := System.Windows.Forms.DockStyle.Fill
+        SELF:LBCVessels:Location := System.Drawing.Point{0, 0}
+        SELF:LBCVessels:Name := "LBCVessels"
+        SELF:LBCVessels:Size := System.Drawing.Size{190, 460}
+        SELF:LBCVessels:TabIndex := 1
+        // 
+        // BingMapUserControl
+        // 
+        SELF:BingMapUserControl:Dock := System.Windows.Forms.DockStyle.Fill
+        SELF:BingMapUserControl:Location := System.Drawing.Point{0, 0}
+        map1:AnimationLevel := Microsoft.Maps.MapControl.WPF.AnimationLevel.UserInput
+        location1:Altitude := 0
+        location1:AltitudeReference := Microsoft.Maps.MapControl.WPF.AltitudeReference.Ellipsoid
+        location1:Latitude := 0
+        location1:Longitude := 0
+        map1:Center := location1
+        applicationIdCredentialsProvider1:ApplicationId := "AuL4qIfpu1oYsx-pA177n21Mpcl2OYYXBzPJy_oVKGvAnTb7XSpJlS4SF4eyKchm"
+        map1:CredentialsProvider := applicationIdCredentialsProvider1
+        map1:Heading := 0
+        map1:IsTabStop := TRUE
+        map1:MapForegroundStyle := NULL
+        //canvas2:Canvas.Left := 0
+        //canvas2:Canvas.Top := 0
+        canvas2:HorizontalAlignment := System.Windows.HorizontalAlignment.Stretch
+        canvas2:IsHitTestVisible := FALSE
+        canvas2:Tag := "TilePyramidCanvas"
+        canvas2:UseLayoutRounding := FALSE
+        canvas2:VerticalAlignment := System.Windows.VerticalAlignment.Stretch
+        canvas1:Children:Add(canvas2)
+        canvas4:HorizontalAlignment := System.Windows.HorizontalAlignment.Stretch
+        canvas4:IsHitTestVisible := FALSE
+        canvas4:Tag := "TilePyramidCanvas"
+        canvas4:UseLayoutRounding := FALSE
+        canvas4:VerticalAlignment := System.Windows.VerticalAlignment.Stretch
+        canvas3:Children:Add(canvas4)
+        image1:Height := 258
+        image1:IsHitTestVisible := FALSE
+        image1:Opacity := 1
+        matrixTransform1:Matrix := ((System.Windows.Media.Matrix)(resources:GetObject("matrixTransform1.Matrix")))
+        image1:RenderTransform := matrixTransform1
+        image1:Stretch := System.Windows.Media.Stretch.None
+        image1:Width := 258
+        canvas7:Children:Add(image1)
+        canvas7:Clip := pathGeometry1
+        canvas7:HorizontalAlignment := System.Windows.HorizontalAlignment.Stretch
+        canvas7:IsHitTestVisible := FALSE
+        canvas7:Tag := "ElementCanvas"
+        canvas7:VerticalAlignment := System.Windows.VerticalAlignment.Stretch
+        image2:Height := 258
+        image2:IsHitTestVisible := FALSE
+        image2:Opacity := 1
+        matrixTransform2:Matrix := ((System.Windows.Media.Matrix)(resources:GetObject("matrixTransform2.Matrix")))
+        image2:RenderTransform := matrixTransform2
+        image2:Stretch := System.Windows.Media.Stretch.None
+        image2:Width := 258
+        canvas8:Children:Add(image2)
+        canvas8:Clip := pathGeometry2
+        canvas8:HorizontalAlignment := System.Windows.HorizontalAlignment.Stretch
+        canvas8:IsHitTestVisible := FALSE
+        canvas8:Tag := "ElementCanvas"
+        canvas8:VerticalAlignment := System.Windows.VerticalAlignment.Stretch
+        image3:Height := 258
+        image3:IsHitTestVisible := FALSE
+        image3:Opacity := 1
+        matrixTransform3:Matrix := ((System.Windows.Media.Matrix)(resources:GetObject("matrixTransform3.Matrix")))
+        image3:RenderTransform := matrixTransform3
+        image3:Stretch := System.Windows.Media.Stretch.None
+        image3:Width := 258
+        canvas9:Children:Add(image3)
+        canvas9:Clip := pathGeometry3
+        canvas9:HorizontalAlignment := System.Windows.HorizontalAlignment.Stretch
+        canvas9:IsHitTestVisible := FALSE
+        canvas9:Tag := "ElementCanvas"
+        canvas9:VerticalAlignment := System.Windows.VerticalAlignment.Stretch
+        image4:Height := 258
+        image4:IsHitTestVisible := FALSE
+        image4:Opacity := 1
+        matrixTransform4:Matrix := ((System.Windows.Media.Matrix)(resources:GetObject("matrixTransform4.Matrix")))
+        image4:RenderTransform := matrixTransform4
+        image4:Stretch := System.Windows.Media.Stretch.None
+        image4:Width := 258
+        canvas10:Children:Add(image4)
+        canvas10:Clip := pathGeometry4
+        canvas10:HorizontalAlignment := System.Windows.HorizontalAlignment.Stretch
+        canvas10:IsHitTestVisible := FALSE
+        canvas10:Tag := "ElementCanvas"
+        canvas10:VerticalAlignment := System.Windows.VerticalAlignment.Stretch
+        image5:Height := 258
+        image5:IsHitTestVisible := FALSE
+        image5:Opacity := 1
+        matrixTransform5:Matrix := ((System.Windows.Media.Matrix)(resources:GetObject("matrixTransform5.Matrix")))
+        image5:RenderTransform := matrixTransform5
+        image5:Stretch := System.Windows.Media.Stretch.None
+        image5:Width := 258
+        canvas11:Children:Add(image5)
+        canvas11:Clip := pathGeometry5
+        canvas11:HorizontalAlignment := System.Windows.HorizontalAlignment.Stretch
+        canvas11:IsHitTestVisible := FALSE
+        canvas11:Tag := "ElementCanvas"
+        canvas11:VerticalAlignment := System.Windows.VerticalAlignment.Stretch
+        image6:Height := 258
+        image6:IsHitTestVisible := FALSE
+        image6:Opacity := 1
+        matrixTransform6:Matrix := ((System.Windows.Media.Matrix)(resources:GetObject("matrixTransform6.Matrix")))
+        image6:RenderTransform := matrixTransform6
+        image6:Stretch := System.Windows.Media.Stretch.None
+        image6:Width := 258
+        canvas12:Children:Add(image6)
+        canvas12:Clip := pathGeometry6
+        canvas12:HorizontalAlignment := System.Windows.HorizontalAlignment.Stretch
+        canvas12:IsHitTestVisible := FALSE
+        canvas12:Tag := "ElementCanvas"
+        canvas12:VerticalAlignment := System.Windows.VerticalAlignment.Stretch
+        image7:Height := 258
+        image7:IsHitTestVisible := FALSE
+        image7:Opacity := 1
+        matrixTransform7:Matrix := ((System.Windows.Media.Matrix)(resources:GetObject("matrixTransform7.Matrix")))
+        image7:RenderTransform := matrixTransform7
+        image7:Stretch := System.Windows.Media.Stretch.None
+        image7:Width := 258
+        canvas13:Children:Add(image7)
+        canvas13:Clip := pathGeometry7
+        canvas13:HorizontalAlignment := System.Windows.HorizontalAlignment.Stretch
+        canvas13:IsHitTestVisible := FALSE
+        canvas13:Tag := "ElementCanvas"
+        canvas13:VerticalAlignment := System.Windows.VerticalAlignment.Stretch
+        image8:Height := 258
+        image8:IsHitTestVisible := FALSE
+        image8:Opacity := 1
+        matrixTransform8:Matrix := ((System.Windows.Media.Matrix)(resources:GetObject("matrixTransform8.Matrix")))
+        image8:RenderTransform := matrixTransform8
+        image8:Stretch := System.Windows.Media.Stretch.None
+        image8:Width := 258
+        canvas14:Children:Add(image8)
+        canvas14:Clip := pathGeometry8
+        canvas14:HorizontalAlignment := System.Windows.HorizontalAlignment.Stretch
+        canvas14:IsHitTestVisible := FALSE
+        canvas14:Tag := "ElementCanvas"
+        canvas14:VerticalAlignment := System.Windows.VerticalAlignment.Stretch
+        canvas6:Children:Add(canvas7)
+        canvas6:Children:Add(canvas8)
+        canvas6:Children:Add(canvas9)
+        canvas6:Children:Add(canvas10)
+        canvas6:Children:Add(canvas11)
+        canvas6:Children:Add(canvas12)
+        canvas6:Children:Add(canvas13)
+        canvas6:Children:Add(canvas14)
+        canvas6:HorizontalAlignment := System.Windows.HorizontalAlignment.Stretch
+        canvas6:IsHitTestVisible := FALSE
+        canvas6:Tag := "TilePyramidCanvas"
+        canvas6:UseLayoutRounding := FALSE
+        canvas6:VerticalAlignment := System.Windows.VerticalAlignment.Stretch
+        canvas5:Children:Add(canvas6)
+        roadMode1:Children:Add(canvas1)
+        roadMode1:Children:Add(canvas3)
+        roadMode1:Children:Add(canvas5)
+        map1:Mode := roadMode1
+        map1:ModeCrossFadeDuration := System.Windows.Duration{System.TimeSpan.Parse("00:00:00.5000000")}
+        map1:Name := "Map"
+        map1:SnapsToDevicePixels := TRUE
+        map1:SupportedManipulations := ((System.Windows.Input.Manipulations.Manipulations2D)((((System.Windows.Input.Manipulations.Manipulations2D.TranslateX | System.Windows.Input.Manipulations.Manipulations2D.TranslateY) ;
+                    | System.Windows.Input.Manipulations.Manipulations2D.Scale) ;
+                    | System.Windows.Input.Manipulations.Manipulations2D.Rotate)))
+        map1:UseInertia := FALSE
+        map1:ZoomLevel := 1
+        SELF:BingMapUserControl:Map := map1
+        SELF:BingMapUserControl:Name := "BingMapUserControl"
+        SELF:BingMapUserControl:Size := System.Drawing.Size{692, 663}
+        SELF:BingMapUserControl:TabIndex := 0
+        // 
+        // MainForm
+        // 
+        SELF:AutoScaleDimensions := System.Drawing.SizeF{((Single) 6), ((Single) 13)}
+        SELF:AutoScaleMode := System.Windows.Forms.AutoScaleMode.Font
+        SELF:ClientSize := System.Drawing.Size{888, 663}
+        SELF:Controls:Add(SELF:splitContainerControl_Main)
+        SELF:Icon := ((System.Drawing.Icon)(resources:GetObject("$this.Icon")))
+        SELF:LookAndFeel:SkinName := "The Asphalt World"
+        SELF:Name := "MainForm"
+        SELF:Text := "Fleet Manager"
+        SELF:FormClosing += System.Windows.Forms.FormClosingEventHandler{ SELF, @MainForm_FormClosing() }
+        SELF:FormClosed += System.Windows.Forms.FormClosedEventHandler{ SELF, @MainForm_FormClosed() }
+        SELF:Load += System.EventHandler{ SELF, @MainForm_Load() }
+        SELF:Shown += System.EventHandler{ SELF, @MainForm_Shown() }
+        ((System.ComponentModel.ISupportInitialize)(SELF:splitContainerControl_Main)):EndInit()
+        SELF:splitContainerControl_Main:ResumeLayout(FALSE)
+        ((System.ComponentModel.ISupportInitialize)(SELF:splitContainerControl_LBC)):EndInit()
+        SELF:splitContainerControl_LBC:ResumeLayout(FALSE)
+        ((System.ComponentModel.ISupportInitialize)(SELF:LBCReports)):EndInit()
+        ((System.ComponentModel.ISupportInitialize)(SELF:LBCVessels)):EndInit()
+        SELF:ResumeLayout(FALSE)
+    PRIVATE METHOD MainForm_Load( sender AS System.Object, e AS System.EventArgs ) AS System.Void
+		SELF:MainForm_OnLoad()
+        RETURN
+
+    PRIVATE METHOD MainForm_Shown( sender AS System.Object, e AS System.EventArgs ) AS System.Void
+		SELF:MainForm_OnShown()
+        RETURN
+
+    PRIVATE METHOD MainForm_FormClosing( sender AS System.Object, e AS System.Windows.Forms.FormClosingEventArgs ) AS System.Void
+		LOCAL oSplit := DevExpress.XtraEditors.SplitContainerControl[]{2} AS DevExpress.XtraEditors.SplitContainerControl[]
+		oSplit[1] := splitContainerControl_Main
+		oSplit[2] := splitContainerControl_LBC
+		IF (lAutoUpdateInProgress .or. cStartupPath:Contains("Visual Studio"))
+			oSoftway:SaveFormSettings_DevExpress(SELF, SELF:alForms, SELF:alData, oSplit)
+			RETURN
+		ENDIF
+		IF SELF:lUserLoggedOn
+			IF QuestionBox("Do you want to exit ?", "Close program") == System.Windows.Forms.DialogResult.Yes
+				oSoftway:SaveFormSettings_DevExpress(SELF, SELF:alForms, SELF:alData, oSplit)
+    			e:Cancel:=FALSE
+			ENDIF
+		ENDIF
+        RETURN
+
+    PRIVATE METHOD MainForm_FormClosed( sender AS System.Object, e AS System.Windows.Forms.FormClosedEventArgs ) AS System.Void
+		IF SELF:lUserLoggedOn
+			LOCAL cTagSelection := "" AS STRING
+
+			IF SELF:LBCReports:SelectedIndex == -1
+				SELF:cLastMainSelection := ""
+			ELSE
+				SELF:cLastMainSelection := SELF:LBCReports:GetDisplayItemValue(self:LBCReports:SelectedIndex):ToString()
+			ENDIF
+			oSoftway:SaveXMLSettings(cStartupPath+"\"+System.Windows.Forms.Application.ProductName+".XML", SELF:alForms, SELF:alData, SELF:cLastMainSelection, cTagSelection, SELF:cSkinNameLookAndFeel)
+
+			Self:ClearConnection()
+			oSoftway:ClearDirectory(cTempDocDir, 3)
+			oSoftway:ClearDirectory(cLogDir, 60)
+		ENDIF
+        RETURN
+
+END CLASS

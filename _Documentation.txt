@@ -1,0 +1,94 @@
+Vessel Outgoing Message Format:
+-------------------------------
+
+TOPIC: 008 VESSEL NAME
+SUBJECT: ANY SUBJ
+
+101.Data for Item101 Here
+102.Data for Item102 Here
+103.Data for Item103 Here
+
+Notes:
+------
+Before the 'TOPIC:' keyword line or after the last Item line the Captain may type everything as text.
+
+The 'TOPIC:' keyword specifies the Vessel’s code and Description. Please note at least 4 characters of the VesseName are required.
+
+The 'SUBJECT:' keyword is the data header we keep into our Historical records
+
+All Vessel, Item codes are 1 to 6 digit codes (SupVessels.VslCode). Please print out a list of available Vessels and Items from your program.
+
+The Items must be after the 'TOPIC:' and the 'SUBJECT:' keywords and must both be one by line.
+Please note after the ItemCode (i.e. 101) you have to type a dot or leave a space in order to separate the Data for the Item 101.
+The data may be a number or a phrase of words (perhaps separated by space) but in any case, each item must be in one line (80 characters maximum per line staring from the ItemCode).
+
+The Item coding is proposed to be a 3-digit number that follows the Report coding:
+0, Mode
+100, Arrival Report
+200, In Port Report
+300, Departure Report
+400, At Sea (Noon Report)
+500, Anchorage Report
+600, Agent Report
+
+
+Tables:
+-------
+SupVessels
+	VESSEL_UNIQUEID		int NOT NULL
+	Active				bit NOT NULL DEFAULT 1
+	VslCode    			varchar(6) NULL
+	PropellerPitch		float NULL
+	MaxPowerOfEngine	int NULL
+PRIMARY KEY (VESSEL_UNIQUEID)
+
+FMReportTypes:
+	REPORT_UID			Identity
+	ReportName			varchar(128) NULL
+	ReportBaseNum		smallint NULL
+	ReportColor			int NOT NULL Default 0
+PRIMARY KEY (REPORT_UID)
+
+FMDataPackages:
+	VESSEL_UNIQUEID		int NOT NULL
+	REPORT_UID			int NOT NULL
+	DateTimeGMT			datetime NOT NULL
+	Latitude			varchar(10) NULL
+	N_OR_S				char(1) NULL
+	Longitude			varchar(10) NULL
+	W_OR_E				char(1) NULL
+	Memo				Text NULL 
+PRIMARY KEY (VESSEL_UNIQUEID, REPORT_UID, DateTimeGMT)
+
+FMReportItems:
+	ITEM_UID			Identity
+	REPORT_UID			int NOT NULL
+	ItemNo				smallint NULL
+	ItemName			VarChar(128) NULL
+	ItemType			Char(1) NULL
+	ExpDays				smallint NULL
+PRIMARY KEY (ITEM_UID)
+CREATE INDEX FMReportsItems ON FMReportItems (REPORT_UID, ITEM_UID)
+
+FMUserVessels:
+	USER_UNIQUEID		int NOT NULL
+	VESSEL_UNIQUEID		int NOT NULL
+PRIMARY KEY (USER_UNIQUEID, VESSEL_UNIQUEID)
+
+
+//////////////////////////////////////////////////////////////////////////////
+The below select statement can be used to compare 2 different tables in SQL:
+-----------------------------------------------------------------------------
+SELECT MIN(TableName) as TableName, ID, COL1, COL2, COL3 ...
+FROM
+(
+  SELECT 'Table A' as TableName, A.ID, A.COL1, A.COL2, A.COL3, ...
+  FROM A
+  UNION ALL
+  SELECT 'Table B' as TableName, B.ID, B.COL1, B.COl2, B.COL3, ...
+  FROM B
+) tmp
+GROUP BY ID, COL1, COL2, COL3 ...
+HAVING COUNT(*) = 1
+ORDER BY ID
+///////////////////////////////////////////////////////////////////////////////

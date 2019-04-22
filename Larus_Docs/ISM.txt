@@ -1,0 +1,35 @@
+From: larus@larus.gr
+To: info@softway.gr
+Subject: FLEET
+CC: george@softway.gr
+Date: Fri, 27 Jun 2014 20:01:38 +0300
+
+
+To:Softway 
+Sub:New NOON report format
+Attn:Mr Theopoulos 
+
+
+As discussed  pls find attached  excel with the complete  data and values.  
+
+Standard ISM report will be auto generated and will come to office as text as always , without any change , but the NOON values reported will be also auto -input in our new monitoring excel.
+
+Pls update  the values as per our discussion today and when ready , we'll speak about the details of  limitations and auto - alarm modes , appearing to office program , for excessive reported values in the new NOON report .
+
+This function , is planned to be  in line with the set / expected  values , either in  cooperation of  ECON  ( monitoring and forecast)  function that has  been developed already , or by manually set values of alarm limitations as per normal practice. (for daily FW consumptions etc) 
+
+Thus , program will not only control and monitor all daily reported values of the fleet , but also will give alarm / notify to oper/tech if any values are excessively higher than normally expected.
+
+Finally, even though in essence is much more easy for the crew to fill up the new format of NOON and generate the standard ISM NOON report , is better to prepare a brief manual with few instructions before we release anything to vessels. 
+
+When completed , we'll discuss all together in larus  to decide to release it to vessels.
+
+
+
+Best Regards
+Xenos T. / Tech Dep
+Larus SA
+
+
+
+[Message sent via SOFTWAY Communicator]
