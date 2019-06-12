@@ -194,7 +194,7 @@ RETURN
 
 PRIVATE METHOD bttnEmailToSendOnGMApprovalsClick() AS System.Void
 
-	LOCAL cEmailText := SELF:txtbttnEmailToSendOnGMApprovals:Text:Trim() as String
+	LOCAL cEmailText := SELF:txtbttnEmailToSendOnGMApprovals:Text:Trim() AS STRING
 
 	IF cEmailText:Length > 0
 		LOCAL cStatement, cUserUID AS STRING

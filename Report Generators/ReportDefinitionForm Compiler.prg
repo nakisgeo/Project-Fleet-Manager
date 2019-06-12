@@ -61,61 +61,61 @@ METHOD CheckAllFormulas() AS LOGIC
 			cCustomItemUnit := oRow:Item["CustomItemUnit"]:ToString():ToUpper()
 
 			DO CASE
-			CASE cFormulaUpper:Contains("(") .and. !cFormulaUpper:Contains(")") ;
-				.or. cFormulaUpper:Contains(")") .and. ! cFormulaUpper:Contains("(")
+			CASE cFormulaUpper:Contains("(") .AND. !cFormulaUpper:Contains(")") ;
+				.OR. cFormulaUpper:Contains(")") .AND. ! cFormulaUpper:Contains("(")
 				ErrorBox("Unbalanced parenthesis found into the Folmula: "+cFormula, "Invalid Formula")
 				BREAK
 
 			CASE cID == CustomItems.TCEquivalentUSD_ID
-				IF cFormulaUpper:Contains("(FIRST)") .or. cFormulaUpper:Contains("(LAST)") .or. cFormulaUpper:Contains("(AVG)")  .or. cFormulaUpper:Contains("(SUM)") ;
-					.or. cFormulaUpper:Contains("+") .or. cFormulaUpper:Contains("-") .or. cFormulaUpper:Contains("*") .or. cFormulaUpper:Contains("/") .or. cFormulaUpper:Contains("=")
+				IF cFormulaUpper:Contains("(FIRST)") .OR. cFormulaUpper:Contains("(LAST)") .OR. cFormulaUpper:Contains("(AVG)")  .OR. cFormulaUpper:Contains("(SUM)") ;
+					.OR. cFormulaUpper:Contains("+") .OR. cFormulaUpper:Contains("-") .OR. cFormulaUpper:Contains("*") .OR. cFormulaUpper:Contains("/") .OR. cFormulaUpper:Contains("=")
 					cError := "Functions and/or Operators are not allowed for the selected Item"
 					BREAK
 				ENDIF
 
-			CASE cCustomItemUnit == "TEXT" .or. cCustomItemUnit == "DATE"
+			CASE cCustomItemUnit == "TEXT" .OR. cCustomItemUnit == "DATE"
 				cError := "Formula is not allowed for the selected Item"
 				BREAK
 
 			CASE cFormulaUpper:Contains("(FIRST)")
-				IF cFormulaUpper:Contains("(LAST)") .or. cFormulaUpper:Contains("(AVG)") .or. cFormulaUpper:Contains("(SUM)") 
+				IF cFormulaUpper:Contains("(LAST)") .OR. cFormulaUpper:Contains("(AVG)") .OR. cFormulaUpper:Contains("(SUM)") 
 					cError := "One Function is not allowed per Formula"
 					BREAK
 				ENDIF
-				IF cFormulaUpper:Contains("+") .or. cFormulaUpper:Contains("-") .or. cFormulaUpper:Contains("*") .or. cFormulaUpper:Contains("/")
+				IF cFormulaUpper:Contains("+") .OR. cFormulaUpper:Contains("-") .OR. cFormulaUpper:Contains("*") .OR. cFormulaUpper:Contains("/")
 					cError := "Cannot mix Function and Operators into a Function Formula"
 					BREAK
 				ENDIF
 				cFormulaUpper:=cFormulaUpper:Replace("(FIRST)", "")
 
 			CASE cFormulaUpper:Contains("(LAST)")
-				IF cFormulaUpper:Contains("(FIRST)") .or. cFormulaUpper:Contains("(AVG)") .or. cFormulaUpper:Contains("(SUM)") 
+				IF cFormulaUpper:Contains("(FIRST)") .OR. cFormulaUpper:Contains("(AVG)") .OR. cFormulaUpper:Contains("(SUM)") 
 					cError := "One Function is not allowed per Formula"
 					BREAK
 				ENDIF
-				IF cFormulaUpper:Contains("+") .or. cFormulaUpper:Contains("-") .or. cFormulaUpper:Contains("*") .or. cFormulaUpper:Contains("/")
+				IF cFormulaUpper:Contains("+") .OR. cFormulaUpper:Contains("-") .OR. cFormulaUpper:Contains("*") .OR. cFormulaUpper:Contains("/")
 					cError := "Cannot mix Function and Operators into a Function Formula"
 					BREAK
 				ENDIF
 				cFormulaUpper:=cFormulaUpper:Replace("(LAST)", "")
 
 			CASE cFormulaUpper:Contains("(AVG)")
-				IF cFormulaUpper:Contains("(FIRST)") .or. cFormulaUpper:Contains("(LAST)") .or. cFormulaUpper:Contains("(SUM)") 
+				IF cFormulaUpper:Contains("(FIRST)") .OR. cFormulaUpper:Contains("(LAST)") .OR. cFormulaUpper:Contains("(SUM)") 
 					cError := "One Function is not allowed per Formula"
 					BREAK
 				ENDIF
-				IF cFormulaUpper:Contains("+") .or. cFormulaUpper:Contains("-") .or. cFormulaUpper:Contains("*") .or. cFormulaUpper:Contains("/")
+				IF cFormulaUpper:Contains("+") .OR. cFormulaUpper:Contains("-") .OR. cFormulaUpper:Contains("*") .OR. cFormulaUpper:Contains("/")
 					cError := "Cannot mix Function and Operators into a Function Formula"
 					BREAK
 				ENDIF
 				cFormulaUpper:=cFormulaUpper:Replace("(AVG)", "")
 
 			CASE cFormulaUpper:Contains("(SUM)")
-				IF cFormulaUpper:Contains("(FIRST)") .or. cFormulaUpper:Contains("(LAST)") .or. cFormulaUpper:Contains("(AVG)") 
+				IF cFormulaUpper:Contains("(FIRST)") .OR. cFormulaUpper:Contains("(LAST)") .OR. cFormulaUpper:Contains("(AVG)") 
 					cError := "One Function is not allowed per Formula"
 					BREAK
 				ENDIF
-				IF cFormulaUpper:Contains("+") .or. cFormulaUpper:Contains("-") .or. cFormulaUpper:Contains("*") .or. cFormulaUpper:Contains("/")
+				IF cFormulaUpper:Contains("+") .OR. cFormulaUpper:Contains("-") .OR. cFormulaUpper:Contains("*") .OR. cFormulaUpper:Contains("/")
 					cError := "Cannot mix Function and Operators into a Function Formula"
 					BREAK
 				ENDIF
@@ -125,7 +125,7 @@ METHOD CheckAllFormulas() AS LOGIC
 				// Put left formula side to array
 				cFormulaUpper := cFormulaUpper:Substring(0, cFormulaUpper:IndexOf("="))	//:ToUpper()
 
-			CASE cFormulaUpper:Contains("+") .or. cFormulaUpper:Contains("-") .or. cFormulaUpper:Contains("*") .or. cFormulaUpper:Contains("/")
+			CASE cFormulaUpper:Contains("+") .OR. cFormulaUpper:Contains("-") .OR. cFormulaUpper:Contains("*") .OR. cFormulaUpper:Contains("/")
 				LOOP
 			ENDCASE
 
@@ -230,7 +230,7 @@ METHOD CompileSingleFormulas(oSelectVoyageForm AS SelectVoyageForm) AS LOGIC
 		cSavedFormula := oDTFormulas:Rows[n]:Item["Description"]:ToString()+": "+cFormula
 		//cItemUnit := oDTFormulas:Rows[n]:Item["ItemUnit"]:ToString():ToUpper()
 		cCustomItemUnit := oDTFormulas:Rows[n]:Item["CustomItemUnit"]:ToString():ToUpper()
-		IF cID == "" .and. cFormula == ""
+		IF cID == "" .AND. cFormula == ""
 			nEmpty++
 			LOOP
 		ENDIF
@@ -261,7 +261,7 @@ METHOD CompileSingleFormulas(oSelectVoyageForm AS SelectVoyageForm) AS LOGIC
 		LOCAL cItemType := oMainForm:GetItemType(cID) AS STRING
 
 		DO CASE
-		CASE cCustomItemUnit == "TEXT" .or. cCustomItemUnit == "DATE"
+		CASE cCustomItemUnit == "TEXT" .OR. cCustomItemUnit == "DATE"
 			// Insert [FMReportPresentation]
 			cTextValue := SELF:GetCustomItemValue(oDTFormulas:Rows[n]:Item["ID"]:ToString(), cCustomItemUnit, oSelectVoyageForm, cDecimalValue)
 
@@ -618,10 +618,10 @@ METHOD CompileSingleFormulas(oSelectVoyageForm AS SelectVoyageForm) AS LOGIC
 			ENDIF
 
 			DO CASE
-			CASE cAmount:Contains(oMainForm:decimalSeparator) .and. cAmount:Contains(oMainForm:groupSeparator)
+			CASE cAmount:Contains(oMainForm:decimalSeparator) .AND. cAmount:Contains(oMainForm:groupSeparator)
 				cAmount := cAmount:Replace(oMainForm:groupSeparator, "")
 
-			CASE ! cAmount:Contains(oMainForm:decimalSeparator) .and. cAmount:Contains(oMainForm:groupSeparator)
+			CASE ! cAmount:Contains(oMainForm:decimalSeparator) .AND. cAmount:Contains(oMainForm:groupSeparator)
 				cAmount := cAmount:Replace(oMainForm:groupSeparator, oMainForm:decimalSeparator)
 			ENDCASE
 
@@ -959,7 +959,7 @@ RETURN cNum
 METHOD GetRightNumber(cTermExpr AS STRING, nPos AS INT) AS STRING
 	LOCAL cNum AS STRING
 	LOCAL cByte AS STRING
-	LOCAL nLen := cTermExpr:Length - 1 as INT
+	LOCAL nLen := cTermExpr:Length - 1 AS INT
 
 	WHILE nPos <= nLen
 		cByte := cTermExpr:Substring(nPos, 1)
@@ -1030,7 +1030,7 @@ RETURN
 METHOD GetCustomItemValue(cID AS STRING, cCustomItemUnit AS STRING, oSelectVoyageForm AS SelectVoyageForm, cDecimalValue REF STRING) AS STRING
 	LOCAL cTextValue := "" AS STRING
 	LOCAL oLBCItem AS MyLBCVoyageItem
-	LOCAL dDate as DateTime
+	LOCAL dDate AS DateTime
 
 	cDecimalValue := "NULL"
 

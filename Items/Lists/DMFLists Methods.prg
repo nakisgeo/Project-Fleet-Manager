@@ -14,183 +14,183 @@
 
 
 PARTIAL CLASS ListsForm INHERIT DevExpress.XtraEditors.XtraForm
-Private oDTFlows as DataTable
-Private lSuspendNotification as logic
-Private oEditColumn as GridColumn
-Private oEditRow as DataRowView
-Private oCurrentRow as DataRowView
-Private oDTStates as DataTable
-Export cFlowFilterUID as string
-Export cRegNo as string
-Private lShowFlowControl as logic
-Private lFillStateUsers as logic
-Method ListsForm_OnLoad() as void
+PRIVATE oDTFlows AS DataTable
+PRIVATE lSuspendNotification AS LOGIC
+PRIVATE oEditColumn AS GridColumn
+PRIVATE oEditRow AS DataRowView
+PRIVATE oCurrentRow AS DataRowView
+PRIVATE oDTStates AS DataTable
+EXPORT cFlowFilterUID AS STRING
+EXPORT cRegNo AS STRING
+PRIVATE lShowFlowControl AS LOGIC
+PRIVATE lFillStateUsers AS LOGIC
+METHOD ListsForm_OnLoad() AS VOID
 
 	SELF:gridviewlists:OptionsView:ShowGroupPanel := FALSE
 	SELF:gridviewlists:OptionsBehavior:AllowIncrementalSearch := TRUE
 	SELF:gridviewlists:OptionsPrint:PrintDetails := TRUE
 	SELF:gridviewlists:OptionsSelection:EnableAppearanceFocusedCell := FALSE
-	SELF:gridviewlists:OptionsSelection:MultiSelect := False
+	SELF:gridviewlists:OptionsSelection:MultiSelect := FALSE
 	SELF:gridviewlists:OptionsView:ColumnAutoWidth := FALSE
 
 	SELF:gridviewlistitems:OptionsView:ShowGroupPanel := FALSE
 	SELF:gridviewlistitems:OptionsBehavior:AllowIncrementalSearch := TRUE
 	SELF:gridviewlistitems:OptionsPrint:PrintDetails := TRUE
 	SELF:gridviewlistitems:OptionsSelection:EnableAppearanceFocusedCell := FALSE
-	SELF:gridviewlistitems:OptionsSelection:MultiSelect := False
+	SELF:gridviewlistitems:OptionsSelection:MultiSelect := FALSE
 	SELF:gridviewlistitems:OptionsView:ColumnAutoWidth := FALSE
 
-	oMainForm:CreateGridLists_Columns(Self:gridviewlists)
-	oMainForm:CreateGridListItems_Columns(Self:gridviewlistitems)
+	oMainForm:CreateGridLists_Columns(SELF:gridviewlists)
+	oMainForm:CreateGridListItems_Columns(SELF:gridviewlistitems)
 
 	//Self:FillStateUsers()
 	//Self:FillPrimaryUser()
 
-	Self:CreateGridLists()
-return
+	SELF:CreateGridLists()
+RETURN
 
 
-Method CreateGridLists() as void
-Local cStatement as string
+METHOD CreateGridLists() AS VOID
+LOCAL cStatement AS STRING
 
 	cStatement:="SELECT List_UID, Description"+;
 					" FROM DMFLists"+;
 					" ORDER BY Description"
 	
-	Self:oDTFlows:=oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement)
-	Self:oDTFlows:TableName:="DMFLists"
+	SELF:oDTFlows:=oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement)
+	SELF:oDTFlows:TableName:="DMFLists"
 	// Create Primary Key
-	oSoftway:CreatePK(Self:oDTFlows, "List_UID")
+	oSoftway:CreatePK(SELF:oDTFlows, "List_UID")
 
-	Self:GridLists:DataSource:=Self:oDTFlows
-Return
-
-
-Method FocusedRowChanged_Flows(e AS DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventArgs) as void
-// Notification Method
-	if Self:gridviewlists:IsGroupRow(e:FocusedRowHandle)
-		Return
-	endif
-
-	// Get GridRow data into a DataRowView object
-	Local oRow as DataRowView
-	oRow:=(DataRowView)Self:gridviewlists:GetRow(e:FocusedRowHandle)
-	if oRow == NULL
-		Return
-	endif
-
-	Self:oCurrentRow := oRow
-	IF SELF:oDTStates <> NULL
-		// Clear the oDTStates Table to allow FocusedRowChanged_States() to jump in after selection
-		Self:oDTStates:Clear()
-	endif
-	Self:CreateGridStates()
-return
-
-
-Method BeforeLeaveRow_Flows(e AS DevExpress.XtraGrid.Views.Base.RowAllowEventArgs ) AS System.Void
-	if Self:lSuspendNotification
-		Return
-	endif
-
-	Local oRow as DataRowView
-	oRow:=(DataRowView)Self:gridviewlists:GetRow(e:RowHandle)
-	if oRow == NULL
-		Return
-	endif
-
-	// Validate Flow Description
-	do case
-	case oRow:Item["Description"]:ToString() == ""
-		wb("The Description must be defined")
-		e:Allow := False
-		Return
-	endcase
-
-	// EditMode: OFF
-	Self:SetEditModeOff_Flows()
-
-	// Validate States
-	Local oRowStates as DataRowView
-	oRowStates:=(DataRowView)Self:gridviewlistitems:GetFocusedRow()
-	if oRowStates == NULL
-		Return
-	endif
-	if ! Self:ValidateStates(oRowStates)
-		e:Allow := False
-		Return
-	endif
-Return
-
-
-Method Flows_Add() as void
-	Local cStatement, cUID as string
-
-	cStatement:="INSERT INTO DMFLists (Description) VALUES"+;
-				" ('New List')"
-	if ! oSoftway:AdoCommand(oMainForm:oGFH, oMainForm:oConn, cStatement)
-		Self:Flows_Refresh()
-		Return
-	endif
-
-	cUID:=oSoftway:GetLastInsertedIdentityFromScope(oMainForm:oGFH, oMainForm:oConn, "DMFLists", "List_UID")
-
-	Self:Flows_Refresh()
-
-	Local nFocusedHandle as int
-	nFocusedHandle:=Self:gridviewlists:LocateByValue(0, Self:gridviewlists:Columns["List_UID"], Convert.ToInt32(cUID))
-	if nFocusedHandle == DevExpress.XtraGrid.GridControl.InvalidRowHandle
-		Return
-	endif
-	Self:gridviewlists:ClearSelection()
-	Self:gridviewlists:FocusedRowHandle:=nFocusedHandle
-	Self:gridviewlists:SelectRow(nFocusedHandle)
+	SELF:GridLists:DataSource:=SELF:oDTFlows
 RETURN
 
 
-Method Flows_Edit(oRow as DataRowView, oColumn as GridColumn) as void
-	if oRow == NULL
-		Return
-	endif
+METHOD FocusedRowChanged_Flows(e AS DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventArgs) AS VOID
+// Notification Method
+	IF SELF:gridviewlists:IsGroupRow(e:FocusedRowHandle)
+		RETURN
+	ENDIF
 
-	Local cField := oColumn:FieldName as string
-	if ! InListExact(cField, "Description")
+	// Get GridRow data into a DataRowView object
+	LOCAL oRow AS DataRowView
+	oRow:=(DataRowView)SELF:gridviewlists:GetRow(e:FocusedRowHandle)
+	IF oRow == NULL
+		RETURN
+	ENDIF
+
+	SELF:oCurrentRow := oRow
+	IF SELF:oDTStates <> NULL
+		// Clear the oDTStates Table to allow FocusedRowChanged_States() to jump in after selection
+		SELF:oDTStates:Clear()
+	ENDIF
+	SELF:CreateGridStates()
+RETURN
+
+
+METHOD BeforeLeaveRow_Flows(e AS DevExpress.XtraGrid.Views.Base.RowAllowEventArgs ) AS System.Void
+	IF SELF:lSuspendNotification
+		RETURN
+	ENDIF
+
+	LOCAL oRow AS DataRowView
+	oRow:=(DataRowView)SELF:gridviewlists:GetRow(e:RowHandle)
+	IF oRow == NULL
+		RETURN
+	ENDIF
+
+	// Validate Flow Description
+	DO CASE
+	CASE oRow:Item["Description"]:ToString() == ""
+		wb("The Description must be defined")
+		e:Allow := FALSE
+		RETURN
+	ENDCASE
+
+	// EditMode: OFF
+	SELF:SetEditModeOff_Flows()
+
+	// Validate States
+	LOCAL oRowStates AS DataRowView
+	oRowStates:=(DataRowView)SELF:gridviewlistitems:GetFocusedRow()
+	IF oRowStates == NULL
+		RETURN
+	ENDIF
+	IF ! SELF:ValidateStates(oRowStates)
+		e:Allow := FALSE
+		RETURN
+	ENDIF
+RETURN
+
+
+METHOD Flows_Add() AS VOID
+	LOCAL cStatement, cUID AS STRING
+
+	cStatement:="INSERT INTO DMFLists (Description) VALUES"+;
+				" ('New List')"
+	IF ! oSoftway:AdoCommand(oMainForm:oGFH, oMainForm:oConn, cStatement)
+		SELF:Flows_Refresh()
+		RETURN
+	ENDIF
+
+	cUID:=oSoftway:GetLastInsertedIdentityFromScope(oMainForm:oGFH, oMainForm:oConn, "DMFLists", "List_UID")
+
+	SELF:Flows_Refresh()
+
+	LOCAL nFocusedHandle AS INT
+	nFocusedHandle:=SELF:gridviewlists:LocateByValue(0, SELF:gridviewlists:Columns["List_UID"], Convert.ToInt32(cUID))
+	IF nFocusedHandle == DevExpress.XtraGrid.GridControl.InvalidRowHandle
+		RETURN
+	ENDIF
+	SELF:gridviewlists:ClearSelection()
+	SELF:gridviewlists:FocusedRowHandle:=nFocusedHandle
+	SELF:gridviewlists:SelectRow(nFocusedHandle)
+RETURN
+
+
+METHOD Flows_Edit(oRow AS DataRowView, oColumn AS GridColumn) AS VOID
+	IF oRow == NULL
+		RETURN
+	ENDIF
+
+	LOCAL cField := oColumn:FieldName AS STRING
+	IF ! InListExact(cField, "Description")
 		wb("The column '"+oColumn:Caption+"' is ReadOnly")
-		Return
-	endif
+		RETURN
+	ENDIF
 
-	Self:oEditColumn := oColumn
-	Self:oEditRow := oRow
+	SELF:oEditColumn := oColumn
+	SELF:oEditRow := oRow
 
-	Self:oEditColumn:OptionsColumn:AllowEdit := True
-    SELF:gridviewlists:OptionsSelection:EnableAppearanceFocusedCell := True
+	SELF:oEditColumn:OptionsColumn:AllowEdit := TRUE
+    SELF:gridviewlists:OptionsSelection:EnableAppearanceFocusedCell := TRUE
 	SELF:gridviewlists:ShowEditor()
 RETURN
 
 
-Method SetEditModeOff_Flows() as void
-	if ! SELF:gridviewlists:OptionsSelection:EnableAppearanceFocusedCell
-		Return
-	endif
+METHOD SetEditModeOff_Flows() AS VOID
+	IF ! SELF:gridviewlists:OptionsSelection:EnableAppearanceFocusedCell
+		RETURN
+	ENDIF
 
-	SELF:gridviewlists:OptionsSelection:EnableAppearanceFocusedCell := False
+	SELF:gridviewlists:OptionsSelection:EnableAppearanceFocusedCell := FALSE
 
-	if Self:oEditColumn <> NULL
-		Self:oEditColumn:OptionsColumn:AllowEdit := False
-		Self:oEditColumn := NULL
-	endif
+	IF SELF:oEditColumn <> NULL
+		SELF:oEditColumn:OptionsColumn:AllowEdit := FALSE
+		SELF:oEditColumn := NULL
+	ENDIF
 
-	if Self:oEditRow <> NULL
-		Self:oEditRow := NULL
-	endif
-Return
+	IF SELF:oEditRow <> NULL
+		SELF:oEditRow := NULL
+	ENDIF
+RETURN
 
 
-Method Flows_Save(e AS DevExpress.XtraGrid.Views.Base.CellValueChangedEventArgs) as void
-Local cStatement, cUID, cField, cValue, cDuplicate as string
+METHOD Flows_Save(e AS DevExpress.XtraGrid.Views.Base.CellValueChangedEventArgs) AS VOID
+LOCAL cStatement, cUID, cField, cValue, cDuplicate AS STRING
 
-	Local oRow as DataRowView
-	oRow:=(DataRowView)Self:gridviewlists:GetRow(e:RowHandle)
+	LOCAL oRow AS DataRowView
+	oRow:=(DataRowView)SELF:gridviewlists:GetRow(e:RowHandle)
 
 	cUID := oRow:Item["List_UID"]:ToString()
 
@@ -198,206 +198,206 @@ Local cStatement, cUID, cField, cValue, cDuplicate as string
 	cValue := e:Value:ToString():Trim()
 
 	// Validate cValue
-	do case
-	case InListExact(cField, "Description") .and. cValue:Length > 128
+	DO CASE
+	CASE InListExact(cField, "Description") .AND. cValue:Length > 128
 		ErrorBox("The field '"+e:Column:Caption+"' must contain up to 128 characters", "Editing aborted")
-		Self:Flows_Refresh()
-		Return
+		SELF:Flows_Refresh()
+		RETURN
 
-	case InListExact(cField, "Description") .and. cValue:Length == 0
+	CASE InListExact(cField, "Description") .AND. cValue:Length == 0
 		ErrorBox("The field '"+e:Column:Caption+"' cannot be empty", "Editing aborted")
-		Self:Flows_Refresh()
-		Return
+		SELF:Flows_Refresh()
+		RETURN
 
-	case InListExact(cField, "Description") .and. (cValue != null .and. ( cValue:Trim()=="Users" .or. cValue:Trim()=="Week" .or. cValue:Trim()=="Ports"))
+	CASE InListExact(cField, "Description") .AND. (cValue != NULL .AND. ( cValue:Trim()=="Users" .OR. cValue:Trim()=="Week" .OR. cValue:Trim()=="Ports"))
 		ErrorBox("This is a reserved wording, pls try another", "Editing aborted")
-		Self:Flows_Refresh()
-		Return
+		SELF:Flows_Refresh()
+		RETURN
 
-	case cField == "Description"
+	CASE cField == "Description"
 		// Check for duplicates
 		cStatement:="SELECT Description FROM DMFLists"+;
 					" WHERE List_UID<>"+cUID+;
-					" AND Description='"+oSoftway:ConvertWildcards(cValue, False)+"'"
+					" AND Description='"+oSoftway:ConvertWildcards(cValue, FALSE)+"'"
 		cDuplicate:=oSoftway:RecordExists(oMainForm:oGFH, oMainForm:oConn, cStatement, "Description")
-		if cDuplicate <> ""
+		IF cDuplicate <> ""
 			ErrorBox("The name '"+cValue+"' is already in use by another List='"+cDuplicate+"'", "Editing aborted")
-			Self:Flows_Refresh()
-			Return
-		endif
+			SELF:Flows_Refresh()
+			RETURN
+		ENDIF
 //		cValue := cValue:ToUpper()
-	endcase
+	ENDCASE
 
 
-		if QuestionBoxDefaultButton("Do you want to rename the List ?", ;
+		IF QuestionBoxDefaultButton("Do you want to rename the List ?", ;
 				"Rename List", MessageBoxButtons.YesNo, MessageBoxDefaultButton.Button2) <> System.Windows.Forms.DialogResult.Yes
-			Self:Flows_Refresh()
-			Return
-		endif
+			SELF:Flows_Refresh()
+			RETURN
+		ENDIF
 	
-	Local cReplace as string
-	cReplace := "'"+oSoftway:ConvertWildcards(cValue, False)+"'"
+	LOCAL cReplace AS STRING
+	cReplace := "'"+oSoftway:ConvertWildcards(cValue, FALSE)+"'"
 
 	// Update Flows
 	cStatement:="UPDATE DMFLists SET"+;
 				" "+cField+"="+cReplace+;
 				" WHERE List_UID="+cUID
-	if ! oSoftway:AdoCommand(oMainForm:oGFH, oMainForm:oConn, cStatement)
-		Self:Flows_Refresh()
-		Return
-	endif
+	IF ! oSoftway:AdoCommand(oMainForm:oGFH, oMainForm:oConn, cStatement)
+		SELF:Flows_Refresh()
+		RETURN
+	ENDIF
 
 	// Update DataTable and Grid
-	Local oDataRow:=Self:oDTFlows:Rows:Find(oRow:Item["List_UID"]:ToString()) as DataRow
-	if oDataRow == NULL
+	LOCAL oDataRow:=SELF:oDTFlows:Rows:Find(oRow:Item["List_UID"]:ToString()) AS DataRow
+	IF oDataRow == NULL
 		ErrorBox("Cannot access current row", "Not changed")
-		Return
-	endif
+		RETURN
+	ENDIF
 	oDataRow:Item[cField]:=cValue
-	Self:oDTFlows:AcceptChanges()
+	SELF:oDTFlows:AcceptChanges()
 	// Invalidates the region occupied by the current View (adds it to the control's update region that will be repainted
 	// during the next paint operation), and causes a paint message to be sent to the grid control
-	Self:gridviewlists:Invalidate()
-Return
+	SELF:gridviewlists:Invalidate()
+RETURN
 
 
-Method Flows_Delete() as void
-	Local oRow as DataRowView
-	Local nRowHandle := Self:gridviewlists:FocusedRowHandle as int
-	oRow:=(DataRowView)Self:gridviewlists:GetRow(nRowHandle)
-	if oRow == NULL
-		Return
-	endif
+METHOD Flows_Delete() AS VOID
+	LOCAL oRow AS DataRowView
+	LOCAL nRowHandle := SELF:gridviewlists:FocusedRowHandle AS INT
+	oRow:=(DataRowView)SELF:gridviewlists:GetRow(nRowHandle)
+	IF oRow == NULL
+		RETURN
+	ENDIF
 
-	Local cStatement as string
+	LOCAL cStatement AS STRING
 
-	if QuestionBox("Do you want to Delete the current List :"+CRLF+CRLF+;
+	IF QuestionBox("Do you want to Delete the current List :"+CRLF+CRLF+;
 					oRow:Item["Description"]:ToString()+" ?", ;
 					"Delete") <> System.Windows.Forms.DialogResult.Yes
-		Return
-	endif
+		RETURN
+	ENDIF
 
 	cStatement:="DELETE FROM DMFLists"+;
 				" WHERE List_UID="+oRow:Item["List_UID"]:ToString()
-	if ! oSoftway:AdoCommand(oMainForm:oGFH, oMainForm:oConn, cStatement)
+	IF ! oSoftway:AdoCommand(oMainForm:oGFH, oMainForm:oConn, cStatement)
 		ErrorBox("Cannot Delete current row", "Deletion aborted")
-		Return
-	endif
+		RETURN
+	ENDIF
 
-	if Self:gridviewlists:DataRowCount == 1
-		Self:oDTFlows:Clear()
-		Return
-	endif
+	IF SELF:gridviewlists:DataRowCount == 1
+		SELF:oDTFlows:Clear()
+		RETURN
+	ENDIF
 
 	// Stop Notification
-	Self:lSuspendNotification := True
-	if nRowHandle == 0
-		Self:gridviewlists:MoveNext()
-	else
-		Self:gridviewlists:MovePrev()
-	endif
-	Self:lSuspendNotification := False
+	SELF:lSuspendNotification := TRUE
+	IF nRowHandle == 0
+		SELF:gridviewlists:MoveNext()
+	ELSE
+		SELF:gridviewlists:MovePrev()
+	ENDIF
+	SELF:lSuspendNotification := FALSE
 
-	Local oDataRow as DataRow
-	oDataRow:=Self:oDTFlows:Rows:Find(oRow:Item["List_UID"]:ToString())
-	if oDataRow <> NULL
-		Self:oDTFlows:Rows:Remove(oDataRow)
-	endif
+	LOCAL oDataRow AS DataRow
+	oDataRow:=SELF:oDTFlows:Rows:Find(oRow:Item["List_UID"]:ToString())
+	IF oDataRow <> NULL
+		SELF:oDTFlows:Rows:Remove(oDataRow)
+	ENDIF
 RETURN
     
 
-Method Flows_Refresh() as void
-Local cUID as string
+METHOD Flows_Refresh() AS VOID
+LOCAL cUID AS STRING
 
-	Local oRow as DataRowView
-	oRow:=(DataRowView)Self:gridviewlists:GetRow(Self:gridviewlists:FocusedRowHandle)
+	LOCAL oRow AS DataRowView
+	oRow:=(DataRowView)SELF:gridviewlists:GetRow(SELF:gridviewlists:FocusedRowHandle)
 
-	if oRow <> NULL
+	IF oRow <> NULL
 		cUID := oRow:Item["List_UID"]:ToString()
-	endif
+	ENDIF
 
-	Self:CreateGridLists()
+	SELF:CreateGridLists()
 
-	if oRow <> NULL
-		Local col as DevExpress.XtraGrid.Columns.GridColumn
-		Local nFocusedHandle as int
+	IF oRow <> NULL
+		LOCAL col AS DevExpress.XtraGrid.Columns.GridColumn
+		LOCAL nFocusedHandle AS INT
 
-		col:=Self:gridviewlists:Columns["List_UID"]
-		nFocusedHandle:=Self:gridviewlists:LocateByValue(0, col, Convert.ToInt32(cUID))
-		if nFocusedHandle == DevExpress.XtraGrid.GridControl.InvalidRowHandle
-			Return
-		endif
+		col:=SELF:gridviewlists:Columns["List_UID"]
+		nFocusedHandle:=SELF:gridviewlists:LocateByValue(0, col, Convert.ToInt32(cUID))
+		IF nFocusedHandle == DevExpress.XtraGrid.GridControl.InvalidRowHandle
+			RETURN
+		ENDIF
 
-		Self:gridviewlists:ClearSelection()
-		Self:gridviewlists:FocusedRowHandle:=nFocusedHandle
-		Self:gridviewlists:SelectRow(nFocusedHandle)
-	endif	
+		SELF:gridviewlists:ClearSelection()
+		SELF:gridviewlists:FocusedRowHandle:=nFocusedHandle
+		SELF:gridviewlists:SelectRow(nFocusedHandle)
+	ENDIF	
 RETURN
     
-METHOD checkChangedStateRights(lChecked AS LOGIC,cRight AS STRING) as Void
+METHOD checkChangedStateRights(lChecked AS LOGIC,cRight AS STRING) AS VOID
 
 RETURN
 
-METHOD loadUserRights() as Void
+METHOD loadUserRights() AS VOID
 	
 RETURN
 
-Method Flows_Print() as void
-	Self:PrintPreviewGridLists()
+METHOD Flows_Print() AS VOID
+	SELF:PrintPreviewGridLists()
 RETURN
 
 
 #Region PrintPreview
 
-Method PrintPreviewGridLists() as void
+METHOD PrintPreviewGridLists() AS VOID
 	// Check whether the XtraGrid control can be previewed.
-	if ! Self:GridLists:IsPrintingAvailable
+	IF ! SELF:GridLists:IsPrintingAvailable
 		ErrorBox("The 'DevExpress.XtraPrinting' Library is not found")
-		return
-	endif
+		RETURN
+	ENDIF
 
 	// Opens the Preview window.
 	//Self:GridCompanies:ShowPrintPreview()
 
 	// Create a PrintingSystem component.
-	Local oPS := PrintingSystem{} as DevExpress.XtraPrinting.PrintingSystem
+	LOCAL oPS := PrintingSystem{} AS DevExpress.XtraPrinting.PrintingSystem
 	// Create a link that will print a control.
-	Local oLink := PrintableComponentLink{oPS} as DevExpress.XtraPrinting.PrintableComponentLink
+	LOCAL oLink := PrintableComponentLink{oPS} AS DevExpress.XtraPrinting.PrintableComponentLink
 	// Specify the control to be printed.
-	oLink:Component := Self:GridLists
+	oLink:Component := SELF:GridLists
 	// Set the paper format.
 	oLink:PaperKind := System.Drawing.Printing.PaperKind.A4
-	oLink:Landscape:=True
+	oLink:Landscape:=TRUE
 	// Subscribe to the CreateReportHeaderArea event used to generate the report header.
-	oLink:CreateReportHeaderArea += CreateAreaEventHandler{self, @PrintableComponentLinkFlows_CreateReportHeaderArea()}
+	oLink:CreateReportHeaderArea += CreateAreaEventHandler{SELF, @PrintableComponentLinkFlows_CreateReportHeaderArea()}
 	// Generate the report.
 	oLink:CreateDocument()
 	// Hide Send via eMail TooBar Button
 	oPS:SetCommandVisibility(PrintingSystemCommand.SendFile, CommandVisibility.None)
 	// Show the report.
 	oLink:ShowPreview()
-Return
+RETURN
 
 
-Method PrintableComponentLinkFlows_CreateReportHeaderArea(sender as object, e as CreateAreaEventArgs) as void
-Local cReportHeader := "Lists - Printed on "+Datetime.Now:ToString(ccDateFormat)+", "+Datetime.Now:ToString("HH:mm:ss")+" - User: "+oUser:UserID as string
+METHOD PrintableComponentLinkFlows_CreateReportHeaderArea(sender AS OBJECT, e AS CreateAreaEventArgs) AS VOID
+LOCAL cReportHeader := "Lists - Printed on "+Datetime.Now:ToString(ccDateFormat)+", "+Datetime.Now:ToString("HH:mm:ss")+" - User: "+oUser:UserID AS STRING
 
 	e:Graph:StringFormat := BrickStringFormat{StringAlignment.Center}
 	e:Graph:Font := Font{"Tahoma", 14, FontStyle.Bold}
 
-	Local rec := RectangleF{0, 0, e:Graph:ClientPageSize:Width, 50} as RectangleF
+	LOCAL rec := RectangleF{0, 0, e:Graph:ClientPageSize:Width, 50} AS RectangleF
 	e:Graph:DrawString(cReportHeader, Color.Black, rec, DevExpress.XtraPrinting.BorderSide.None)
-Return
+RETURN
 
 #EndRegion
 
 
-Method FillStateUsers() as void
+METHOD FillStateUsers() AS VOID
 
-Return
+RETURN
 
 
-Method FillPrimaryUser() as void
+METHOD FillPrimaryUser() AS VOID
 
 RETURN
 
@@ -405,29 +405,29 @@ RETURN
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-Method CreateGridStates() as void
-Local cStatement, cUID as string
+METHOD CreateGridStates() AS VOID
+LOCAL cStatement, cUID AS STRING
 
-	if Self:oCurrentRow == NULL
+	IF SELF:oCurrentRow == NULL
 		cUID := "0"
-	else
-		cUID := Self:oCurrentRow:Item["List_UID"]:ToString()
-	endif
+	ELSE
+		cUID := SELF:oCurrentRow:Item["List_UID"]:ToString()
+	ENDIF
 
 	cStatement:="SELECT Description, List_Item_UID FROM DMFListItems "+;
 				" WHERE FK_List_UID="+cUID
-	Self:oDTStates:=oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement)
-	Self:oDTStates:TableName:="DMFListItems"
+	SELF:oDTStates:=oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement)
+	SELF:oDTStates:TableName:="DMFListItems"
 	// Create Primary Key
-	oSoftway:CreatePK(Self:oDTStates, "List_Item_UID")
+	oSoftway:CreatePK(SELF:oDTStates, "List_Item_UID")
 
-	Self:GridStates:DataSource:=Self:oDTStates
+	SELF:GridStates:DataSource:=SELF:oDTStates
 	//Self:States_Notify()
 
-	if Self:oDTStates:Rows:Count == 0
-		Self:ClearStateDetails()
-	endif
-Return
+	IF SELF:oDTStates:Rows:Count == 0
+		SELF:ClearStateDetails()
+	ENDIF
+RETURN
 
 
 /*Method CreateGridStates_Columns() as void
@@ -496,10 +496,10 @@ oColumn:Visible:=False
 Return*/
 
 
-Method FocusedRowChanged_States(e AS DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventArgs) as void
+METHOD FocusedRowChanged_States(e AS DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventArgs) AS VOID
 // Notification Method
 
-return
+RETURN
 
 
 /*Method States_Notify() as void
@@ -524,23 +524,23 @@ return
 Return*/
 
 
-Method BeforeLeaveRow_States(e AS DevExpress.XtraGrid.Views.Base.RowAllowEventArgs ) AS System.Void
-	if Self:lSuspendNotification
-		Return
-	endif
+METHOD BeforeLeaveRow_States(e AS DevExpress.XtraGrid.Views.Base.RowAllowEventArgs ) AS System.Void
+	IF SELF:lSuspendNotification
+		RETURN
+	ENDIF
 
-	Local oRow as DataRowView
-	oRow:=(DataRowView)Self:gridviewlistitems:GetRow(e:RowHandle)
-	if oRow == NULL
-		Return
-	endif
+	LOCAL oRow AS DataRowView
+	oRow:=(DataRowView)SELF:gridviewlistitems:GetRow(e:RowHandle)
+	IF oRow == NULL
+		RETURN
+	ENDIF
 
 	// Validate States
-	if ! Self:ValidateStates(oRow)
-		e:Allow := False
+	IF ! SELF:ValidateStates(oRow)
+		e:Allow := FALSE
 		//Self:FillStateDetails(oRow)
-		Return
-	endif
+		RETURN
+	ENDIF
 
 /*	// Validate SubmitFieldCondition
 	if ! Self:ValidateSubmitFieldCondition(oRow)
@@ -550,18 +550,18 @@ Method BeforeLeaveRow_States(e AS DevExpress.XtraGrid.Views.Base.RowAllowEventAr
 	endif*/
 
 	// EditMode: OFF
-	Self:SetEditModeOff_States()
-Return
+	SELF:SetEditModeOff_States()
+RETURN
 
 
-Method ValidateSubmitFieldCondition(oRow as DataRowView) as logic
+METHOD ValidateSubmitFieldCondition(oRow AS DataRowView) AS LOGIC
 	
-Return True
+RETURN TRUE
 
 
-Method ValidateStates(oRow as DataRowView) as logic
+METHOD ValidateStates(oRow AS DataRowView) AS LOGIC
 
-Return True
+RETURN TRUE
 
 METHOD loadExcelFile_Method() AS VOID
 	LOCAL cUID, cListName,cStr AS STRING
@@ -640,7 +640,7 @@ METHOD loadExcelFile_Method() AS VOID
 		MemoWrit(cTxt, "Imported "+nImported:toString()+" list items."+CRLF+cStr)
 		Process.Start("Notepad.exe", cTxt)
 		CATCH exc AS Exception
-			MessageBox.Show(exc:HResult:ToString())	
+			MessageBox.Show(exc:StackTrace:ToString())	
 		FINALLY
 			System.Threading.Thread.CurrentThread:CurrentCulture:=oldCI
 			SELF:Cursor := System.Windows.Forms.Cursors.Default
@@ -649,9 +649,9 @@ METHOD loadExcelFile_Method() AS VOID
 RETURN
 
 
-METHOD ImportRow(oRow AS DataRow, nImported REF INT, cStr REF STRING, columnName as String, cListUID as String) AS LOGIC
+METHOD ImportRow(oRow AS DataRow, nImported REF INT, cStr REF STRING, columnName AS STRING, cListUID AS STRING) AS LOGIC
 	LOCAL cDescription, cStatement AS STRING
-	cDescription := oSoftway:ConvertWildcards(oRow[0]:ToString():Trim(),False)
+	cDescription := oSoftway:ConvertWildcards(oRow[0]:ToString():Trim(),FALSE)
 	IF cDescription == "" 
 		RETURN TRUE
 	ENDIF
@@ -665,27 +665,27 @@ METHOD ImportRow(oRow AS DataRow, nImported REF INT, cStr REF STRING, columnName
 	nImported++
 RETURN TRUE
 
-Method States_Add() as void
-	Local cStatement, cUID as string
-	cUID := Self:oCurrentRow:Item["List_UID"]:ToString()
+METHOD States_Add() AS VOID
+	LOCAL cStatement, cUID AS STRING
+	cUID := SELF:oCurrentRow:Item["List_UID"]:ToString()
 	
 		cStatement:="INSERT INTO DMFListItems (Description, FK_List_UID) VALUES"+;
 					" ('New List Item',"+cUID+")"
 	
-	if ! oSoftway:AdoCommand(oMainForm:oGFH, oMainForm:oConn, cStatement)
-		Self:States_Refresh()
-		Return
-	endif
-	Self:States_Refresh()
+	IF ! oSoftway:AdoCommand(oMainForm:oGFH, oMainForm:oConn, cStatement)
+		SELF:States_Refresh()
+		RETURN
+	ENDIF
+	SELF:States_Refresh()
 	cUID:=oSoftway:GetLastInsertedIdentityFromScope(oMainForm:oGFH, oMainForm:oConn, "DMFListItems", "List_Item_UID")
-	Local nFocusedHandle as int
-	nFocusedHandle:=Self:gridviewlistitems:LocateByValue(0, Self:gridviewlistitems:Columns["List_Item_UID"], Convert.ToInt32(cUID))
-	if nFocusedHandle == DevExpress.XtraGrid.GridControl.InvalidRowHandle
-		Return
-	endif
-	Self:gridviewlistitems:ClearSelection()
-	Self:gridviewlistitems:FocusedRowHandle:=nFocusedHandle
-	Self:gridviewlistitems:SelectRow(nFocusedHandle)
+	LOCAL nFocusedHandle:= 0 AS INT
+	nFocusedHandle:=SELF:gridviewlistitems:LocateByValue(0, SELF:gridviewlistitems:Columns["List_Item_UID"], Convert.ToInt32(cUID))
+	IF nFocusedHandle == DevExpress.XtraGrid.GridControl.InvalidRowHandle
+		RETURN
+	ENDIF
+	SELF:gridviewlistitems:ClearSelection()
+	SELF:gridviewlistitems:FocusedRowHandle:=nFocusedHandle
+	SELF:gridviewlistitems:SelectRow(nFocusedHandle)
 RETURN
 
 
@@ -694,79 +694,79 @@ RETURN
 //RETURN cNo
 
 
-Method States_Edit(oRow as DataRowView, oColumn as GridColumn) as void
-	if oRow == NULL
-		Return
-	endif
+METHOD States_Edit(oRow AS DataRowView, oColumn AS GridColumn) AS VOID
+	IF oRow == NULL
+		RETURN
+	ENDIF
 
-	Local cField := oColumn:FieldName as string
+	LOCAL cField := oColumn:FieldName AS STRING
 	DO CASE
-	case ! InListExact(cField,"Description")
+	CASE ! InListExact(cField,"Description")
 		wb("The column '"+oColumn:Caption+"' is ReadOnly")
-		Return
-	endcase
+		RETURN
+	ENDCASE
 
-	Self:oEditColumn := oColumn
-	Self:oEditRow := oRow
+	SELF:oEditColumn := oColumn
+	SELF:oEditRow := oRow
 
-	Self:oEditColumn:OptionsColumn:AllowEdit := True
-    SELF:gridviewlistitems:OptionsSelection:EnableAppearanceFocusedCell := True
+	SELF:oEditColumn:OptionsColumn:AllowEdit := TRUE
+    SELF:gridviewlistitems:OptionsSelection:EnableAppearanceFocusedCell := TRUE
 	SELF:gridviewlistitems:ShowEditor()
 RETURN
 
 
-Method SetEditModeOff_States() as void
-	if ! SELF:gridviewlistitems:OptionsSelection:EnableAppearanceFocusedCell
-		Return
-	endif
+METHOD SetEditModeOff_States() AS VOID
+	IF ! SELF:gridviewlistitems:OptionsSelection:EnableAppearanceFocusedCell
+		RETURN
+	ENDIF
 
-	SELF:gridviewlistitems:OptionsSelection:EnableAppearanceFocusedCell := False
+	SELF:gridviewlistitems:OptionsSelection:EnableAppearanceFocusedCell := FALSE
 
-	if Self:oEditColumn <> NULL
-		Self:oEditColumn:OptionsColumn:AllowEdit := False
-		Self:oEditColumn := NULL
-	endif
+	IF SELF:oEditColumn <> NULL
+		SELF:oEditColumn:OptionsColumn:AllowEdit := FALSE
+		SELF:oEditColumn := NULL
+	ENDIF
 
-	if Self:oEditRow <> NULL
-		Self:oEditRow := NULL
-	endif
-Return
+	IF SELF:oEditRow <> NULL
+		SELF:oEditRow := NULL
+	ENDIF
+RETURN
 
 
-Method States_Save(e AS DevExpress.XtraGrid.Views.Base.CellValueChangedEventArgs) as void
-Local cField, cValue, cCaption as string
+METHOD States_Save(e AS DevExpress.XtraGrid.Views.Base.CellValueChangedEventArgs) AS VOID
+LOCAL cField, cValue, cCaption AS STRING
 
 	cField := e:Column:FieldName
 	cValue := e:Value:ToString():Trim()
 	cCaption := e:Column:Caption
 
-	Local oRow as DataRowView
-	oRow:=(DataRowView)Self:gridviewlistitems:GetRow(e:RowHandle)
+	LOCAL oRow AS DataRowView
+	oRow:=(DataRowView)SELF:gridviewlistitems:GetRow(e:RowHandle)
 
-	if Self:Update_StatesField(oRow, cField, cValue, cCaption)
+	IF SELF:Update_StatesField(oRow, cField, cValue, cCaption)
 		// Grid Modified
-		Self:FillStateDetails(oRow)
-	endif
-Return
+		SELF:FillStateDetails(oRow)
+	ENDIF
+RETURN
 
 
-Method Update_StatesField(oRow as DataRowView, cField as string, cValue as string, cCaption as string) as Logic
-Local cStatement, cUID as string
+METHOD Update_StatesField(oRow AS DataRowView, cField AS STRING, cValue AS STRING, cCaption AS STRING) AS LOGIC
+LOCAL cStatement, cUID AS STRING
 
 	cUID := oRow:Item["List_Item_UID"]:ToString()
 
 	// Validate cValue
-	do case
-	case InListExact(cField, "Description", "SubmitFieldCondition") .and. cValue:Length > 128
+	DO CASE
+	CASE InListExact(cField, "Description", "SubmitFieldCondition") .AND. cValue:Length > 128
 		ErrorBox("The field '"+cCaption+"' must contain up to 128 characters", "Editing aborted")
-		Self:States_Refresh()
-		Return False
+		SELF:States_Refresh()
+		RETURN FALSE
 
-	case InListExact(cField, "Description") .and. cValue:Length == 0
+	CASE InListExact(cField, "Description") .AND. cValue:Length == 0
 		ErrorBox("The field '"+cCaption+"' cannot be empty", "Editing aborted")
-		Self:States_Refresh()
-		Return False
-	endcase
+		SELF:States_Refresh()
+		RETURN FALSE
+	ENDCASE
 
 		/*if QuestionBoxDefaultButton("Do you want to update the State ?", ;
 				"Change field: "+cCaption, MessageBoxButtons.YesNo, MessageBoxDefaultButton.Button2) <> System.Windows.Forms.DialogResult.Yes
@@ -775,164 +775,164 @@ Local cStatement, cUID as string
 		endif*/
 	
 
-	Local cReplace as string
-	cReplace := "'"+oSoftway:ConvertWildcards(cValue, False)+"'"
+	LOCAL cReplace AS STRING
+	cReplace := "'"+oSoftway:ConvertWildcards(cValue, FALSE)+"'"
 
 	// Update States
 	cStatement:="UPDATE DMFListItems SET"+;
 				" "+cField+"="+cReplace+;
 				" WHERE List_Item_UID="+cUID
-	if ! oSoftway:AdoCommand(oMainForm:oGFH, oMainForm:oConn, cStatement)
-		Self:States_Refresh()
-		Return False
-	endif
+	IF ! oSoftway:AdoCommand(oMainForm:oGFH, oMainForm:oConn, cStatement)
+		SELF:States_Refresh()
+		RETURN FALSE
+	ENDIF
 
 	// Update DataTable and Grid
-	Local oDataRow:=Self:oDTStates:Rows:Find(oRow:Item["List_Item_UID"]:ToString()) as DataRow
-	if oDataRow == NULL
+	LOCAL oDataRow:=SELF:oDTStates:Rows:Find(oRow:Item["List_Item_UID"]:ToString()) AS DataRow
+	IF oDataRow == NULL
 		ErrorBox("Cannot access current row", "Not changed")
-		Return False
-	endif
+		RETURN FALSE
+	ENDIF
 	oDataRow:Item[cField]:=cValue
-	Self:oDTStates:AcceptChanges()
+	SELF:oDTStates:AcceptChanges()
 	// Invalidates the region occupied by the current View (adds it to the control's update region that will be repainted
 	// during the next paint operation), and causes a paint message to be sent to the grid control
-	Self:gridviewlistitems:Invalidate()
+	SELF:gridviewlistitems:Invalidate()
 
-	if cField == "List_Item_UID"
-		Self:States_Refresh()
-	endif
-Return True
+	IF cField == "List_Item_UID"
+		SELF:States_Refresh()
+	ENDIF
+RETURN TRUE
 
 
-Method States_Delete() as void
-	Local oRow as DataRowView
-	Local nRowHandle := Self:gridviewlistitems:FocusedRowHandle as int
-	oRow:=(DataRowView)Self:gridviewlistitems:GetRow(nRowHandle)
-	if oRow == NULL
-		Return
-	endif
+METHOD States_Delete() AS VOID
+	LOCAL oRow AS DataRowView
+	LOCAL nRowHandle := SELF:gridviewlistitems:FocusedRowHandle AS INT
+	oRow:=(DataRowView)SELF:gridviewlistitems:GetRow(nRowHandle)
+	IF oRow == NULL
+		RETURN
+	ENDIF
 
-	Local cStatement as string
+	LOCAL cStatement AS STRING
 	//Local oDT1, oDT2 as DataTable
 	//Local cStr1 := "", cStr2 := "" as string
 
-	if QuestionBox("Do you want to Delete the current Item:"+CRLF+CRLF+;
+	IF QuestionBox("Do you want to Delete the current Item:"+CRLF+CRLF+;
 					oRow:Item["Description"]:ToString()+" ?", ;
 					"Delete") <> System.Windows.Forms.DialogResult.Yes
-		Return
-	endif
+		RETURN
+	ENDIF
 
 	cStatement:="DELETE FROM DMFListItems"+;
 				" WHERE List_Item_UID="+oRow:Item["List_Item_UID"]:ToString()
-	if ! oSoftway:AdoCommand(oMainForm:oGFH, oMainForm:oConn, cStatement)
+	IF ! oSoftway:AdoCommand(oMainForm:oGFH, oMainForm:oConn, cStatement)
 		ErrorBox("Cannot Delete current row", "Deletion aborted")
-		Return
-	endif
+		RETURN
+	ENDIF
 
-	if Self:gridviewlistitems:DataRowCount == 1
-		Self:oDTStates:Clear()
-		Return
-	endif
+	IF SELF:gridviewlistitems:DataRowCount == 1
+		SELF:oDTStates:Clear()
+		RETURN
+	ENDIF
 
 	// Stop Notification
-	Self:lSuspendNotification := True
-	if nRowHandle == 0
-		Self:gridviewlistitems:MoveNext()
-	else
-		Self:gridviewlistitems:MovePrev()
-	endif
-	Self:lSuspendNotification := False
+	SELF:lSuspendNotification := TRUE
+	IF nRowHandle == 0
+		SELF:gridviewlistitems:MoveNext()
+	ELSE
+		SELF:gridviewlistitems:MovePrev()
+	ENDIF
+	SELF:lSuspendNotification := FALSE
 
-	Local oDataRow as DataRow
-	oDataRow:=Self:oDTStates:Rows:Find(oRow:Item["List_Item_UID"]:ToString())
+	LOCAL oDataRow AS DataRow
+	oDataRow:=SELF:oDTStates:Rows:Find(oRow:Item["List_Item_UID"]:ToString())
 	//wb(oRow:Item["MSG_UNIQUEID"]:ToString(), oDataRow)
-	if oDataRow <> NULL
-		Self:oDTStates:Rows:Remove(oDataRow)
+	IF oDataRow <> NULL
+		SELF:oDTStates:Rows:Remove(oDataRow)
 //			cUIDs+=cUID+","
-	endif
+	ENDIF
 RETURN
     
 
-Method States_Refresh() as void
-Local cUID as string
+METHOD States_Refresh() AS VOID
+LOCAL cUID AS STRING
 
-	Local oRow as DataRowView
-	oRow:=(DataRowView)Self:gridviewlistitems:GetRow(Self:gridviewlistitems:FocusedRowHandle)
+	LOCAL oRow AS DataRowView
+	oRow:=(DataRowView)SELF:gridviewlistitems:GetRow(SELF:gridviewlistitems:FocusedRowHandle)
 
-	if oRow <> NULL
+	IF oRow <> NULL
 		cUID := oRow:Item["List_Item_UID"]:ToString()
-	endif
+	ENDIF
 
-	Self:CreateGridStates()
+	SELF:CreateGridStates()
 
-	if oRow <> NULL
-		Local col as DevExpress.XtraGrid.Columns.GridColumn
-		Local nFocusedHandle as int
+	IF oRow <> NULL
+		LOCAL col AS DevExpress.XtraGrid.Columns.GridColumn
+		LOCAL nFocusedHandle AS INT
 
-		col:=Self:gridviewlistitems:Columns["List_Item_UID"]
-		nFocusedHandle:=Self:gridviewlistitems:LocateByValue(0, col, Convert.ToInt32(cUID))
-		if nFocusedHandle == DevExpress.XtraGrid.GridControl.InvalidRowHandle
-			Return
-		endif
+		col:=SELF:gridviewlistitems:Columns["List_Item_UID"]
+		nFocusedHandle:=SELF:gridviewlistitems:LocateByValue(0, col, Convert.ToInt32(cUID))
+		IF nFocusedHandle == DevExpress.XtraGrid.GridControl.InvalidRowHandle
+			RETURN
+		ENDIF
 
-		Self:gridviewlistitems:ClearSelection()
-		Self:gridviewlistitems:FocusedRowHandle:=nFocusedHandle
-		Self:gridviewlistitems:SelectRow(nFocusedHandle)
-	endif	
+		SELF:gridviewlistitems:ClearSelection()
+		SELF:gridviewlistitems:FocusedRowHandle:=nFocusedHandle
+		SELF:gridviewlistitems:SelectRow(nFocusedHandle)
+	ENDIF	
 RETURN
     
 
-Method States_Print() as void
-	Self:PrintPreviewGridStates()
+METHOD States_Print() AS VOID
+	SELF:PrintPreviewGridStates()
 RETURN
 
 
-Method States_Help() as void
-Return
+METHOD States_Help() AS VOID
+RETURN
 
 
 #Region PrintPreview
 
-Method PrintPreviewGridStates() as void
+METHOD PrintPreviewGridStates() AS VOID
 	// Check whether the XtraGrid control can be previewed.
-	if ! Self:GridStates:IsPrintingAvailable
+	IF ! SELF:GridStates:IsPrintingAvailable
 		ErrorBox("The 'DevExpress.XtraPrinting' Library is not found")
-		return
-	endif
+		RETURN
+	ENDIF
 
 	// Opens the Preview window.
 	//Self:GridCompanies:ShowPrintPreview()
 
 	// Create a PrintingSystem component.
-	Local oPS := PrintingSystem{} as DevExpress.XtraPrinting.PrintingSystem
+	LOCAL oPS := PrintingSystem{} AS DevExpress.XtraPrinting.PrintingSystem
 	// Create a link that will print a control.
-	Local oLink := PrintableComponentLink{oPS} as DevExpress.XtraPrinting.PrintableComponentLink
+	LOCAL oLink := PrintableComponentLink{oPS} AS DevExpress.XtraPrinting.PrintableComponentLink
 	// Specify the control to be printed.
-	oLink:Component := Self:GridStates
+	oLink:Component := SELF:GridStates
 	// Set the paper format.
 	oLink:PaperKind := System.Drawing.Printing.PaperKind.A4
-	oLink:Landscape:=True
+	oLink:Landscape:=TRUE
 	// Subscribe to the CreateReportHeaderArea event used to generate the report header.
-	oLink:CreateReportHeaderArea += CreateAreaEventHandler{self, @PrintableComponentLinkStates_CreateReportHeaderArea()}
+	oLink:CreateReportHeaderArea += CreateAreaEventHandler{SELF, @PrintableComponentLinkStates_CreateReportHeaderArea()}
 	// Generate the report.
 	oLink:CreateDocument()
 	// Hide Send via eMail TooBar Button
 	oPS:SetCommandVisibility(PrintingSystemCommand.SendFile, CommandVisibility.None)
 	// Show the report.
 	oLink:ShowPreview()
-Return
+RETURN
 
 
-Method PrintableComponentLinkStates_CreateReportHeaderArea(sender as object, e as CreateAreaEventArgs) as void
-Local cReportHeader := "List Items of ["+Self:oCurrentRow:Item["Description"]:ToString()+"] - Printed on "+Datetime.Now:ToString(ccDateFormat)+", "+Datetime.Now:ToString("HH:mm:ss")+" - User: "+oUser:UserID as string
+METHOD PrintableComponentLinkStates_CreateReportHeaderArea(sender AS OBJECT, e AS CreateAreaEventArgs) AS VOID
+LOCAL cReportHeader := "List Items of ["+SELF:oCurrentRow:Item["Description"]:ToString()+"] - Printed on "+Datetime.Now:ToString(ccDateFormat)+", "+Datetime.Now:ToString("HH:mm:ss")+" - User: "+oUser:UserID AS STRING
 
 	e:Graph:StringFormat := BrickStringFormat{StringAlignment.Center}
 	e:Graph:Font := Font{"Tahoma", 14, FontStyle.Bold}
 
-	Local rec := RectangleF{0, 0, e:Graph:ClientPageSize:Width, 50} as RectangleF
+	LOCAL rec := RectangleF{0, 0, e:Graph:ClientPageSize:Width, 50} AS RectangleF
 	e:Graph:DrawString(cReportHeader, Color.Black, rec, DevExpress.XtraPrinting.BorderSide.None)
-Return
+RETURN
 
 #EndRegion
 
@@ -941,9 +941,9 @@ Return
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-Method FillStateDetails(oRow as DataRowView) as void
+METHOD FillStateDetails(oRow AS DataRowView) AS VOID
 
-Return
+RETURN
 
 
 //Method LocatePrimaryUser(cUserName as string) as void
@@ -983,14 +983,14 @@ Return
 //RETURN cDescription
 
 
-Method ClearStateDetails() as void
+METHOD ClearStateDetails() AS VOID
 	
-Return
+RETURN
 
 
-Method SelectFolder() as void
+METHOD SelectFolder() AS VOID
 
-Return
+RETURN
 
 
 /*Method FillNonSystemFolders(oTVSub as FolderTreeView) as void
@@ -1075,7 +1075,7 @@ oReader:Close()
 
 Return*/
 
-End Class
+END CLASS
 
 
 /*Class UserInfo

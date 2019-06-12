@@ -22,9 +22,9 @@ METHOD ReportTabForm_OnShown() AS VOID
 	SELF:decimalSeparator := numberFormatInfo:NumberDecimalSeparator
 	SELF:groupSeparator := numberFormatInfo:NumberGroupSeparator
 	
-	SELF:cTempDocsDir := Application.StartupPath + "\TempDocs"
+	SELF:cTempDocsDir := Application.StartupPath + "\TempDoc_FM_"+oUser:UserID+"\Reports"
 	SELF:CreateDirectory(SELF:cTempDocsDir)
-	SELF:ClearDirectory(self:cTempDocsDir,0)
+	SELF:ClearDirectory(SELF:cTempDocsDir,0)
 
 	lisOfficeForm := isAnOfficeForm(SELF:cMyPackageUID)	
 
@@ -45,7 +45,7 @@ METHOD ReportTabForm_OnShown() AS VOID
 		SELF:ReadOnlyControls(FALSE)
 	ENDIF
 	IF SELF:ReportMainMenu:Visible == TRUE
-		SELF:ControlBox := false
+		SELF:ControlBox := FALSE
 	ENDIF
 	
 RETURN
@@ -60,7 +60,7 @@ METHOD FillTab(cCatUID AS STRING, cDescription AS STRING) AS VOID
 		SELF:nConsecutiveNumber := 0
 		// Get the 1st Tab
 		oTabPage := SELF:tabPage_General
-		oTabPage:Click += System.EventHandler{self,@Tab_must_focus()}
+		oTabPage:Click += System.EventHandler{SELF,@Tab_must_focus()}
 		oTabPage:Name := "0"
 		dTabTag:Add("Status", "Appeared")
 	ELSE
@@ -73,7 +73,7 @@ METHOD FillTab(cCatUID AS STRING, cDescription AS STRING) AS VOID
         oTabPage:AutoScroll := TRUE
         oTabPage:Size := System.Drawing.Size{776, 536}
         oTabPage:TabIndex := Convert.ToInt32(cCatUID)
-		oTabPage:Click += System.EventHandler{self,@Tab_must_focus()}
+		oTabPage:Click += System.EventHandler{SELF,@Tab_must_focus()}
         oTabPage:UseVisualStyleBackColor := TRUE
 		dTabTag:Add("Status", "NotAppeared")
 		oTabPage:Enter += System.EventHandler{ SELF, @TabPage_Enter() }
@@ -103,7 +103,7 @@ METHOD FillTab(cCatUID AS STRING, cDescription AS STRING) AS VOID
 			oMyTable := NULL
 			iRowCount := 0 
 			iColumnCount := 0 
-			lTableMode := false 
+			lTableMode := FALSE 
 	ENDIF
 	
 RETURN
@@ -172,14 +172,14 @@ METHOD AddTabControls(oTabPage AS System.Windows.Forms.TabPage, oRow AS DataRow,
 	STATIC LOCAL cPreviousLabel := "" AS STRING
 	STATIC LOCAL nInstance := 0 AS INT
 	STATIC LOCAL cPreviousItemType AS STRING
-	STATIC LOCAL cPreviousLabelSize as int
+	STATIC LOCAL cPreviousLabelSize AS INT
 	LOCAL lSameSerieItem AS LOGIC
 	//wb(cItemType+CRLF+oRow["ItemName"]:ToString(), oTabPage:Name)
 	LOCAL oLabel AS System.Windows.Forms.Label
 	// Table
 	IF lTableMode 
 		IF cSLAA == "1"
-			self:addControlToTable(oRow, nY, TabIndex)
+			SELF:addControlToTable(oRow, nY, TabIndex)
 			RETURN
 		ELSE
 			lTableMode := FALSE
@@ -193,11 +193,11 @@ METHOD AddTabControls(oTabPage AS System.Windows.Forms.TabPage, oRow AS DataRow,
 		ENDIF
 	ENDIF
 	
-	IF cItemType <> "B" .AND. cSLAA <> "1" .and. cItemType <> "L" .and. cItemType <> "A" //If not checkbox or Slaa or Label or Table
+	IF cItemType <> "B" .AND. cSLAA <> "1" .AND. cItemType <> "L" .AND. cItemType <> "A" //If not checkbox or Slaa or Label or Table
 		LOCAL cItemName := oRow["ItemName"]:ToString():Trim() AS STRING
 		cItemName := cItemName:Replace("&", "&&")
 		//Edw vazei sthn idia grammh an einai to idio onoma ektos apo to teleutaio. mono gia numeric
-		IF cItemType == "N" .and. cPreviousLabel <> ""
+		IF cItemType == "N" .AND. cPreviousLabel <> ""
 			// Numeric field having the same description (up to Length-1 character)
 			//wb(cPreviousLabel)
 			IF cItemName:StartsWith(cPreviousLabel)
@@ -266,7 +266,7 @@ METHOD AddTabControls(oTabPage AS System.Windows.Forms.TabPage, oRow AS DataRow,
 				nLabelX +=cPreviousLabelSize + 130
 				nX +=  130
 				nY -= 30
-			CASE cPreviousItemType == "D" .or. cPreviousItemType == "X"
+			CASE cPreviousItemType == "D" .OR. cPreviousItemType == "X"
 				nLabelX +=cPreviousLabelSize + 135
 				nX +=  135
 				nY -= 30
@@ -322,7 +322,7 @@ METHOD AddTabControls(oTabPage AS System.Windows.Forms.TabPage, oRow AS DataRow,
         // 
         // CheckBox
         // 
-        oCheckBox:AutoSize := true
+        oCheckBox:AutoSize := TRUE
         oCheckBox:Location := System.Drawing.Point{250, nY}
         oCheckBox:Name := "CheckBox" + cItemUID
         oCheckBox:Size := System.Drawing.Size{80, 17}
@@ -351,11 +351,11 @@ METHOD AddTabControls(oTabPage AS System.Windows.Forms.TabPage, oRow AS DataRow,
 
 		LOCAL cCaption := oCheckBox:Text AS STRING
 		DO CASE
-		CASE cCaption:ToUpper():EndsWith("OFF/ON") .or. cCaption:ToUpper():EndsWith("ON/OFF")
+		CASE cCaption:ToUpper():EndsWith("OFF/ON") .OR. cCaption:ToUpper():EndsWith("ON/OFF")
 			cCaption := cCaption:Substring(0, cCaption:Length - 6)+" (OFF)"
 			oCheckBox:Text := cCaption
 
-		CASE cCaption:ToUpper():EndsWith("YES/NO") .or. cCaption:ToUpper():EndsWith("NO/YES")
+		CASE cCaption:ToUpper():EndsWith("YES/NO") .OR. cCaption:ToUpper():EndsWith("NO/YES")
 			cCaption := cCaption:Substring(0, cCaption:Length - 6)+" (NO)"
 			oCheckBox:Text := cCaption
 		ENDCASE
@@ -402,7 +402,7 @@ METHOD AddTabControls(oTabPage AS System.Windows.Forms.TabPage, oRow AS DataRow,
 		cItemTypeValues := cItemTypeValues:TrimEnd(';')
 		LOCAL cItems := cItemTypeValues:Split(';') AS STRING[]
 		//For Default Values.
-		LOCAL lFoundDefault := false AS LOGIC
+		LOCAL lFoundDefault := FALSE AS LOGIC
 		LOCAL cDefaultItem := "" AS STRING
 		
 		FOREACH cItem AS STRING IN cItems
@@ -526,7 +526,7 @@ METHOD AddTabControls(oTabPage AS System.Windows.Forms.TabPage, oRow AS DataRow,
 		nY += 30
 
 
-	CASE cItemType == "D" .and. cIsDD == "0"
+	CASE cItemType == "D" .AND. cIsDD == "0"
 		LOCAL oDatePicker := System.Windows.Forms.DateTimePicker{} AS System.Windows.Forms.DateTimePicker
         // 
         // DatePicker
@@ -567,7 +567,7 @@ METHOD AddTabControls(oTabPage AS System.Windows.Forms.TabPage, oRow AS DataRow,
 	//			ADDED BY KIRIAKOS
 	/////////////////////////////////////////////////////////
 
-	CASE cItemType == "D" .and. cIsDD == "1"
+	CASE cItemType == "D" .AND. cIsDD == "1"
 		LOCAL oButtonFile := System.Windows.Forms.Button{} AS System.Windows.Forms.Button
 		//
 		//	Due Date
@@ -636,7 +636,7 @@ METHOD AddTabControls(oTabPage AS System.Windows.Forms.TabPage, oRow AS DataRow,
 		//IF nFirstControl == 0
 		//	SELF:aFocusControls:Add(oTextBox)
 		//ENDIF
-	Case cItemType == "F"
+	CASE cItemType == "F"
 		LOCAL oButtonFile := System.Windows.Forms.Button{} AS System.Windows.Forms.Button
 		//
 		//	File Uploader
@@ -682,7 +682,7 @@ METHOD AddTabControls(oTabPage AS System.Windows.Forms.TabPage, oRow AS DataRow,
 		nX := 20
 		nY += 5
 		LOCAL oTable := DoubleBufferedTableLayoutPanel{} AS DoubleBufferedTableLayoutPanel
-		oTable:Visible := false
+		oTable:Visible := FALSE
 		oTable:SuspendLayout()
 		LOCAL cItemName := oRow["ItemName"]:ToString():Trim() AS STRING
 		
@@ -704,7 +704,7 @@ METHOD AddTabControls(oTabPage AS System.Windows.Forms.TabPage, oRow AS DataRow,
         // Table
         // 
 		oTable:CellBorderStyle := System.Windows.Forms.TableLayoutPanelCellBorderStyle.OutsetDouble
-        oTable:Size := System.Drawing.Size{self:Width-60, 30}
+        oTable:Size := System.Drawing.Size{SELF:Width-60, 30}
 		oTable:Location := System.Drawing.Point{nX, nY}
         oTable:Name := "Table"+ cItemUID
         oTable:RowCount := 1
@@ -782,7 +782,7 @@ METHOD AddTabControls(oTabPage AS System.Windows.Forms.TabPage, oRow AS DataRow,
 RETURN
 
 
-METHOD addControlToTable(oRow AS DataRow,  nY REF INT, nTabIndex REF INT) as Void
+METHOD addControlToTable(oRow AS DataRow,  nY REF INT, nTabIndex REF INT) AS VOID
 	//MessageBox.Show("Add Control To table.")
 	LOCAL cItemUID := oRow["ITEM_UID"]:ToString() AS STRING
 	LOCAL cItemType := oRow["ItemType"]:ToString() AS STRING
@@ -853,10 +853,10 @@ METHOD addControlToTable(oRow AS DataRow,  nY REF INT, nTabIndex REF INT) as Voi
 		cDefaultItem := "" 
         oComboBox:KeyUp += System.Windows.Forms.KeyEventHandler{ SELF, @Control_KeyUp() }
 
-		if SELF:addControlToTableLayout(oComboBox)
+		IF SELF:addControlToTableLayout(oComboBox)
 			nY += 32
 		ENDIF
-	CASE cItemType == "D" .and. cIsDD == "1"
+	CASE cItemType == "D" .AND. cIsDD == "1"
 		LOCAL oButtonFile := System.Windows.Forms.Button{} AS System.Windows.Forms.Button
 		//
 		//	Due Date
@@ -871,11 +871,11 @@ METHOD addControlToTable(oRow AS DataRow,  nY REF INT, nTabIndex REF INT) as Voi
         oButtonFile:Click += System.EventHandler{ SELF, @DueDate_Button_Clicked() }
 		oButtonFile:KeyUp += System.Windows.Forms.KeyEventHandler{ SELF, @Control_KeyUp() }
 		oButtonFile:Tag := Mandatory 
-		if SELF:addControlToTableLayout(oButtonFile)
+		IF SELF:addControlToTableLayout(oButtonFile)
 			nY += 32
 		ENDIF
 		
-	CASE cItemType == "D" .and. cIsDD == "0"
+	CASE cItemType == "D" .AND. cIsDD == "0"
 		LOCAL oDatePicker := System.Windows.Forms.DateTimePicker{} AS System.Windows.Forms.DateTimePicker
         // 
         // DatePicker
@@ -898,7 +898,7 @@ METHOD addControlToTable(oRow AS DataRow,  nY REF INT, nTabIndex REF INT) as Voi
 		oDatePicker:ValueChanged += System.EventHandler{ SELF, @Control_ValueChanged() }
 		oDatePicker:Tag := Mandatory
         //oTabPage:Controls:Add(oDatePicker)
-		if SELF:addControlToTableLayout(oDatePicker)
+		IF SELF:addControlToTableLayout(oDatePicker)
 			nY += 32
 		ENDIF
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -950,7 +950,7 @@ METHOD addControlToTable(oRow AS DataRow,  nY REF INT, nTabIndex REF INT) as Voi
         oNumericTextBox:Validating += System.ComponentModel.CancelEventHandler{ SELF, @NumericControl_Validating() }
         oNumericTextBox:Validated += System.EventHandler{ SELF, @NumericControl_Validated() }
 		oNumericTextBox:Tag := Mandatory
-        if SELF:addControlToTableLayout(oNumericTextBox)
+        IF SELF:addControlToTableLayout(oNumericTextBox)
 			nY += 32
 		ENDIF
 	CASE cItemType == "T"
@@ -967,10 +967,10 @@ METHOD addControlToTable(oRow AS DataRow,  nY REF INT, nTabIndex REF INT) as Voi
         oTextBox:BackColor := Color.White
         oTextBox:KeyUp += System.Windows.Forms.KeyEventHandler{ SELF, @Control_KeyUp() }
 		oTextBox:Tag := Mandatory
-        if SELF:addControlToTableLayout(oTextBox)
+        IF SELF:addControlToTableLayout(oTextBox)
 			nY += 32
 		ENDIF
-	Case cItemType == "F"
+	CASE cItemType == "F"
 		LOCAL oButtonFile := System.Windows.Forms.Button{} AS System.Windows.Forms.Button
 		//
 		//	File Uploader
@@ -985,13 +985,13 @@ METHOD addControlToTable(oRow AS DataRow,  nY REF INT, nTabIndex REF INT) as Voi
         oButtonFile:Click += System.EventHandler{ SELF, @File_Button_Clicked() }
 		oButtonFile:KeyUp += System.Windows.Forms.KeyEventHandler{ SELF, @Control_KeyUp() }
 		oButtonFile:Tag := Mandatory
-        if SELF:addControlToTableLayout(oButtonFile)
+        IF SELF:addControlToTableLayout(oButtonFile)
 			nY += 32
 		ENDIF
 	
 	CASE cItemType == "L"
 		LOCAL cItemName := oRow["ItemName"]:ToString():Trim() AS STRING
-		local oLabel := System.Windows.Forms.Label{} as System.Windows.Forms.Label
+		LOCAL oLabel := System.Windows.Forms.Label{} AS System.Windows.Forms.Label
         // 
         // label
         // 
@@ -1011,7 +1011,7 @@ METHOD addControlToTable(oRow AS DataRow,  nY REF INT, nTabIndex REF INT) as Voi
 		oToolTip:ShowAlways := TRUE
 		oToolTip:SetToolTip(oLabel,cItemName)
 		
-        if SELF:addControlToTableLayout(oLabel)
+        IF SELF:addControlToTableLayout(oLabel)
 			nY += 32
 		ENDIF
 	CASE cItemType == "M"
@@ -1077,9 +1077,9 @@ METHOD checkTheColumnSpan(oControlTemp AS Control, iExpandOnColumns AS INT) AS V
 	ENDIF
 RETURN
 
-METHOD addControlToTableLayout(oControl AS Control) AS logic
+METHOD addControlToTableLayout(oControl AS Control) AS LOGIC
 		///oMyTable:SuspendLayout()
-		IF iRowCount == 0 .and. iColumnCount == 0 // Einai to prwto meta to header
+		IF iRowCount == 0 .AND. iColumnCount == 0 // Einai to prwto meta to header
 			oMyTable:RowCount := 2
 			LOCAL iPercent AS INT
 			iPercent := Convert.ToInt32(100/oMyTable:RowCount)
@@ -1089,7 +1089,7 @@ METHOD addControlToTableLayout(oControl AS Control) AS logic
 			oMyTable:Controls:Add(oControl, iColumnCount, iRowCount)
 			iColumnCount ++
 			///oMyTable:ResumeLayout()
-			RETURN true
+			RETURN TRUE
 		ELSEIF  iColumnCount < oMyTable:ColumnCount
 			//LOCAL iPercent AS INT
 			//iPercent := Convert.ToInt32(100/oMyTable:RowCount)
@@ -1098,7 +1098,7 @@ METHOD addControlToTableLayout(oControl AS Control) AS logic
 			oMyTable:Controls:Add(oControl, iColumnCount, iRowCount)
 			iColumnCount ++
 			///oMyTable:ResumeLayout()
-			RETURN false
+			RETURN FALSE
 		ELSEIF iColumnCount == oMyTable:ColumnCount
 			oMyTable:RowCount := oMyTable:RowCount+1
 			iRowCount++
@@ -1110,7 +1110,7 @@ METHOD addControlToTableLayout(oControl AS Control) AS logic
 			oMyTable:Controls:Add(oControl, iColumnCount, iRowCount)
 			iColumnCount ++
 			///oMyTable:ResumeLayout()
-			RETURN true
+			RETURN TRUE
 		ENDIF
 		//oMyTable:Size := System.Drawing.Size{oMyTable:Width, oMyTable:Height+30}
 RETURN TRUE
@@ -1129,7 +1129,7 @@ METHOD isAnOfficeForm(cReportUID AS STRING) AS LOGIC
 	LOCAL cStatement:= " SELECT ReportType FROM FMReportTypes "+;
 					   " WHERE Report_Uid="+cReport_UidLocal AS STRING
 	
-	LOCAL cData := oSoftway:RecordExists(oMainForm:oGFH, oMainForm:oConn, cStatement, "ReportType")
+	LOCAL cData := oSoftway:RecordExists(oMainForm:oGFH, oMainForm:oConn, cStatement, "ReportType") AS STRING
 	IF cData == "V"
 		lReturn := FALSE
 	ELSEIF cData == "O"
@@ -1158,7 +1158,7 @@ METHOD PutControlValues(cCategoryUIDLocal AS STRING) AS VOID
 		IF SELF:cMyPackageUID == ""
 			RETURN
 		ENDIF
-	    cUID := self:cMyPackageUID //23.12
+	    cUID := SELF:cMyPackageUID //23.12
 		cStatement:="SELECT FMDataPackages.PACKAGE_UID, FMDataPackages.Status, FMData.ITEM_UID, FMData.Data FROM FMData"+oMainForm:cNoLockTerm+;
 				" INNER JOIN FMDataPackages ON FMDataPackages.PACKAGE_UID=FMData.PACKAGE_UID"+;
 				" INNER JOIN FMReportItems ON FMReportItems.ITEM_UID=FMData.ITEM_UID"+cTabSQL+;
@@ -1194,14 +1194,14 @@ METHOD PutControlValues(cCategoryUIDLocal AS STRING) AS VOID
 					" WHERE PACKAGE_UID="+cPackageUID
 		cMemo := oSoftway:RecordExists(oMainForm:oGFH, oMainForm:oConn, cStatement, "Memo")
 		
-		IF cMemo <> "" .and. cMemo:Contains((char)168)
-			LOCAL charSpl1 := (char)169 AS Char
-			LOCAL charSpl2 := (char)168 AS Char
+		IF cMemo <> "" .AND. cMemo:Contains(CHR(168))
+			LOCAL charSpl1 := (CHAR)169 AS CHAR
+			LOCAL charSpl2 := (CHAR)168 AS CHAR
 			//
 			LOCAL cItems := cMemo:Split(charSpl1) AS STRING[]
 			FOREACH cItem AS STRING IN cItems
 				TRY
-				IF cItem <> NULL .and. cItem <> ""
+				IF cItem <> NULL .AND. cItem <> ""
 					LOCAL cItemsTemp := cItem:Split(charSpl2) AS STRING[]
 					LOCAL cMultilineUID := cItemsTemp[1] AS STRING
 					oMultilineRows := oDMLE:Select("ITEM_UID="+cItemsTemp[1] )
@@ -1242,8 +1242,8 @@ METHOD PutControlValues(cCategoryUIDLocal AS STRING) AS VOID
 
         
 	    LOCAL oIniFile:=IniFile{cStartupPath+"\SOFTWAY.INI"} AS IniFile
-	    LOCAL cSQLInitialCatalog := oIniFile:GetString("SQLConnect", "SQLInitialCatalog") as String
-	    local cSQLInitialCatalogBlob := cSQLInitialCatalog + "Blob" as String
+	    LOCAL cSQLInitialCatalog := oIniFile:GetString("SQLConnect", "SQLInitialCatalog") AS STRING
+	    LOCAL cSQLInitialCatalogBlob := cSQLInitialCatalog + "Blob" AS STRING
 
 		IF cCategoryUIDLocal != NULL && cCategoryUIDLocal:Length>0
 			cStatement:=" SELECT FMBlobData.ITEM_UID,FileName FROM FMBlobData "+oMainForm:cNoLockTerm+;
@@ -1259,8 +1259,8 @@ METHOD PutControlValues(cCategoryUIDLocal AS STRING) AS VOID
 		oDMLE := oSoftway:ResultTable(oMainForm:oGFHBlob, oMainForm:oConnBlob, cStatement) 
 	
 		//wb(cStatement, oDMLE:Rows:Count:ToString())
-		LOCAL oFileTempDT as DataTable
-		IF oDMLE != null .and. oDMLE:Rows:Count > 0
+		LOCAL oFileTempDT AS DataTable
+		IF oDMLE != NULL .AND. oDMLE:Rows:Count > 0
 			iCountRows := oDMLE:Rows:Count
 			FOR i := 0 UPTO iCountRows-1 STEP 1
 					//cData := SELF:GetString(oData)
@@ -1272,7 +1272,7 @@ METHOD PutControlValues(cCategoryUIDLocal AS STRING) AS VOID
 					TRY
 						oButton := (Button)SELF:GetControl("FileUploader",cButtonId)
 						IF oButton == NULL
-							Loop
+							LOOP
 						ENDIF
 						//MessageBox.Show(SELF:GetPreviousNumberOfFiles(oButton:Text):ToString())
 						iPreviousNumberOfDocuments := SELF:GetPreviousNumberOfFiles(oButton:Text)
@@ -1308,7 +1308,7 @@ METHOD PutControlValues(cCategoryUIDLocal AS STRING) AS VOID
 		IF cCategoryUIDLocal!=NULL && cCategoryUIDLocal!=""
 			LOCAL dTabTag AS Dictionary<STRING, STRING>	
 			dTabTag := (Dictionary<STRING, STRING>)oTabPage:Tag	
-			LOCAL cTagLocal := dTabTag["TabId"]:ToString()
+			LOCAL cTagLocal := dTabTag["TabId"]:ToString() AS STRING
 			IF cTagLocal!=cCategoryUIDLocal
 				LOOP
 			ENDIF
@@ -1382,7 +1382,7 @@ METHOD PutControlValues(cCategoryUIDLocal AS STRING) AS VOID
 					CASE cName:StartsWith("TextBox")
 						oSecControl:Text := cData
 				
-					CASE cName:StartsWith("DD") .and. cData != ""
+					CASE cName:StartsWith("DD") .AND. cData != ""
 						LOCAL oDateTimePicker := replaceButtonWithDate(oSecControl) AS DateTimePicker
 						IF cData == "No Date Applicable"
 							oDateTimePicker:Visible := FALSE
@@ -1403,7 +1403,7 @@ METHOD PutControlValues(cCategoryUIDLocal AS STRING) AS VOID
 						ENDIF
 
 					CASE cName:StartsWith("GeoDeg")
-						IF ! SElF:GeoValueToDegMinSecNSEW(cData, cDeg, cMin, cSec, cNSEW)
+						IF ! SELF:GeoValueToDegMinSecNSEW(cData, cDeg, cMin, cSec, cNSEW)
 							ErrorBox("Cannot analyse the value: "+cData)
 							EXIT
 						ENDIF
@@ -1417,7 +1417,7 @@ METHOD PutControlValues(cCategoryUIDLocal AS STRING) AS VOID
 
 					CASE cName:StartsWith("GeoNSEW")
 						//wb(((System.Windows.Forms.ComboBox)oControl):SelectedIndex:Tostring()+CRLF+((System.Windows.Forms.ComboBox)oControl):Items:Count:ToString()+CRLF+(cNSEW == "N"):Tostring(), "|"+cNSEW+"|")
-						IF cNSEW == "N" .or. cNSEW == "E"
+						IF cNSEW == "N" .OR. cNSEW == "E"
 							((System.Windows.Forms.ComboBox)oControl):SelectedIndex := 0
 						ELSE
 							((System.Windows.Forms.ComboBox)oControl):SelectedIndex := 1
@@ -1434,7 +1434,7 @@ METHOD PutControlValues(cCategoryUIDLocal AS STRING) AS VOID
 		//////////////////////////////////////////////////////////////////////////////////////////
 			
 			////////////////////////////////////////////////////////////////////////////////////////////
-			try
+			TRY
 			cName := oControl:Name
 			IF cName:StartsWith("buttonEnterKey")
 				LOOP
@@ -1492,10 +1492,10 @@ METHOD PutControlValues(cCategoryUIDLocal AS STRING) AS VOID
 			CASE cName:StartsWith("TextBox")
 				oControl:Text := cData
 				
-			CASE cName:StartsWith("DD") .and. cData != ""
-				LOCAL oDateTimePicker := replaceButtonWithDate(oControl) as DateTimePicker
+			CASE cName:StartsWith("DD") .AND. cData != ""
+				LOCAL oDateTimePicker := replaceButtonWithDate(oControl) AS DateTimePicker
 				IF cData == "No Date Applicable"
-					oDateTimePicker:Visible := false
+					oDateTimePicker:Visible := FALSE
 				ELSE
 					dDate := DateTime.Parse(cData)
 					oDateTimePicker:Value := dDate
@@ -1513,7 +1513,7 @@ METHOD PutControlValues(cCategoryUIDLocal AS STRING) AS VOID
 				ENDIF
 
 			CASE cName:StartsWith("GeoDeg")
-				IF ! SElF:GeoValueToDegMinSecNSEW(cData, cDeg, cMin, cSec, cNSEW)
+				IF ! SELF:GeoValueToDegMinSecNSEW(cData, cDeg, cMin, cSec, cNSEW)
 					ErrorBox("Cannot analyse the value: "+cData)
 					EXIT
 				ENDIF
@@ -1527,7 +1527,7 @@ METHOD PutControlValues(cCategoryUIDLocal AS STRING) AS VOID
 
 			CASE cName:StartsWith("GeoNSEW")
 				//wb(((System.Windows.Forms.ComboBox)oControl):SelectedIndex:Tostring()+CRLF+((System.Windows.Forms.ComboBox)oControl):Items:Count:ToString()+CRLF+(cNSEW == "N"):Tostring(), "|"+cNSEW+"|")
-				IF cNSEW == "N" .or. cNSEW == "E"
+				IF cNSEW == "N" .OR. cNSEW == "E"
 					((System.Windows.Forms.ComboBox)oControl):SelectedIndex := 0
 				ELSE
 					((System.Windows.Forms.ComboBox)oControl):SelectedIndex := 1
@@ -1538,7 +1538,7 @@ METHOD PutControlValues(cCategoryUIDLocal AS STRING) AS VOID
 				wb("Invalid Data specified for"+CRLF+"Control: ["+cName:Replace(cItemUID, "")+"]"+CRLF+"ControlID: ["+cItemUID+"]"+CRLF+"Data: ["+cData+"]", "")
 				//CHANGED BY KIRIAKOS ON 04/11/16
 			END
-			endif 
+			ENDIF 
 		NEXT
 		//////////////////////////////////////////////////////////////////////////////////////////
 	NEXT
@@ -1548,15 +1548,15 @@ RETURN
 
 PUBLIC METHOD locateControlByNameAndUID(cPrefix AS STRING, cItemUIDLocal AS STRING) AS VOID
 
-	local cStatement:="SELECT Category_UID FROM FMReportItems "+;
-				" WHERE ITEM_UID="+cItemUIDLocal as String
+	LOCAL cStatement:="SELECT Category_UID FROM FMReportItems "+;
+				" WHERE ITEM_UID="+cItemUIDLocal AS STRING
 	cStatement := oSoftway:SelectTop(cStatement)
-	local cCategory_UidLocal :=oSoftway:RecordExists(oMainForm:oGFH, oMainForm:oConn, cStatement, "Category_UID")
+	LOCAL cCategory_UidLocal :=oSoftway:RecordExists(oMainForm:oGFH, oMainForm:oConn, cStatement, "Category_UID") AS STRING
 	
 	FOREACH oTabPage AS System.Windows.Forms.TabPage IN SELF:tabControl_Report:TabPages
 			LOCAL dTabTag AS Dictionary<STRING, STRING>	
 			dTabTag := (Dictionary<STRING, STRING>)oTabPage:Tag	
-			LOCAL cTagLocal := dTabTag["TabId"]:ToString()
+			LOCAL cTagLocal := dTabTag["TabId"]:ToString() AS STRING
 			IF cTagLocal!=cCategory_UidLocal
 				LOOP
 			ELSE
@@ -1571,10 +1571,10 @@ PUBLIC METHOD locateControlByNameAndUID(cPrefix AS STRING, cItemUIDLocal AS STRI
 	PRIVATE METHOD PrintTableClick( sender AS System.Object, e AS System.EventArgs ) AS System.Void
 	TRY
 		LOCAL oTempMenuItem := (MenuItem)sender AS MenuItem
-		LOCAL cTag := oTempMenuItem:Tag:ToString()
+		LOCAL cTag := oTempMenuItem:Tag:ToString() AS STRING
 		LOCAL lEmpty := TRUE AS LOGIC
 		IF cMyPackageUID != ""
-			lEmpty := false
+			lEmpty := FALSE
 		ENDIF
 		SELF:PrintTableToExcelFile(SELF:cReportUID,SELF:cReportName,lEmpty,SELF:cVesselUID,;
 								   SELF:cMyVesselName,cTag,SELF:cMyPackageUID)

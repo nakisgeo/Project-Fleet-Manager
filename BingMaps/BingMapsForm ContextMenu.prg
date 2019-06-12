@@ -200,7 +200,7 @@ PRIVATE METHOD GoToNextPushpin() AS VOID
 	ENDIF
 
 	LOCAL nIndex := SELF:routeLine:Locations:IndexOf(SELF:MyMapUserControl:currentPushpinLocation) AS INT
-	IF nIndex == -1 .or. nIndex >= SELF:routeLine:Locations:Count - 1
+	IF nIndex == -1 .OR. nIndex >= SELF:routeLine:Locations:Count - 1
 		RETURN
 	ENDIF
 

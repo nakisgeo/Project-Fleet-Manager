@@ -60,7 +60,7 @@
         SELF:label1:Name := "label1"
         SELF:label1:Size := System.Drawing.Size{149, 13}
         SELF:label1:TabIndex := 8
-        SELF:label1:Text := "Copyright © 2017 Softway Ltd"
+        SELF:label1:Text := "Copyright © 2019 Softway Ltd"
         // 
         // linkLabel
         // 
@@ -117,7 +117,7 @@
         RETURN
 
     PRIVATE METHOD ButtonOK_Click( sender AS System.Object, e AS System.EventArgs ) AS System.Void
-		Self:Close()
+		SELF:Close()
         RETURN
 
 END CLASS

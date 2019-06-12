@@ -281,24 +281,24 @@ PARTIAL CLASS FleetForm INHERIT DevExpress.XtraEditors.XtraForm
 
     PRIVATE METHOD GridViewFleet_DoubleClick( sender AS System.Object, e AS System.EventArgs ) AS System.Void
 		LOCAL oPoint := SELF:GridViewFleet:GridControl:PointToClient(Control.MousePosition) AS Point
-		Local info := Self:GridViewFleet:CalcHitInfo(oPoint) as DevExpress.XtraGrid.Views.Grid.ViewInfo.GridHitInfo
-		if info:InRow .or. info:InRowCell
-			if Self:GridViewFleet:IsGroupRow(info:RowHandle)
-				Return
-			endif
+		LOCAL info := SELF:GridViewFleet:CalcHitInfo(oPoint) AS DevExpress.XtraGrid.Views.Grid.ViewInfo.GridHitInfo
+		IF info:InRow .OR. info:InRowCell
+			IF SELF:GridViewFleet:IsGroupRow(info:RowHandle)
+				RETURN
+			ENDIF
 
 			// Get GridRow data into a DataRowView object
-			Local oRow as DataRowView
-			oRow:=(DataRowView)Self:GridViewFleet:GetRow(info:RowHandle)
+			LOCAL oRow AS DataRowView
+			oRow:=(DataRowView)SELF:GridViewFleet:GetRow(info:RowHandle)
 
-			if info:Column <> NULL
+			IF info:Column <> NULL
 				// Set focused Row/Column (for DoubleClick event)
 				//SELF:GridViewFleet:FocusedRowHandle := info:RowHandle
 				//SELF:GridViewFleet:FocusedColumn := info:Column
 
-				Self:Fleet_Edit(oRow, info:Column)
-			endif
-		endif
+				SELF:Fleet_Edit(oRow, info:Column)
+			ENDIF
+		ENDIF
         RETURN
 
     PRIVATE METHOD GridViewFleet_FocusedColumnChanged( sender AS System.Object, e AS DevExpress.XtraGrid.Views.Base.FocusedColumnChangedEventArgs ) AS System.Void
@@ -313,8 +313,8 @@ PARTIAL CLASS FleetForm INHERIT DevExpress.XtraEditors.XtraForm
 		// Get GridRow data into a DataRowView object
 		LOCAL oRow AS DataRowView
 
-		oRow := (DataRowView)Self:GridViewFleet:GetFocusedRow()
-		Self:Fleet_Edit(oRow, Self:GridViewFleet:FocusedColumn)
+		oRow := (DataRowView)SELF:GridViewFleet:GetFocusedRow()
+		SELF:Fleet_Edit(oRow, SELF:GridViewFleet:FocusedColumn)
         RETURN
 
     PRIVATE METHOD BBIDelete_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void

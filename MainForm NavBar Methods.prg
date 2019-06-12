@@ -14,48 +14,48 @@ DO CASE
 CASE e:Group:Name == "Communicator"
 	IF ! lInstalledCommunicator
 		InfoBox("This module is not included in the active program licenses", e:Group:Name)
-		SELF:oNavBarPrograms:ActiveGroup := SELF:oNavBarPrograms:Groups["FleetManager"]
-		// or: SELF:oNavBarPrograms:ActiveGroup:=SELF:oNavBarPrograms:Groups[Application.ProductName]
+		SELF:oNavBarForm:NavBarPrograms:ActiveGroup := SELF:oNavBarForm:NavBarPrograms:Groups["FleetManager"]
+		// or: SELF:oNavBarForm:NavBarPrograms:ActiveGroup:=SELF:oNavBarForm:NavBarPrograms:Groups[Application.ProductName]
 		RETURN
 	ENDIF
-	oSoftway:RunNavBarApplication(SELF, SELF:oNavBarPrograms, e:Group:Name, e:Group:Caption, Application.ProductName)
+	oSoftway:RunNavBarApplication(SELF, SELF:oNavBarForm:NavBarPrograms, e:Group:Name, e:Group:Caption, Application.ProductName)
 
 CASE e:Group:Name == "CrewFile"
 	IF ! lInstalledCrew
 		InfoBox("This module is not included in the active program licenses", e:Group:Name)
-		SELF:oNavBarPrograms:ActiveGroup := SELF:oNavBarPrograms:Groups["FleetManager"]
-		// or: SELF:oNavBarPrograms:ActiveGroup:=SELF:oNavBarPrograms:Groups[Application.ProductName]
+		SELF:oNavBarForm:NavBarPrograms:ActiveGroup := SELF:oNavBarForm:NavBarPrograms:Groups["FleetManager"]
+		// or: SELF:oNavBarForm:NavBarPrograms:ActiveGroup:=SELF:oNavBarForm:NavBarPrograms:Groups[Application.ProductName]
 		RETURN
 	ENDIF
-	oSoftway:RunNavBarApplication(SELF, SELF:oNavBarPrograms, e:Group:Name, e:Group:Caption, Application.ProductName)
+	oSoftway:RunNavBarApplication(SELF, SELF:oNavBarForm:NavBarPrograms, e:Group:Name, e:Group:Caption, Application.ProductName)
 
 
 CASE e:Group:Name == "Scheduler"
 	IF ! lInstalledScheduler
 		InfoBox("This module is not included in the active program licenses", e:Group:Name)
-		SELF:oNavBarPrograms:ActiveGroup := SELF:oNavBarPrograms:Groups["FleetManager"]
-		// or: SELF:oNavBarPrograms:ActiveGroup:=SELF:oNavBarPrograms:Groups[Application.ProductName]
+		SELF:oNavBarForm:NavBarPrograms:ActiveGroup := SELF:oNavBarForm:NavBarPrograms:Groups["FleetManager"]
+		// or: SELF:oNavBarForm:NavBarPrograms:ActiveGroup:=SELF:oNavBarForm:NavBarPrograms:Groups[Application.ProductName]
 		RETURN
 	ENDIF
-	oSoftway:RunNavBarApplication(SELF, SELF:oNavBarPrograms, "Communicator", "Communicator", Application.ProductName)
+	oSoftway:RunNavBarApplication(SELF, SELF:oNavBarForm:NavBarPrograms, "Communicator", "Communicator", Application.ProductName)
 
 CASE e:Group:Name == "DMF"
 	IF ! lInstalledDMF
 		InfoBox("This module is not included in the active program licenses", e:Group:Name)
-		SELF:oNavBarPrograms:ActiveGroup := SELF:oNavBarPrograms:Groups["FleetManager"]
-		// or: SELF:oNavBarPrograms:ActiveGroup:=SELF:oNavBarPrograms:Groups[Application.ProductName]
+		SELF:oNavBarForm:NavBarPrograms:ActiveGroup := SELF:oNavBarForm:NavBarPrograms:Groups["FleetManager"]
+		// or: SELF:oNavBarForm:NavBarPrograms:ActiveGroup:=SELF:oNavBarForm:NavBarPrograms:Groups[Application.ProductName]
 		RETURN
 	ENDIF
-	oSoftway:RunNavBarApplication(SELF, SELF:oNavBarPrograms, "Communicator", "Communicator", Application.ProductName)
+	oSoftway:RunNavBarApplication(SELF, SELF:oNavBarForm:NavBarPrograms, "Communicator", "Communicator", Application.ProductName)
 
 CASE e:Group:Name == "ShippingAccounting"
 	IF ! lInstalledShippingAccounting
 		InfoBox("This module is not included in the active program licenses", e:Group:Name)
-		SELF:oNavBarPrograms:ActiveGroup := SELF:oNavBarPrograms:Groups["FleetManager"]
-		// or: SELF:oNavBarPrograms:ActiveGroup:=SELF:oNavBarPrograms:Groups[Application.ProductName]
+		SELF:oNavBarForm:NavBarPrograms:ActiveGroup := SELF:oNavBarForm:NavBarPrograms:Groups["FleetManager"]
+		// or: SELF:oNavBarForm:NavBarPrograms:ActiveGroup:=SELF:oNavBarForm:NavBarPrograms:Groups[Application.ProductName]
 		RETURN
 	ENDIF
-	oSoftway:RunNavBarApplication(SELF, SELF:oNavBarPrograms, e:Group:Name, e:Group:Caption, Application.ProductName)
+	oSoftway:RunNavBarApplication(SELF, SELF:oNavBarForm:NavBarPrograms, e:Group:Name, e:Group:Caption, Application.ProductName)
 
 ENDCASE
 
@@ -67,8 +67,8 @@ PRIVATE METHOD Fleet_LinkClicked( sender AS System.Object, e AS DevExpress.XtraN
 	SELF:oNavBarForm:Fleet:Enabled := FALSE
 	Application.DoEvents()
 
-	LOCAL oRowLocal := self:returnUserSetting(oUser:USER_UNIQUEID) AS DataRow
-	IF !( oRowLocal == NULL .or. oRowLocal["CanEditReports"]:ToString() == "False")
+	LOCAL oRowLocal := SELF:returnUserSetting(oUser:USER_UNIQUEID) AS DataRow
+	IF !( oRowLocal == NULL .OR. oRowLocal["CanEditReports"]:ToString() == "False")
 		LOCAL oFleetForm := FleetForm{} AS FleetForm
 		oFleetForm:Show(SELF)
 	ENDIF
@@ -83,8 +83,8 @@ PRIVATE METHOD FMVessels_LinkClicked( sender AS System.Object, e AS DevExpress.X
 	SELF:oNavBarForm:FMVessels:Enabled := FALSE
 	Application.DoEvents()
 
-	LOCAL oRowLocal := self:returnUserSetting(oUser:USER_UNIQUEID) AS DataRow
-	IF !( oRowLocal == NULL .or. oRowLocal["CanEditReports"]:ToString() == "False")
+	LOCAL oRowLocal := SELF:returnUserSetting(oUser:USER_UNIQUEID) AS DataRow
+	IF !( oRowLocal == NULL .OR. oRowLocal["CanEditReports"]:ToString() == "False")
 		LOCAL oVesselsForm := VesselsForm{} AS VesselsForm
 		oVesselsForm:Show(SELF)
 	ENDIF
@@ -112,8 +112,8 @@ PRIVATE METHOD FMReports_LinkClicked( sender AS System.Object, e AS DevExpress.X
 	SELF:oNavBarForm:FMReports:Enabled := FALSE
 	Application.DoEvents()
 
-	LOCAL oRowLocal := self:returnUserSetting(oUser:USER_UNIQUEID) AS DataRow
-	IF !( oRowLocal == NULL .or. oRowLocal["CanEditReports"]:ToString() == "False")
+	LOCAL oRowLocal := SELF:returnUserSetting(oUser:USER_UNIQUEID) AS DataRow
+	IF !( oRowLocal == NULL .OR. oRowLocal["CanEditReports"]:ToString() == "False")
 		LOCAL oReportsForm := ReportsForm{} AS ReportsForm
 		oReportsForm:Show(SELF)
 	ENDIF
@@ -127,8 +127,8 @@ PRIVATE METHOD FMItems_LinkClicked( sender AS System.Object, e AS DevExpress.Xtr
 	SELF:oNavBarForm:FMItems:Enabled := FALSE
 	Application.DoEvents()
 	
-	LOCAL oRowLocal := self:returnUserSetting(oUser:USER_UNIQUEID) AS DataRow
-	IF !( oRowLocal == NULL .or. oRowLocal["CanEditReports"]:ToString() == "False")
+	LOCAL oRowLocal := SELF:returnUserSetting(oUser:USER_UNIQUEID) AS DataRow
+	IF !( oRowLocal == NULL .OR. oRowLocal["CanEditReports"]:ToString() == "False")
 		LOCAL oItemsForm := ItemsForm{} AS ItemsForm
 		oItemsForm:Show(SELF)
 	ENDIF
@@ -214,21 +214,21 @@ RETURN
 
 
 PRIVATE METHOD HelpAbout_LinkClicked( sender AS System.Object, e AS DevExpress.XtraNavBar.NavBarLinkEventArgs ) AS System.Void
-	Self:oNavBarForm:HelpAbout:Enabled := False
+	SELF:oNavBarForm:HelpAbout:Enabled := FALSE
 	Application.DoEvents()
 
-	Local oAboutDialog:=AboutDialog{} as AboutDialog
-	Local cLicText as string
+	LOCAL oAboutDialog:=AboutDialog{} AS AboutDialog
+	LOCAL cLicText AS STRING
 
 	cLicText:="Licensed to: "+cLicensedCompany
-	if nDemoDays > 0
+	IF nDemoDays > 0
 		//cLicText+=CRLF+"Demo version: "+(nDemoDays - nDemoDayCurrent):ToString()+" days left"
 		cLicText+=CRLF+"You are on day: "+nDemoDayCurrent:ToString()+;
 						" of your: "+nDemoDays:ToString()+" day evaluation period"
-	endif                                                          
+	ENDIF                                                          
 	oAboutDialog:LicenseTxt:Text:=cLicText
-	Self:oNavBarForm:HelpAbout:Enabled := True
-	oAboutDialog:ShowDialog(Self)  
+	SELF:oNavBarForm:HelpAbout:Enabled := TRUE
+	oAboutDialog:ShowDialog(SELF)  
 
 	//Self:oNavBarForm:HelpAbout:Enabled := False
 	//Application.DoEvents()

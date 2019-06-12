@@ -25,13 +25,13 @@ PARTIAL CLASS VoyagesForm INHERIT System.Windows.Forms.Form
 	PRIVATE LBSuggestOwner := "" AS STRING	//DevExpress.XtraEditors.SplitContainerControl
 	PRIVATE cPortFromGMT_DIFF, cPortToGMT_DIFF AS STRING
 	PRIVATE cCondition AS STRING
-	PRIVATE cVoyageType as STRING
+	PRIVATE cVoyageType AS STRING
 	PRIVATE cVesselName := "" AS STRING
 	//Time Charter Antonis 1.12.14
 	PUBLIC lisTC AS LOGIC
 	PUBLIC cTCParent AS STRING
 	//Silent Mode Do Not invoke events
-	Public lSilent as LOGIC
+	PUBLIC lSilent AS LOGIC
 	
 	
 METHOD VoyagesForm_OnLoad() AS VOID
@@ -49,7 +49,7 @@ METHOD VoyagesForm_OnLoad() AS VOID
 	SELF:LBSuggest:BringToFront()
 	SELF:LBSuggest:Visible:=FALSE
 
-	SELF:GridViewVoyages:OptionsView:ShowGroupPanel := False
+	SELF:GridViewVoyages:OptionsView:ShowGroupPanel := FALSE
 	//SELF:GridViewVoyages:OptionsBehavior:AutoPopulateColumns := FALSE
 	SELF:GridViewVoyages:OptionsBehavior:AllowIncrementalSearch := FALSE
 	SELF:GridViewVoyages:OptionsPrint:PrintDetails := TRUE
@@ -71,7 +71,7 @@ METHOD VoyagesForm_OnLoad() AS VOID
 
 	//SELF:GridViewRoutings:OptionsView:ShowFooter := TRUE
 	
-	lSilent := true
+	lSilent := TRUE
 	SELF:CreateGridVoyages_Columns()
 	SELF:CreateGridRoutings_Columns()
 	SELF:routingDetails1:createGrids()
@@ -80,7 +80,7 @@ METHOD VoyagesForm_OnLoad() AS VOID
 
 	// Set CheckBox GridColumn to single mouse click if it is active
 	SELF:SetEditModeOff_Common(SELF:GridViewVoyages)
-	lSilent := false
+	lSilent := FALSE
 	SELF:GridViewVoyages:Focus()
 	
 	
@@ -88,7 +88,7 @@ METHOD VoyagesForm_OnLoad() AS VOID
 	LOCAL oRowLocal := oMainForm:returnUserSetting(oUser:USER_UNIQUEID) AS DataRow
 	
 	//WB(oRowLocal["CanEditVoyages"]:ToString())
-	IF oRowLocal == null .or. oRowLocal["CanEditVoyages"]:ToString() == "False"
+	IF oRowLocal == NULL .OR. oRowLocal["CanEditVoyages"]:ToString() == "False"
 		SELF:GridViewVoyages:OptionsBehavior:Editable := FALSE
 		SELF:GridViewRoutings:OptionsBehavior:Editable := FALSE
 	ENDIF
@@ -171,7 +171,7 @@ METHOD CreateGridVoyages() AS VOID
 	oSoftway:CreatePK(SELF:oDTVoyages, "VOYAGE_UID")
 
 	// Routings
-	cStatement:= self:formSQLRoutingsQuery(cTCextraSQL_Voyage)
+	cStatement:= SELF:formSQLRoutingsQuery(cTCextraSQL_Voyage)
 	
 	//MemoWrit(ctempdocdir+"\stat2.txt", cStatement)
 	
@@ -230,8 +230,8 @@ LOCAL nVisible:=0, nAbsIndex:=0 AS INT
 	oColumn:ColumnEdit := SELF:CreateRepositoryItemTextEdit_Port()
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
-	oColumn:=oMainForm:CreateDXColumn("FromEU", "FromEU",				False, DevExpress.Data.UnboundColumnType.Boolean, ;
-																		nAbsIndex++, nVisible++, 50, Self:GridViewVoyages)
+	oColumn:=oMainForm:CreateDXColumn("FromEU", "FromEU",				FALSE, DevExpress.Data.UnboundColumnType.Boolean, ;
+																		nAbsIndex++, nVisible++, 50, SELF:GridViewVoyages)
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	oColumn:=oMainForm:CreateDXColumn("+/-GMT", "uPortFromGMT_DIFF",FALSE, DevExpress.Data.UnboundColumnType.Decimal, ;
@@ -245,8 +245,8 @@ LOCAL nVisible:=0, nAbsIndex:=0 AS INT
 																nAbsIndex++, nVisible++, 150, SELF:GridViewVoyages)
 	oColumn:ColumnEdit := SELF:CreateRepositoryItemTextEdit_Port()
 
-	oColumn:=oMainForm:CreateDXColumn("ToEU", "ToEU",				False, DevExpress.Data.UnboundColumnType.Boolean, ;
-																		nAbsIndex++, nVisible++, 50, Self:GridViewVoyages)
+	oColumn:=oMainForm:CreateDXColumn("ToEU", "ToEU",				FALSE, DevExpress.Data.UnboundColumnType.Boolean, ;
+																		nAbsIndex++, nVisible++, 50, SELF:GridViewVoyages)
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	oColumn:=oMainForm:CreateDXColumn("+/-GMT", "uPortToGMT_DIFF",	FALSE, DevExpress.Data.UnboundColumnType.Decimal, ;
@@ -323,7 +323,7 @@ LOCAL nVisible:=0, nAbsIndex:=0 AS INT
 RETURN
 
 
-METHOD CreateRepositoryItemDateTime() as RepositoryItemDateEdit
+METHOD CreateRepositoryItemDateTime() AS RepositoryItemDateEdit
 // Create a RepositoryItemTextEdit control for the DateTime columns: dd-MM-yy HH:mm
 	LOCAL oRepositoryItemDateTime AS RepositoryItemDateEdit
 	oRepositoryItemDateTime := RepositoryItemDateEdit{}
@@ -491,7 +491,7 @@ METHOD GetGMTColumn_Voyage(oRow AS DataRow, cPrefix AS STRING) AS STRING
 	LOCAL dt AS Datetime
 
 	// Read the Row's CommencedGMT or CompletedGMT
-	cDateGMT := oRow:Item[Iif(cPrefix == "PortFrom", "StartDateGMT", "EndDateGMT")]:ToString()
+	cDateGMT := oRow:Item[IIF(cPrefix == "PortFrom", "StartDateGMT", "EndDateGMT")]:ToString()
 	IF cDateGMT == ""
 		cGMT := IIF(oSoftway:IsSummerTimeGMT(Datetime.Now), cPrefix+"SummerGMT_DIFF", cPrefix+"WinterGMT_DIFF")
 		RETURN cGMT
@@ -512,7 +512,7 @@ METHOD GetGMTColumn_Routing(oRow AS DataRow, cPrefix AS STRING) AS STRING
 	LOCAL dt AS Datetime
 
 	// Read the Row's CommencedGMT or CompletedGMT
-	cDateGMT := oRow:Item[Iif(cPrefix == "PortFrom", "CommencedGMT", "CompletedGMT")]:ToString()
+	cDateGMT := oRow:Item[IIF(cPrefix == "PortFrom", "CommencedGMT", "CompletedGMT")]:ToString()
 	IF cDateGMT == ""
 		cGMT := IIF(oSoftway:IsSummerTimeGMT(Datetime.Now), cPrefix+"SummerGMT_DIFF", cPrefix+"WinterGMT_DIFF")
 		RETURN cGMT
@@ -540,7 +540,7 @@ METHOD FocusedRowChanged_Voyages(e AS DevExpress.XtraGrid.Views.Base.FocusedRowC
 	IF oRow == NULL
 		RETURN
 	ELSE
-		SELF:routingDetails1:formGrid("V",oRow["Voyage_UID"]:ToString(),"Data",self)
+		SELF:routingDetails1:formGrid("V",oRow["Voyage_UID"]:ToString(),"Data",SELF)
 	ENDIF
 
 	
@@ -665,12 +665,12 @@ METHOD FocusedRowChanged_Routings(e AS DevExpress.XtraGrid.Views.Base.FocusedRow
 				RETURN
 			ENDIF
 			oRoutingRow:=(DataRowView)oRView:GetFocusedRow()
-			SELF:routingDetails1:formGrid("R",oRoutingRow["ROUTING_UID"]:ToString(),"Data",self)
+			SELF:routingDetails1:formGrid("R",oRoutingRow["ROUTING_UID"]:ToString(),"Data",SELF)
 		ENDIF
 	
 RETURN
 
-export METHOD click_Routings() as Void
+EXPORT METHOD click_Routings() AS VOID
 //	LOCAL iIndexes AS INT[]
 	LOCAL oRoutingRow AS DataRowView
 		IF SELF:GridVoyages:FocusedView == SELF:GridViewVoyages
@@ -762,7 +762,7 @@ RETURN
 
 METHOD VoyageRouting_Add(lSilent AS LOGIC) AS VOID
 	LOCAL oRow AS DataRowView
-	LOCAL isTimeCharter :=false as LOGIC
+	LOCAL isTimeCharter :=FALSE AS LOGIC
 	oRow:=(DataRowView)SELF:GridViewVoyages:GetFocusedRow()
 
 	IF oRow == NULL
@@ -772,17 +772,17 @@ METHOD VoyageRouting_Add(lSilent AS LOGIC) AS VOID
 
 	LOCAL cTypeOfVoyage := oRow:Item["Type"]:ToString() AS STRING
 	IF cTypeOfVoyage == "1"
-		isTimeCharter := true
+		isTimeCharter := TRUE
 	ENDIF
 	//wb(cTypeOfVoyage) 
 	
 	
-	IF ! lSilent .and. !isTimeCharter
+	IF ! lSilent .AND. !isTimeCharter
 		IF QuestionBox("Do you want to create a New Voyage Routing for the selected Voyage ?", ;
 					"New Voyage Routing") <> System.Windows.Forms.DialogResult.Yes
 			RETURN
 		ENDIF
-	ELSEif !lSilent .and. isTimeCharter
+	ELSEIF !lSilent .AND. isTimeCharter
 		IF QuestionBox("Do you want to create a New Voyage for the selected Time Charter ?", ;
 					"New Voyage") <> System.Windows.Forms.DialogResult.Yes
 			RETURN
@@ -973,7 +973,7 @@ METHOD VoyageRouting_Edit(oRow AS DataRowView, oColumn AS GridColumn, oView AS G
 		RETURN
 	ENDIF
 
-	IF cField == "ManualROB_FO" .and. (oRow:Item["CommencedGMT"]:ToString() == "" .or. oRow:Item["CompletedGMT"]:ToString() == "")
+	IF cField == "ManualROB_FO" .AND. (oRow:Item["CommencedGMT"]:ToString() == "" .OR. oRow:Item["CompletedGMT"]:ToString() == "")
 		ErrorBox("The CommencedGMT/CompletedGMT is not specified", "Editing aborted")
 		RETURN
 	ENDIF
@@ -992,7 +992,7 @@ METHOD VoyageRouting_Edit(oRow AS DataRowView, oColumn AS GridColumn, oView AS G
 	ENDIF
 RETURN
 
-METHOD SetCompanyInTableAndField(oRow as DataRowView,cTable as String,cIUDColumnName as STRING, cField as String) AS VOID
+METHOD SetCompanyInTableAndField(oRow AS DataRowView,cTable AS STRING,cIUDColumnName AS STRING, cField AS STRING) AS VOID
 		LOCAL oSelect_Company := Select_Company{} AS Select_Company
 		LOCAL oResult := oSelect_Company:ShowDialog() AS DialogResult
 		//MessageBox.Show(oResult:ToString())
@@ -1009,7 +1009,7 @@ METHOD SetCompanyInTableAndField(oRow as DataRowView,cTable as String,cIUDColumn
 		ENDIF	
 RETURN
 
-METHOD SetOperationInTableAndField(oRow as DataRowView,cTable as String,cIUDColumnName as STRING, cField as String) AS VOID
+METHOD SetOperationInTableAndField(oRow AS DataRowView,cTable AS STRING,cIUDColumnName AS STRING, cField AS STRING) AS VOID
 		LOCAL oSelect_Operation := Select_Operation{} AS Select_Operation
 		LOCAL oResult := oSelect_Operation:ShowDialog() AS DialogResult
 		//MessageBox.Show(oResult:ToString())
@@ -1156,7 +1156,7 @@ METHOD Voyages_Save(e AS DevExpress.XtraGrid.Views.Base.CellValueChangedEventArg
 			cReplace := "0"
 		CASE SELF:cVoyageType:ToUpper() == "TIME CHARTER"
 			cReplace := "1"
-		CASE self:cVoyageType:ToUpper() == "IDLE" 
+		CASE SELF:cVoyageType:ToUpper() == "IDLE" 
 			cReplace := "2"
 		OTHERWISE
 			cReplace := "0"
@@ -2354,7 +2354,7 @@ METHOD UpdateEconDistances(oDataRow AS DataRow, cValue AS STRING) AS VOID
 		NEXT
 
 		DO CASE
-		CASE oDTDist:Rows:Count > 0 .AND. nDistance <> nOldDistance .and. nDistance <> 0
+		CASE oDTDist:Rows:Count > 0 .AND. nDistance <> nOldDistance .AND. nDistance <> 0
 			IF QuestionBox("The Distance table contains the Distance: "+oDTDist:Rows[0]:Item["Distance"]:ToString()+CRLF+;
 							"between: "+oDataRow:Item["PortFrom"]:ToString()+" and "+oDataRow:Item["PortTo"]:ToString()+CRLF+CRLF+;
 							"Do you want to Update the the existing Distance to: "+nDistance:ToString()+" into the Distance table ?", ;
@@ -2368,7 +2368,7 @@ METHOD UpdateEconDistances(oDataRow AS DataRow, cValue AS STRING) AS VOID
 				//nDistance := Convert.ToInt32(oDTDist:Rows[0]:Item["Distance"])
 			ENDIF
 
-		CASE oDTDist:Rows:Count == 0 .and. nDistance <> 0
+		CASE oDTDist:Rows:Count == 0 .AND. nDistance <> 0
 			// Append Distance
 			cStatement:="INSERT INTO VEDistances (PortFrom, PortTo, PortVia, Distance) VALUES"+;
 						" ("+cPortFrom+","+cPortTo+", 0, "+nDistance:ToString()+")"
@@ -2432,7 +2432,7 @@ METHOD Voyages_Delete() AS VOID
 	SELF:lSuspendNotification := FALSE
 
 	LOCAL oDataRow AS DataRow
-	oDataRow:=Self:oDTVoyages:Rows:Find(cUID)
+	oDataRow:=SELF:oDTVoyages:Rows:Find(cUID)
 	//wb(oRow:Item["MSG_UNIQUEID"]:ToString(), oDataRow)
 	IF oDataRow <> NULL
 		//wb(Self:oDTMsg32:Rows:Find(oRow:Item["MsgRefNo"]:ToString()), "Removed")
@@ -2500,7 +2500,7 @@ METHOD VoyageRouting_Delete() AS VOID
 	SELF:lSuspendNotification := FALSE
 
 	LOCAL oDataRow AS DataRow
-	oDataRow:=Self:oDTRoutings:Rows:Find(cRoutingUID)
+	oDataRow:=SELF:oDTRoutings:Rows:Find(cRoutingUID)
 	//wb(oRow:Item["MSG_UNIQUEID"]:ToString(), oDataRow)
 	IF oDataRow <> NULL
 		//wb(Self:oDTMsg32:Rows:Find(oRow:Item["MsgRefNo"]:ToString()), "Removed")
@@ -2644,7 +2644,7 @@ METHOD FillDates_Voyage() AS VOID
 
 	FOR n:=0 UPTO nRows
 		oRow:=(DataRowView)SELF:GridViewVoyages:GetRow(n)
-		IF oRow:Item["StartDate"]:ToString() <> "" .and. oRow:Item["StartDateGMT"]:ToString() == ""
+		IF oRow:Item["StartDate"]:ToString() <> "" .AND. oRow:Item["StartDateGMT"]:ToString() == ""
 			TRY
 				cGMTColumn := SELF:GetGMTColumn_Voyage(oRow:Row, "PortFrom")
 				nDiff := Convert.ToDouble(oRow:Item[cGMTColumn]:ToString())
@@ -2661,7 +2661,7 @@ METHOD FillDates_Voyage() AS VOID
 			END TRY
 		ENDIF
 
-		IF oRow:Item["StartDate"]:ToString() == "" .and. oRow:Item["StartDateGMT"]:ToString() <> ""
+		IF oRow:Item["StartDate"]:ToString() == "" .AND. oRow:Item["StartDateGMT"]:ToString() <> ""
 			TRY
 				cGMTColumn := SELF:GetGMTColumn_Voyage(oRow:Row, "PortFrom")
 				nDiff := Convert.ToDouble(oRow:Item[cGMTColumn]:ToString())
@@ -2678,7 +2678,7 @@ METHOD FillDates_Voyage() AS VOID
 			END TRY
 		ENDIF
 
-		IF oRow:Item["EndDate"]:ToString() <> "" .and. oRow:Item["EndDateGMT"]:ToString() == ""
+		IF oRow:Item["EndDate"]:ToString() <> "" .AND. oRow:Item["EndDateGMT"]:ToString() == ""
 			TRY
 				cGMTColumn := SELF:GetGMTColumn_Voyage(oRow:Row, "PortTo")
 				nDiff := Convert.ToDouble(oRow:Item[cGMTColumn]:ToString())
@@ -2695,7 +2695,7 @@ METHOD FillDates_Voyage() AS VOID
 			END TRY
 		ENDIF
 
-		IF oRow:Item["EndDate"]:ToString() == "" .and. oRow:Item["EndDateGMT"]:ToString() <> ""
+		IF oRow:Item["EndDate"]:ToString() == "" .AND. oRow:Item["EndDateGMT"]:ToString() <> ""
 			TRY
 				cGMTColumn := SELF:GetGMTColumn_Voyage(oRow:Row, "PortTo")
 				nDiff := Convert.ToDouble(oRow:Item[cGMTColumn]:ToString())
@@ -2728,7 +2728,7 @@ METHOD FillDates_Routing(oView AS GridView) AS VOID
 
 	FOR n:=0 UPTO nRows
 		oRow:=(DataRowView)oView:GetRow(n)
-		IF oRow:Item["Commenced"]:ToString() <> "" .and. oRow:Item["CommencedGMT"]:ToString() == ""
+		IF oRow:Item["Commenced"]:ToString() <> "" .AND. oRow:Item["CommencedGMT"]:ToString() == ""
 			TRY
 				cGMTColumn := SELF:GetGMTColumn_Routing(oRow:Row, "PortFrom")
 				nDiff := Convert.ToDouble(oRow:Item[cGMTColumn]:ToString())
@@ -2745,7 +2745,7 @@ METHOD FillDates_Routing(oView AS GridView) AS VOID
 			END TRY
 		ENDIF
 
-		IF oRow:Item["Commenced"]:ToString() == "" .and. oRow:Item["CommencedGMT"]:ToString() <> ""
+		IF oRow:Item["Commenced"]:ToString() == "" .AND. oRow:Item["CommencedGMT"]:ToString() <> ""
 			TRY
 				cGMTColumn := SELF:GetGMTColumn_Routing(oRow:Row, "PortFrom")
 				nDiff := Convert.ToDouble(oRow:Item[cGMTColumn]:ToString())
@@ -2762,7 +2762,7 @@ METHOD FillDates_Routing(oView AS GridView) AS VOID
 			END TRY
 		ENDIF
 
-		IF oRow:Item["Completed"]:ToString() <> "" .and. oRow:Item["CompletedGMT"]:ToString() == ""
+		IF oRow:Item["Completed"]:ToString() <> "" .AND. oRow:Item["CompletedGMT"]:ToString() == ""
 			TRY
 				cGMTColumn := SELF:GetGMTColumn_Routing(oRow:Row, "PortTo")
 				nDiff := Convert.ToDouble(oRow:Item[cGMTColumn]:ToString())
@@ -2779,7 +2779,7 @@ METHOD FillDates_Routing(oView AS GridView) AS VOID
 			END TRY
 		ENDIF
 
-		IF oRow:Item["Completed"]:ToString() == "" .and. oRow:Item["CompletedGMT"]:ToString() <> ""
+		IF oRow:Item["Completed"]:ToString() == "" .AND. oRow:Item["CompletedGMT"]:ToString() <> ""
 			TRY
 				cGMTColumn := SELF:GetGMTColumn_Routing(oRow:Row, "PortTo")
 				nDiff := Convert.ToDouble(oRow:Item[cGMTColumn]:ToString())
@@ -2798,7 +2798,7 @@ METHOD FillDates_Routing(oView AS GridView) AS VOID
 	NEXT
 RETURN
 
-METHOD setTimeCharterProperties(lIsTCLocal AS LOGIC,cTCParentLocal AS STRING) as Void
+METHOD setTimeCharterProperties(lIsTCLocal AS LOGIC,cTCParentLocal AS STRING) AS VOID
 	SELF:lisTC := lIsTCLocal 
 	SELF:cTCParent := cTCParentLocal
 RETURN
@@ -2914,7 +2914,7 @@ METHOD Change_BarSetup_ToolTips_Routings() AS VOID
 	SELF:BBICalculateROB:Visibility := DevExpress.XtraBars.BarItemVisibility.Always
 RETURN
 
-Export METHOD showMatchForm(cType AS STRING) as void
+EXPORT METHOD showMatchForm(cType AS STRING) AS VOID
 		LOCAL oMatchForm := MatchForm{} AS MatchForm
 		LOCAL DateGMT := "" AS STRING
 		LOCAL oView:=(GridView)SELF:GridViewVoyages:GetDetailView(SELF:GridViewVoyages:FocusedRowHandle, 0) AS GridView
@@ -2925,9 +2925,9 @@ Export METHOD showMatchForm(cType AS STRING) as void
 			RETURN
 		ENDIF
 		
-		LOCAL cRoutingUID := oRoutingRow["Routing_UID"]:ToString() 
-		LOCAL cVoyageStartDate := oRoutingRow["CommencedGMT"]:ToString() 
-		LOCAL cVoyageEndDate := oRoutingRow["CompletedGMT"]:ToString() 
+		LOCAL cRoutingUID := oRoutingRow["Routing_UID"]:ToString()  AS STRING
+		LOCAL cVoyageStartDate := oRoutingRow["CommencedGMT"]:ToString()  AS STRING
+		LOCAL cVoyageEndDate := oRoutingRow["CompletedGMT"]:ToString()  AS STRING
 		oMatchForm:setTypeAndVessel(cType,cVesselUID_Voyages,cVoyageStartDate,cVoyageEndDate)
 		LOCAL oResult := oMatchForm:ShowDialog() AS DialogResult
 		//MessageBox.Show(oResult:ToString())
@@ -3044,7 +3044,7 @@ Export METHOD showMatchForm(cType AS STRING) as void
 			SELF:Voyages_Refresh()
 			
 		ENDIF	
-return
+RETURN
 
 
 
@@ -3073,7 +3073,7 @@ METHOD PrintPreviewGridVoyages() AS VOID
 	oLink:Component := SELF:GridVoyages
 	// Set the paper format.
 	oLink:PaperKind := System.Drawing.Printing.PaperKind.A4
-	oLink:Landscape:=True
+	oLink:Landscape:=TRUE
 	// Subscribe to the CreateReportHeaderArea event used to generate the report header.
 	oLink:CreateReportHeaderArea += CreateAreaEventHandler{SELF, @PrintableComponentLinkVoyages_CreateReportHeaderArea()}
 	// Generate the report.

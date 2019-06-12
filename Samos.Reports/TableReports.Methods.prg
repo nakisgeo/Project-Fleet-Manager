@@ -17,9 +17,9 @@
 PARTIAL CLASS TableReportsSelectionForm INHERIT System.Windows.Forms.Form
 	EXPORT cMyReportUID, cReportName, cVesselName, cVesselUID AS STRING
 	EXPORT aObjects, aUIDtoCheck AS ArrayList
-	EXPORT oDTPackages AS DataTable
+	EXPORT oDTPackages AS System.Data.DataTable
 	EXPORT cTempDocDir AS STRING
-	EXPORT lisSEReport as LOGIC
+	EXPORT lisSEReport AS LOGIC
 	EXPORT cLinesUIDForAllTables   AS STRING[]
 	PRIVATE lSumsCreated AS LOGIC
 	EXPORT oMyMainForm AS MainForm
@@ -29,8 +29,8 @@ PRIVATE METHOD myOnLoad() AS VOID
 	SELF:aObjects := ArrayList{}
 	SELF:aUIDtoCheck := ArrayList{}
 	
-	self:LoadMyListView()
-	self:LoadVesselsListView()	
+	SELF:LoadMyListView()
+	SELF:LoadVesselsListView()	
 
 
 	SELF:DateFrom:DateTime := DateTime.Now:AddYears(-1)
@@ -62,7 +62,7 @@ PRIVATE METHOD LoadVesselsListView() AS VOID
 		oListViewItem := ListViewItem{iRow["VesselName"]:ToString()}
 		oListViewItem:SubItems:Add(iRow["Description"]:ToString())
 		oListViewItem:Tag := iRow["VESSEL_UNIQUEID"]:ToString()
-		oListViewItem:Checked := true
+		oListViewItem:Checked := TRUE
 		SELF:lvVessels:Items:Add(oListViewItem)
 	NEXT
 RETURN
@@ -77,15 +77,15 @@ PRIVATE METHOD LoadMyListView() AS VOID
 	LOCAL oDTReportItems := oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement) AS DataTable
 	SELF:ItemsListView:Items:Clear()
 	LOCAL cItemTypeValues := "", cColumnName:="", cTable_UID AS STRING
-	LOCAL oListViewItem as ListViewItem
-	local iGroupCount :=0 as int
+	LOCAL oListViewItem AS ListViewItem
+	LOCAL iGroupCount :=0 AS INT
 	FOREACH iRow AS DataRow IN oDTReportItems:Rows
 					
 		ItemsListView:Groups:Add(System.Windows.Forms.ListViewGroup{iRow["ItemName"]:ToString()})
 		cItemTypeValues := iRow["ItemTypeValues"]:ToString()
 		cTable_UID :=  iRow["ITEM_UID"]:ToString()
 		LOCAL cColumnNames, cItems := cItemTypeValues:Split(';') AS STRING[]
-		LOCAL iColumnInt := 1 as INT
+		LOCAL iColumnInt := 1 AS INT
 		FOREACH cItem AS STRING IN cItems
 			cColumnNames := cItem:Split(':')
 			cColumnName := cColumnNames[1]
@@ -110,18 +110,18 @@ RETURN
 PRIVATE METHOD writtingOnTextView() AS VOID
         IF (ItemsListView:SelectedItems:Count > 0)
 			FOREACH oListViewItem AS ListViewItem IN ItemsListView:SelectedItems
-				oListViewItem:SubItems[2]:Text := self:txtValue:Text
+				oListViewItem:SubItems[2]:Text := SELF:txtValue:Text
 			
             //listView1.SelectedItems[0].SubItems[1].Text = txt_sender.Text
-			next
-        endif
+			NEXT
+        ENDIF
 RETURN
 
 PRIVATE METHOD btnReport_Clicked() AS VOID
 
 	txtProgress:Text :=""
 
-	LOCAL cFieldNameToCheckLocal := self:txtFieldNameToCheck:Text AS STRING
+	LOCAL cFieldNameToCheckLocal := SELF:txtFieldNameToCheck:Text AS STRING
 	//LOCAL cReportsToCheckSQLLocal := " Report_UID in (1029) " as String
 
 	IF SELF:DateFrom:DateTime > SELF:DateTo:DateTime
@@ -129,9 +129,9 @@ PRIVATE METHOD btnReport_Clicked() AS VOID
 			SELF:DateTo:Focus()
 			RETURN
 	ENDIF
-	local cStatement as String
+	LOCAL cStatement AS STRING
 	
-	LOCAL cValue := ""
+	LOCAL cValue := "" AS STRING
 	aObjects:Clear()
 	aUIDtoCheck:Clear()
 	LOCAL iCountObjLocal := 1 AS INT
@@ -176,8 +176,8 @@ PRIVATE METHOD btnReport_Clicked() AS VOID
 	ENDIF
 	
 	
-	LOCAL dStart := self:DateFrom:DateTime AS DateTime
-	LOCAL dEnd := self:DateTo:DateTime AS DateTime
+	LOCAL dStart := SELF:DateFrom:DateTime AS DateTime
+	LOCAL dEnd := SELF:DateTo:DateTime AS DateTime
 
 	//Load the Report Items
 	cStatement:="SELECT FMReportItems.*"+;
@@ -195,12 +195,12 @@ PRIVATE METHOD btnReport_Clicked() AS VOID
 	LOCAL iCount, iCountRows := oDTReportItems:Rows:Count, iInsideCount, iInsideTableCount AS INT
 	LOCAL iIndexToCheckLocal AS INT
 	LOCAL cIsSLAA AS STRING
-	LOCAL cReportItemsUIDToCheck := "" as String
+	LOCAL cReportItemsUIDToCheck := "" AS STRING
 	LOCAL oRow, oRowInside AS DataRow
 	LOCAL iNumberOfTableColumns AS INT
 	LOCAL cItemTypeValues, cNameLocal AS STRING
 	LOCAL cLineUIDS:="",cTempUid_Local:="",cTempNameLocal:="" AS STRING
-	LOCAL lLineToAdd := false as LOGIC
+	LOCAL lLineToAdd := FALSE AS LOGIC
 	
 	LOCAL cColumnNames, cItems,cColumnsLocal  AS STRING[]
 	
@@ -220,12 +220,12 @@ PRIVATE METHOD btnReport_Clicked() AS VOID
 				cIsSLAA := "True"
 				IF oTempObj:cTableUID==cTable_UID
 					//Vrisko poia kolona psaxnw
-					iIndexToCheckLocal := (int)INT64.Parse(oTempObj:cColumnIndex)
+					iIndexToCheckLocal := (INT)INT64.Parse(oTempObj:cColumnIndex)
 					//Arxikopoiw se ena ton metrhth ths seiras
 					iInsideCount := 1
 					cLineUIDS := ""
 					iInsideTableCount := iCount + 1
-					WHILE cIsSLAA != "False" .and. iInsideTableCount<iCountRows
+					WHILE cIsSLAA != "False" .AND. iInsideTableCount<iCountRows
 						// An o arithmos kolonas einia idios me auton pou psaxnw
 						oRowInside :=  oDTReportItems:Rows[iInsideTableCount]
 						cInsideType := oRowInside["ItemType"]:ToString()
@@ -240,14 +240,14 @@ PRIVATE METHOD btnReport_Clicked() AS VOID
 							LOOP
 						ENDIF
 						LOCAL oUIDtoCheckForValue := UIDtoCheckForValue{}  AS UIDtoCheckForValue 
-						IF iIndexToCheckLocal == iInsideCount .and. cInsideType!="L"
+						IF iIndexToCheckLocal == iInsideCount .AND. cInsideType!="L"
 							//Prosethese ena antikeimeno me UID kai value sto array
 							//oUIDtoCheckForValue:cValue := oTempObj:cValue
 							//oUIDtoCheckForValue:iObjectId := oTempObj:iId
 							cTempUid_Local := oRowInside["ITEM_UID"]:ToString()
 							//oUIDtoCheckForValue:cTableName := cNameLocal
 							cTempNameLocal := oRowInside["ItemName"]:ToString()
-							lLineToAdd := true
+							lLineToAdd := TRUE
 						ENDIF
 						cIsSLAA := oRowInside["SLAA"]:ToString()
 						iInsideTableCount++
@@ -267,7 +267,7 @@ PRIVATE METHOD btnReport_Clicked() AS VOID
 							cLineUIDS := ""
 							cTempNameLocal:=""
 							cTempUid_Local:=""
-							lLineToAdd := false
+							lLineToAdd := FALSE
 						ENDIF
 					ENDDO
 				ENDIF
@@ -321,12 +321,12 @@ PRIVATE METHOD myOkPressed() AS VOID
 			SELF:DateTo:Focus()
 			RETURN
 	ENDIF
-	local cStatement as String
+	LOCAL cStatement AS STRING
 	
-	LOCAL cValue := ""
+	LOCAL cValue := "" AS STRING
 	aObjects:Clear()
 	aUIDtoCheck:Clear()
-	LOCAL iCountObjLocal := 1 as INT
+	LOCAL iCountObjLocal := 1 AS INT
 	FOREACH oListViewItem AS ListViewItem IN ItemsListView:Items
 		cValue := oListViewItem:SubItems[2]:Text
 		IF STRING.IsNullOrEmpty(cValue)
@@ -349,8 +349,8 @@ PRIVATE METHOD myOkPressed() AS VOID
 	ENDIF
 	
 	
-	LOCAL dStart := self:DateFrom:DateTime AS DateTime
-	LOCAL dEnd := self:DateTo:DateTime AS DateTime
+	LOCAL dStart := SELF:DateFrom:DateTime AS DateTime
+	LOCAL dEnd := SELF:DateTo:DateTime AS DateTime
 
 	//Load the Report Items
 	cStatement:="SELECT FMReportItems.*"+;
@@ -364,12 +364,12 @@ PRIVATE METHOD myOkPressed() AS VOID
 	LOCAL iCount, iCountRows := oDTReportItems:Rows:Count, iInsideCount, iInsideTableCount AS INT
 	LOCAL iIndexToCheckLocal AS INT
 	LOCAL cIsSLAA AS STRING
-	LOCAL cReportItemsUIDToCheck := "" as String
+	LOCAL cReportItemsUIDToCheck := "" AS STRING
 	LOCAL oRow, oRowInside AS DataRow
 	LOCAL iNumberOfTableColumns AS INT
 	LOCAL cItemTypeValues, cNameLocal AS STRING
 	LOCAL cLineUIDS:="",cTempUid_Local:="",cTempNameLocal:="" AS STRING
-	LOCAL lLineToAdd := false as LOGIC
+	LOCAL lLineToAdd := FALSE AS LOGIC
 	
 	LOCAL cColumnNames, cItems,cColumnsLocal  AS STRING[]
 	
@@ -384,17 +384,17 @@ PRIVATE METHOD myOkPressed() AS VOID
 			cColumnsLocal := cItemTypeValues:Split(';')
 			iNumberOfTableColumns := cColumnsLocal:Length
 			FOREACH oTempObj AS objectToCheck IN SELF:aObjects
-				LOCAL json :=  JavaScriptSerializer{}:Serialize(oTempObj):ToString() as String
+				LOCAL json :=  JavaScriptSerializer{}:Serialize(oTempObj):ToString() AS STRING
 				Console.WriteLine(json)
 				cIsSLAA := "True"
 				IF oTempObj:cTableUID==cTable_UID
 					//Vrisko poia kolona psaxnw
-					iIndexToCheckLocal := (int)INT64.Parse(oTempObj:cColumnIndex)
+					iIndexToCheckLocal := (INT)INT64.Parse(oTempObj:cColumnIndex)
 					//Arxikopoiw se ena ton metrhth ths seiras
 					iInsideCount := 1
 					cLineUIDS := ""
 					iInsideTableCount := iCount + 1
-					WHILE cIsSLAA != "False" .and. iInsideTableCount<iCountRows
+					WHILE cIsSLAA != "False" .AND. iInsideTableCount<iCountRows
 						// An o arithmos kolonas einia idios me auton pou psaxnw
 						oRowInside :=  oDTReportItems:Rows[iInsideTableCount]
 						cInsideType := oRowInside["ItemType"]:ToString()
@@ -409,14 +409,14 @@ PRIVATE METHOD myOkPressed() AS VOID
 							LOOP
 						ENDIF
 						LOCAL oUIDtoCheckForValue := UIDtoCheckForValue{}  AS UIDtoCheckForValue 
-						IF iIndexToCheckLocal == iInsideCount .and. cInsideType!="L"
+						IF iIndexToCheckLocal == iInsideCount .AND. cInsideType!="L"
 							//Prosethese ena antikeimeno me UID kai value sto array
 							//oUIDtoCheckForValue:cValue := oTempObj:cValue
 							//oUIDtoCheckForValue:iObjectId := oTempObj:iId
 							cTempUid_Local := oRowInside["ITEM_UID"]:ToString()
 							//oUIDtoCheckForValue:cTableName := cNameLocal
 							cTempNameLocal := oRowInside["ItemName"]:ToString()
-							lLineToAdd := true
+							lLineToAdd := TRUE
 						ENDIF
 						cIsSLAA := oRowInside["SLAA"]:ToString()
 						iInsideTableCount++
@@ -436,7 +436,7 @@ PRIVATE METHOD myOkPressed() AS VOID
 							cLineUIDS := ""
 							cTempNameLocal:=""
 							cTempUid_Local:=""
-							lLineToAdd := false
+							lLineToAdd := FALSE
 						ENDIF
 					ENDDO
 				ENDIF
@@ -458,10 +458,10 @@ PRIVATE METHOD myOkPressed() AS VOID
 
 RETURN
 
-PRIVATE METHOD createExcel(cReportItemsUIDToCheck AS STRING, dStart AS Datetime, dEnd AS DateTime, lAllVessels := false as LOGIC) as void
-	LOCAL lIncludeStatistics as LOGIC
+PRIVATE METHOD createExcel(cReportItemsUIDToCheck AS STRING, dStart AS Datetime, dEnd AS DateTime, lAllVessels := FALSE AS LOGIC) AS VOID
+	LOCAL lIncludeStatistics AS LOGIC
 	IF SELF:ckbIncludeStatistics:Checked
-		lIncludeStatistics := true
+		lIncludeStatistics := TRUE
 	ENDIF
 
 	LOCAL cExtraStatusStatement := "" AS STRING
@@ -469,7 +469,7 @@ PRIVATE METHOD createExcel(cReportItemsUIDToCheck AS STRING, dStart AS Datetime,
 		cExtraStatusStatement := " And FMDataPackages.Status > 0 "
 	ENDIF
 		
-	LOCAL cStatement as String
+	LOCAL cStatement AS STRING
 	cStatement:="SELECT FMDataPackages.PACKAGE_UID, DateTimeGMT, GmtDiff"+;
 				" FROM FMDataPackages"+;
 				" WHERE FMDataPackages.DateTimeGMT BETWEEN '"+dStart:ToString("yyyy-MM-dd HH:mm:ss")+"' AND '"+dEnd:ToString("yyyy-MM-dd HH:mm:ss")+"'"+;
@@ -495,8 +495,8 @@ PRIVATE METHOD createExcel(cReportItemsUIDToCheck AS STRING, dStart AS Datetime,
 
 	
 	
-	lOCAL cFile AS STRING
-	cFile := cTempDocDir+"\FMData_"+self:cVesselName:Replace("/", "_")+"_"+Datetime.Now:ToString("dd_MM_yyyy__HH_mm_ss")+".xlsx"	//".XLSX"
+	LOCAL cFile AS STRING
+	cFile := cTempDocDir+"\FMData_"+SELF:cVesselName:Replace("/", "_")+"_"+Datetime.Now:ToString("dd_MM_yyyy__HH_mm_ss")+".xlsx"	//".XLSX"
 
 	SELF:Cursor := System.Windows.Forms.Cursors.WaitCursor
 
@@ -537,14 +537,14 @@ PRIVATE METHOD createExcel(cReportItemsUIDToCheck AS STRING, dStart AS Datetime,
 		LOCAL cPackageUID, cItemUID, cData AS STRING
 		LOCAL oRows AS DataRow[]
 		LOCAL cMemo AS STRING
-		LOCAL charSpl1 := (char)169 AS Char
-		LOCAL charSpl2 := (char)168 AS Char
+		LOCAL charSpl1 := (CHAR)169 AS CHAR
+		LOCAL charSpl2 := (CHAR)168 AS CHAR
 		LOCAL cItemsArray AS STRING[]
 		LOCAL cItemsTemp  AS STRING[]
 		LOCAL cStringDateTimeGMT AS STRING
-		LOCAL oDateTime as DateTime
-		LOCAL lDateSet as LOGIC
-		cLinesUIDForAllTables := String[]{oDTPackages:Rows:Count} 
+		LOCAL oDateTime AS DateTime
+		LOCAL lDateSet AS LOGIC
+		cLinesUIDForAllTables := STRING[]{oDTPackages:Rows:Count} 
 
 		oSheet:Cells[1, 1] := "DateTime of the report."
 		//Set The Dates
@@ -560,14 +560,14 @@ PRIVATE METHOD createExcel(cReportItemsUIDToCheck AS STRING, dStart AS Datetime,
 		nRow :=2
 		
 		// Ftiaxnw mia kolona 
-		LOCAL cTableName, cColumnName, cPACKAGE_UIDLocal as String
+		LOCAL cTableName, cColumnName, cPACKAGE_UIDLocal AS STRING
 		LOCAL oDTFMData := DataTable{} AS DataTable
 		LOCAL iCountOccurences:=0 AS INT
 		LOCAL cRangeName AS STRING
 		LOCAL cLinesUIDsLocal := "" AS STRING
-		LOCAL doubleQuote := '"' AS char
+		LOCAL doubleQuote := '"' AS CHAR
 		LOCAL iCountRowsInTable := 0 AS INT
-		LOCAL cCellDataLocal :="" as String
+		LOCAL cCellDataLocal :="" AS STRING
 		
 		FOREACH oTempObject AS objectToCheck IN SELF:aObjects
 			cStatement:="SELECT ItemName FROM FMReportItems"+oMainForm:cNoLockTerm+;
@@ -595,7 +595,7 @@ PRIVATE METHOD createExcel(cReportItemsUIDToCheck AS STRING, dStart AS Datetime,
 							" FROM FMData"+oMainForm:cNoLockTerm+;
 							" INNER JOIN FMDataPackages ON FMDataPackages.PACKAGE_UID=FMData.PACKAGE_UID"+;
 							" INNER JOIN FMReportItems ON FMReportItems.ITEM_UID=FMData.ITEM_UID"+;
-							" WHERE FMDataPackages.VESSEL_UNIQUEID="+self:cVesselUID+;
+							" WHERE FMDataPackages.VESSEL_UNIQUEID="+SELF:cVesselUID+;
 							" AND FMDataPackages.REPORT_UID="+SELF:cMyReportUID+;
 							" AND FMDataPackages.Visible=1 AND FMDataPackages.PACKAGE_UID="+cPACKAGE_UIDLocal+;
 							" AND FMReportItems.ITEM_UID = "+oTempUIDLocal:cUID
@@ -617,7 +617,7 @@ PRIVATE METHOD createExcel(cReportItemsUIDToCheck AS STRING, dStart AS Datetime,
 							ENDIF
 						NEXT
 						iCountRowsInTable++
-					endif
+					ENDIF
 				NEXT
 				
 				IF cLinesUIDsLocal != ""
@@ -640,7 +640,7 @@ PRIVATE METHOD createExcel(cReportItemsUIDToCheck AS STRING, dStart AS Datetime,
 				ENDIF*/
 				oRange:Hyperlinks:Add(oSheet:Cells[nRow, nCol],"_UIDs="+cLinesUIDsLocal,"","",cCellDataLocal)
 
-				IF  cLinesUIDForAllTables[nRow-1]==NULL .or. cLinesUIDForAllTables[nRow-1]==""
+				IF  cLinesUIDForAllTables[nRow-1]==NULL .OR. cLinesUIDForAllTables[nRow-1]==""
 					cLinesUIDForAllTables[nRow-1]:="_UIDs="+cLinesUIDsLocal
 				ELSE
 					cLinesUIDForAllTables[nRow-1]+= ","+cLinesUIDsLocal
@@ -713,17 +713,17 @@ PRIVATE METHOD createExcel(cReportItemsUIDToCheck AS STRING, dStart AS Datetime,
 
 RETURN
 
-PRIVATE METHOD createExcelVertical(cReportItemsUIDToCheck AS STRING, dStart AS Datetime, dEnd AS DateTime, lAllVessels := false as LOGIC) as void
+PRIVATE METHOD createExcelVertical(cReportItemsUIDToCheck AS STRING, dStart AS Datetime, dEnd AS DateTime, lAllVessels := FALSE AS LOGIC) AS VOID
 	LOCAL lIncludeStatistics, lExcel AS LOGIC
 	LOCAL lExactMatch := TRUE AS LOGIC
 	LOCAL nDataStartOnColumn := 5 AS INT
 		
-	IF SELf:ckbExcel:Checked
+	IF SELF:ckbExcel:Checked
 		lExcel := TRUE
 	ENDIF
 
 	IF SELF:ckbIncludeStatistics:Checked
-		lIncludeStatistics := true
+		lIncludeStatistics := TRUE
 	ENDIF
 
 	LOCAL cExtraStatusStatement := "" AS STRING
@@ -786,7 +786,7 @@ PRIVATE METHOD createExcelVertical(cReportItemsUIDToCheck AS STRING, dStart AS D
     oDTFMDataLocal:Columns:Add("4", typeof(STRING))
     oDTFMDataLocal:Columns:Add("5", typeof(STRING))
 	
-	lOCAL cFile AS STRING
+	LOCAL cFile AS STRING
 	cFile := cTempDocDir+"\FMData_"+Datetime.Now:ToString("dd_MM_yyyy__HH_mm_ss")+".xlsx"	//".XLSX"
 
 	SELF:Cursor := System.Windows.Forms.Cursors.WaitCursor
@@ -823,32 +823,32 @@ PRIVATE METHOD createExcelVertical(cReportItemsUIDToCheck AS STRING, dStart AS D
 		LOCAL cPackageUID, cItemUID, cData AS STRING
 		LOCAL oRows AS DataRow[]
 		LOCAL cMemo AS STRING
-		LOCAL charSpl1 := (char)169 AS Char
-		LOCAL charSpl2 := (char)168 AS Char
+		LOCAL charSpl1 := (CHAR)169 AS CHAR
+		LOCAL charSpl2 := (CHAR)168 AS CHAR
 		LOCAL cItemsArray AS STRING[]
 		LOCAL cItemsTemp  AS STRING[]
 		LOCAL cStringDateTimeGMT AS STRING
-		LOCAL oDateTime as DateTime
-		LOCAL lDateSet as LOGIC
+		LOCAL oDateTime AS DateTime
+		LOCAL lDateSet AS LOGIC
 
 		// Ftiaxnw mia kolona 
-		LOCAL cTableName, cColumnName, cPACKAGE_UIDLocal, cSectionName as String
+		LOCAL cTableName, cColumnName, cPACKAGE_UIDLocal, cSectionName AS STRING
 		LOCAL oDTFMData := DataTable{} AS DataTable
 		LOCAL iCountOccurences:=0, iCountOccurencesInRow :=0,iCount AS INT
 		LOCAL cRangeName AS STRING
 		LOCAL cLinesUIDsLocal := "" AS STRING
-		LOCAL doubleQuote := '"' AS char
+		LOCAL doubleQuote := '"' AS CHAR
 		LOCAL iCountRowsInTable := 0 AS INT
 		LOCAL cCellDataLocal :="", cSecondCellDataLocal :="" AS STRING
 		LOCAL iPrct AS INT
 		LOCAL cPrct AS STRING
 		LOCAL rFindingsPerInspection AS FLOAT
 		LOCAL oDTFItemNameDescription := DataTable{} AS DataTable 
-		cLinesUIDForAllTables := String[]{aObjects:Count} 
+		cLinesUIDForAllTables := STRING[]{aObjects:Count} 
 		
 		FOREACH oTempObject AS objectToCheck IN SELF:aObjects
 
-			Local newCustomersRow := oDTFMDataLocal:NewRow() as DataRow
+			LOCAL newCustomersRow := oDTFMDataLocal:NewRow() AS DataRow
 			cStatement:="SELECT FMReportItems.ItemName, FMItemCategories.Description "+;
 					" FROM FMReportItems "+oMainForm:cNoLockTerm+;
 					" Inner Join FMItemCategories on FMItemCategories.CATEGORY_UID = FMReportItems.CATEGORY_UID "+;
@@ -884,7 +884,7 @@ PRIVATE METHOD createExcelVertical(cReportItemsUIDToCheck AS STRING, dStart AS D
 						oDTFMData:Clear()	
 						oDTFMData := oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement)
 						oDTFMData:TableName := "FMData"
-						LOCAL lCompare as LOGIC
+						LOCAL lCompare AS LOGIC
 						FOREACH oRowDataTemp AS DataRow IN oDTFMData:Rows
 							IF lExactMatch
 								IF oRowDataTemp["Data"]:ToString():Trim():Equals(oTempObject:cValue)
@@ -919,7 +919,7 @@ PRIVATE METHOD createExcelVertical(cReportItemsUIDToCheck AS STRING, dStart AS D
 				ELSE
 					cCellDataLocal := iCountOccurences:ToString()
 				ENDIF	
-				if lExcel	
+				IF lExcel	
 					oSheet:Cells[nRow, nCol] := cCellDataLocal
 				ENDIF
 				nCol++
@@ -952,7 +952,7 @@ PRIVATE METHOD createExcelVertical(cReportItemsUIDToCheck AS STRING, dStart AS D
 			txtProgress:Text := Datetime.Now:ToString("HH:mm:ss")+ ": Finished Checking for "+cColumnName + CRLF + txtProgress:Text
 			System.Windows.Forms.Application.DoEvents()
 
-			IF  cLinesUIDForAllTables[nRow-2]==NULL .or. cLinesUIDForAllTables[nRow-2]==""
+			IF  cLinesUIDForAllTables[nRow-2]==NULL .OR. cLinesUIDForAllTables[nRow-2]==""
 					cLinesUIDForAllTables[nRow-2]:= cLinesUIDsLocal
 					newCustomersRow["5"] := cLinesUIDsLocal
 			ENDIF
@@ -978,7 +978,7 @@ PRIVATE METHOD createExcelVertical(cReportItemsUIDToCheck AS STRING, dStart AS D
 		ENDIF
 		LOCAL cRowOccurences, cTotalOccurences AS STRING
 		LOCAL fRowOccurences := 0 AS Decimal
-		local fTotalOccurences := 0 as Decimal
+		LOCAL fTotalOccurences := 0 AS Decimal
 		IF lExcel
 			oRangeLocal := oSheet:Range[oSheet:Cells[nRow, 2],oSheet:Cells[nRow, 2]]
 			cTotalOccurences := oRangeLocal:Value2:ToString()
@@ -987,7 +987,7 @@ PRIVATE METHOD createExcelVertical(cReportItemsUIDToCheck AS STRING, dStart AS D
 			FOR iCount := 2 UPTO nRow-1 STEP 1
 					oRangeLocal := oSheet:Range[oSheet:Cells[iCount, 2],oSheet:Cells[iCount, 2]]
 					IF oRangeLocal:Value2 == NULL
-						loop
+						LOOP
 					ENDIF
 					cRowOccurences := oRangeLocal:Value2:ToString()
 					IF cRowOccurences == ""
@@ -995,7 +995,7 @@ PRIVATE METHOD createExcelVertical(cReportItemsUIDToCheck AS STRING, dStart AS D
 					ENDIF
 					fRowOccurences := Decimal.Parse(cRowOccurences)
 					oSheet:Cells[iCount, 4] := ((Decimal)(fRowOccurences/fTotalOccurences)*(Decimal)100):ToString("0.00")
-					local oDataRowTemp :=  oDTFMDataLocal:Rows[iCount-2] AS DataRow 
+					LOCAL oDataRowTemp :=  oDTFMDataLocal:Rows[iCount-2] AS DataRow 
 					oDataRowTemp["4"] := ((Decimal)(fRowOccurences/fTotalOccurences)*(Decimal)100):ToString("0.00")
 					oDataRowTemp:AcceptChanges()
 					oDTFMDataLocal:AcceptChanges()
@@ -1018,7 +1018,7 @@ PRIVATE METHOD createExcelVertical(cReportItemsUIDToCheck AS STRING, dStart AS D
 		 SELF:gcResults:DataSource := dsLocal
          SELF:gcResults:DataMember := "Data"
 		 SELF:gcResults:ForceInitialize()
-		 SELF:gvResults:Columns[4]:Visible := false
+		 SELF:gvResults:Columns[4]:Visible := FALSE
 		 SELF:gvResults:Columns[0]:Caption := "Categories"
 		 SELF:gvResults:Columns[1]:Caption := "Findings in "+oDTPackages:Rows:Count:ToString()+" Inspection(s)"
 		 SELF:gvResults:Columns[1]:AppearanceCell:TextOptions:HAlignment := DevExpress.Utils.HorzAlignment.Center
@@ -1052,12 +1052,12 @@ PRIVATE METHOD createExcelVertical(cReportItemsUIDToCheck AS STRING, dStart AS D
 			// Statistics
 			nCol := nDataStartOnColumn
 			LOCAL cTempLocal, cCountOccurencesInColumn,cTotalOccurencesInColumn AS STRING
-			LOCAL  iCountOccurencesInColumn:=0, iTotalOccurencesInColumn:=0 as INT
+			LOCAL  iCountOccurencesInColumn:=0, iTotalOccurencesInColumn:=0 AS INT
 			FOREACH oRowDate AS DataRow IN oDTPackages:Rows
 				FOR iCount := 2 UPTO nRow-1 STEP 1
 					oRangeLocal := oSheet:Range[oSheet:Cells[iCount, nCol],oSheet:Cells[iCount, nCol]]
 					IF oRangeLocal:Value2 == NULL
-						loop
+						LOOP
 					ENDIF
 					cTempLocal := oRangeLocal:Value2:ToString()
 					IF cTempLocal==""
@@ -1071,7 +1071,7 @@ PRIVATE METHOD createExcelVertical(cReportItemsUIDToCheck AS STRING, dStart AS D
 					ELSE
 						cCountOccurencesInColumn := cTempLocal
 						iCountOccurencesInColumn += Int32.Parse(cCountOccurencesInColumn)
-					endif
+					ENDIF
 				NEXT
 				IF lIncludeStatistics
 					oSheet:Cells[nRow,nCol] := iCountOccurencesInColumn:ToString() + " of " + iTotalOccurencesInColumn:ToString()
@@ -1136,7 +1136,7 @@ PRIVATE METHOD btnReportPerSE_Clicked() AS VOID
 
 	txtProgress:Text :=""
 
-	LOCAL cFieldNameToCheckLocal := self:txtFieldNameToCheck:Text AS STRING
+	LOCAL cFieldNameToCheckLocal := SELF:txtFieldNameToCheck:Text AS STRING
 	//LOCAL cReportsToCheckSQLLocal := " Report_UID in (1029) " as String
 
 	IF SELF:DateFrom:DateTime > SELF:DateTo:DateTime
@@ -1144,9 +1144,9 @@ PRIVATE METHOD btnReportPerSE_Clicked() AS VOID
 			SELF:DateTo:Focus()
 			RETURN
 	ENDIF
-	local cStatement as String
+	LOCAL cStatement AS STRING
 	
-	LOCAL cValue := ""
+	LOCAL cValue := "" AS STRING
 	aObjects:Clear()
 	aUIDtoCheck:Clear()
 	LOCAL iCountObjLocal := 1 AS INT
@@ -1190,8 +1190,8 @@ PRIVATE METHOD btnReportPerSE_Clicked() AS VOID
 	ENDIF
 	
 	
-	LOCAL dStart := self:DateFrom:DateTime AS DateTime
-	LOCAL dEnd := self:DateTo:DateTime AS DateTime
+	LOCAL dStart := SELF:DateFrom:DateTime AS DateTime
+	LOCAL dEnd := SELF:DateTo:DateTime AS DateTime
 
 	//Load the Report Items
 	cStatement:="SELECT FMReportItems.*"+;
@@ -1209,12 +1209,12 @@ PRIVATE METHOD btnReportPerSE_Clicked() AS VOID
 	LOCAL iCount, iCountRows := oDTReportItems:Rows:Count, iInsideCount, iInsideTableCount AS INT
 	LOCAL iIndexToCheckLocal AS INT
 	LOCAL cIsSLAA AS STRING
-	LOCAL cReportItemsUIDToCheck := "" as String
+	LOCAL cReportItemsUIDToCheck := "" AS STRING
 	LOCAL oRow, oRowInside AS DataRow
 	LOCAL iNumberOfTableColumns AS INT
 	LOCAL cItemTypeValues, cNameLocal AS STRING
 	LOCAL cLineUIDS:="",cTempUid_Local:="",cTempNameLocal:="" AS STRING
-	LOCAL lLineToAdd := false as LOGIC
+	LOCAL lLineToAdd := FALSE AS LOGIC
 	
 	LOCAL cColumnNames, cItems,cColumnsLocal  AS STRING[]
 	
@@ -1234,12 +1234,12 @@ PRIVATE METHOD btnReportPerSE_Clicked() AS VOID
 				cIsSLAA := "True"
 				IF oTempObj:cTableUID==cTable_UID
 					//Vrisko poia kolona psaxnw
-					iIndexToCheckLocal := (int)INT64.Parse(oTempObj:cColumnIndex)
+					iIndexToCheckLocal := (INT)INT64.Parse(oTempObj:cColumnIndex)
 					//Arxikopoiw se ena ton metrhth ths seiras
 					iInsideCount := 1
 					cLineUIDS := ""
 					iInsideTableCount := iCount + 1
-					WHILE cIsSLAA != "False" .and. iInsideTableCount<iCountRows
+					WHILE cIsSLAA != "False" .AND. iInsideTableCount<iCountRows
 						// An o arithmos kolonas einia idios me auton pou psaxnw
 						oRowInside :=  oDTReportItems:Rows[iInsideTableCount]
 						cInsideType := oRowInside["ItemType"]:ToString()
@@ -1254,14 +1254,14 @@ PRIVATE METHOD btnReportPerSE_Clicked() AS VOID
 							LOOP
 						ENDIF
 						LOCAL oUIDtoCheckForValue := UIDtoCheckForValue{}  AS UIDtoCheckForValue 
-						IF iIndexToCheckLocal == iInsideCount .and. cInsideType!="L"
+						IF iIndexToCheckLocal == iInsideCount .AND. cInsideType!="L"
 							//Prosethese ena antikeimeno me UID kai value sto array
 							//oUIDtoCheckForValue:cValue := oTempObj:cValue
 							//oUIDtoCheckForValue:iObjectId := oTempObj:iId
 							cTempUid_Local := oRowInside["ITEM_UID"]:ToString()
 							//oUIDtoCheckForValue:cTableName := cNameLocal
 							cTempNameLocal := oRowInside["ItemName"]:ToString()
-							lLineToAdd := true
+							lLineToAdd := TRUE
 						ENDIF
 						cIsSLAA := oRowInside["SLAA"]:ToString()
 						iInsideTableCount++
@@ -1281,7 +1281,7 @@ PRIVATE METHOD btnReportPerSE_Clicked() AS VOID
 							cLineUIDS := ""
 							cTempNameLocal:=""
 							cTempUid_Local:=""
-							lLineToAdd := false
+							lLineToAdd := FALSE
 						ENDIF
 					ENDDO
 				ENDIF
@@ -1298,8 +1298,8 @@ PRIVATE METHOD btnReportPerSE_Clicked() AS VOID
 	ENDIF
 	
 	LOCAL lAllVesselsLocal := FALSE AS LOGIC
-	IF self:ckbAllVessels:Checked
-		lAllVesselsLocal := true
+	IF SELF:ckbAllVessels:Checked
+		lAllVesselsLocal := TRUE
 	ENDIF
 
 	//IF SELF:ckbIncludeStatistics:Checked
@@ -1308,7 +1308,7 @@ PRIVATE METHOD btnReportPerSE_Clicked() AS VOID
 	//ENDIF
 RETURN
 
-PRIVATE METHOD createExcelSuperEng(cReportItemsUIDToCheck AS STRING, dStart AS Datetime, dEnd AS DateTime, lAllVessels := false as LOGIC) as void
+PRIVATE METHOD createExcelSuperEng(cReportItemsUIDToCheck AS STRING, dStart AS Datetime, dEnd AS DateTime, lAllVessels := FALSE AS LOGIC) AS VOID
 	LOCAL lIncludeStatistics, lExcel AS LOGIC
 	LOCAL lExactMatch := TRUE AS LOGIC
 	LOCAL nDataStartOnColumn := 5 AS INT
@@ -1317,7 +1317,7 @@ PRIVATE METHOD createExcelSuperEng(cReportItemsUIDToCheck AS STRING, dStart AS D
 	IF SELF:ckbIncludeStatistics:Checked
 		lIncludeStatistics := TRUE
 	ENDIF
-	IF SELf:ckbExcel:Checked
+	IF SELF:ckbExcel:Checked
 		lExcel := TRUE
 	ENDIF
 
@@ -1414,18 +1414,18 @@ PRIVATE METHOD createExcelSuperEng(cReportItemsUIDToCheck AS STRING, dStart AS D
 
 	oDTUsernames := oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement)
 	oDTUsernames:Columns:Add("Prcnt", typeof(STRING))	
-	oDTUsernames:Columns:Add("Findings", typeof(String))
-	oDTUsernames:Columns:Add("FindingsPerInspection", typeof(String))
-	oDTUsernames:Columns:Add("5", typeof(String))
+	oDTUsernames:Columns:Add("Findings", typeof(STRING))
+	oDTUsernames:Columns:Add("FindingsPerInspection", typeof(STRING))
+	oDTUsernames:Columns:Add("5", typeof(STRING))
 
-	self:cLinesUIDForAllTables := String[]{oDTUsernames:Rows:Count}  
+	SELF:cLinesUIDForAllTables := STRING[]{oDTUsernames:Rows:Count}  
 
 	txtProgress:Text := Datetime.Now:ToString("HH:mm:ss")+ ": "+oDTUsernames:Rows:Count:ToString()+" Users Found..." + CRLF + txtProgress:Text
 	System.Windows.Forms.Application.DoEvents()
 
 	
 	
-	lOCAL cFile AS STRING
+	LOCAL cFile AS STRING
 	cFile := cTempDocDir+"\FMData_"+Datetime.Now:ToString("dd_MM_yyyy__HH_mm_ss")+".xlsx"	//".XLSX"
 
 	SELF:Cursor := System.Windows.Forms.Cursors.WaitCursor
@@ -1458,20 +1458,20 @@ PRIVATE METHOD createExcelSuperEng(cReportItemsUIDToCheck AS STRING, dStart AS D
 		LOCAL cPackageUID, cItemUID, cData AS STRING
 		LOCAL oRows AS DataRow[]
 		LOCAL cMemo AS STRING
-		LOCAL charSpl1 := (char)169 AS Char
-		LOCAL charSpl2 := (char)168 AS Char
+		LOCAL charSpl1 := (CHAR)169 AS CHAR
+		LOCAL charSpl2 := (CHAR)168 AS CHAR
 		LOCAL cItemsArray AS STRING[]
 		LOCAL cItemsTemp  AS STRING[]
 		LOCAL cStringDateTimeGMT AS STRING
-		LOCAL oDateTime as DateTime
-		LOCAL lDateSet as LOGIC
+		LOCAL oDateTime AS DateTime
+		LOCAL lDateSet AS LOGIC
 		// Ftiaxnw mia kolona 
-		LOCAL cTableName, cColumnName, cPACKAGE_UIDLocal, cSectionName, cUserName :="", cSearchFor := cmbStatus:Text as String
+		LOCAL cTableName, cColumnName, cPACKAGE_UIDLocal, cSectionName, cUserName :="", cSearchFor := cmbStatus:Text AS STRING
 		LOCAL oDTFMData := DataTable{} AS DataTable
 		LOCAL iCountOccurences:=0, iCountOccurencesInRow :=0,iCount AS INT
 		LOCAL cRangeName AS STRING
 		LOCAL cLinesUIDsLocal := "" AS STRING
-		LOCAL doubleQuote := '"' AS char
+		LOCAL doubleQuote := '"' AS CHAR
 		LOCAL iCountRowsInTable := 0 AS INT
 		LOCAL cCellDataLocal :="" AS STRING
 		LOCAL iPrct AS INT
@@ -1485,13 +1485,13 @@ PRIVATE METHOD createExcelSuperEng(cReportItemsUIDToCheck AS STRING, dStart AS D
 				System.Windows.Forms.Application.DoEvents()
 
 				cPACKAGE_UIDLocal := oRowDate["PACKAGE_UID"]:ToString()
-				IF cUserName!="" .and. oRowDate["Username"]:ToString() != cUserName
+				IF cUserName!="" .AND. oRowDate["Username"]:ToString() != cUserName
 					//Report the iCountOccurences
-					local oDRTemp := oDTUsernames:Rows[nRow] as DataRow
-					oDRTemp["Findings"] := iCountOccurences:ToString()
-					oDRTemp["5"] := cLinesUIDsLocal
+					LOCAL oDRTemp1 := oDTUsernames:Rows[nRow] AS DataRow
+					oDRTemp1["Findings"] := iCountOccurences:ToString()
+					oDRTemp1["5"] := cLinesUIDsLocal
 					cLinesUIDsLocal := "" 
-					oDRTemp:AcceptChanges()
+					oDRTemp1:AcceptChanges()
 					iCountOccurences:=0
 					nRow ++
 				ENDIF
@@ -1499,7 +1499,7 @@ PRIVATE METHOD createExcelSuperEng(cReportItemsUIDToCheck AS STRING, dStart AS D
 
 				FOREACH oTempUIDLocal AS UIDtoCheckForValue IN SELF:aUIDtoCheck
 				 
-				 Local newCustomersRow := oDTFMDataLocal:NewRow() as DataRow	
+				 LOCAL newCustomersRow := oDTFMDataLocal:NewRow() AS DataRow	
 				 cStatement :=" SELECT FMData.ITEM_UID, "+;
 							" FMData.Data "+;
 							" FROM FMData"+oMainForm:cNoLockTerm+;
@@ -1510,7 +1510,7 @@ PRIVATE METHOD createExcelSuperEng(cReportItemsUIDToCheck AS STRING, dStart AS D
 						oDTFMData:Clear()	
 						oDTFMData := oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement)
 						oDTFMData:TableName := "FMData"
-						LOCAL lCompare as LOGIC
+						LOCAL lCompare AS LOGIC
 						FOREACH oRowDataTemp AS DataRow IN oDTFMData:Rows
 							IF lExactMatch
 								IF oRowDataTemp["Data"]:ToString():Trim():Equals(cSearchFor)
@@ -1657,10 +1657,10 @@ PRIVATE METHOD gvResulsFocusedChanged( sender AS System.Object, e AS DevExpress.
 	
 
 	LOCAL oRow AS DataRow
-	LOCAL charSpl1 := (char)169 AS Char
-	LOCAL charSpl2 := (char)168 AS Char
+	LOCAL charSpl1 := (CHAR)169 AS CHAR
+	LOCAL charSpl2 := (CHAR)168 AS CHAR
 
-	LOCAL iFR := e:FocusedRowHandle as int
+	LOCAL iFR := e:FocusedRowHandle AS INT
 	IF gcResults:DataSource == NULL	
 		RETURN
 	ENDIF
@@ -1675,7 +1675,7 @@ PRIVATE METHOD gvResulsFocusedChanged( sender AS System.Object, e AS DevExpress.
 	LOCAL cUIDs := oRow:Item["5"]:ToString() AS STRING
 
 	IF cUIDs == NULL || cUIDs==""
-		SELF:gcDetails:DataSource := null
+		SELF:gcDetails:DataSource := NULL
 		RETURN
 	ENDIF
 
@@ -1699,7 +1699,7 @@ PRIVATE METHOD gvResulsFocusedChanged( sender AS System.Object, e AS DevExpress.
 		oDTFMDataLocal:Columns:Add("CA", typeof(STRING))
 	ENDIF
 	LOCAL cMemo AS STRING
-	LOCAL iFind, iFindEnd as int
+	LOCAL iFind, iFindEnd AS INT
 	LOCAL cSplit3, cSplit2, cItems := cUIDs:Split('-') AS STRING[]
 	FOREACH cItem AS STRING IN cItems
 		iFind := 0
@@ -1709,7 +1709,7 @@ PRIVATE METHOD gvResulsFocusedChanged( sender AS System.Object, e AS DevExpress.
 		cSplit2 := cItem:Split(':')
 		LOCAL cStatement := " SELECT DateTimeGMT, UserName, VESSELS.VesselName, Memo FROM FMDataPackages "+;
 							" Inner Join VESSELS ON VESSELS.VESSEL_UNIQUEID = FMDataPackages.VESSEL_UNIQUEID "+;
-						    " WHERE FMDataPackages.PACKAGE_UID="+cSplit2[1]:ToString() as String
+						    " WHERE FMDataPackages.PACKAGE_UID="+cSplit2[1]:ToString() AS STRING
 		oDTFMDataPackagesLocal:Clear()	
 		oDTFMDataPackagesLocal := oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement)
 		LOCAL oRowDate := oDTFMDataPackagesLocal:Rows[0] AS DataRow
@@ -1785,13 +1785,13 @@ PRIVATE METHOD gvResulsFocusedChanged( sender AS System.Object, e AS DevExpress.
 	SELF:gcDetails:RepositoryItems:Add(memoEdit)
 	SELF:gvDetails:Columns["Question"]:ColumnEdit := memoEdit
 	
-	SELF:gvDetails:Columns["Vessel"]:OptionsColumn:FixedWidth := True 
+	SELF:gvDetails:Columns["Vessel"]:OptionsColumn:FixedWidth := TRUE 
 	SELF:gvDetails:Columns["Vessel"]:Width := 100
-	SELF:gvDetails:Columns["Date"]:OptionsColumn:FixedWidth := True 
+	SELF:gvDetails:Columns["Date"]:OptionsColumn:FixedWidth := TRUE 
 	SELF:gvDetails:Columns["Date"]:Width :=   70
-	SELF:gvDetails:Columns["HeldBy"]:OptionsColumn:FixedWidth := True 
+	SELF:gvDetails:Columns["HeldBy"]:OptionsColumn:FixedWidth := TRUE 
 	SELF:gvDetails:Columns["HeldBy"]:Width := 40
-	SELF:gvDetails:Columns["Question"]:OptionsColumn:FixedWidth := True 
+	SELF:gvDetails:Columns["Question"]:OptionsColumn:FixedWidth := TRUE 
 	SELF:gvDetails:Columns["Question"]:Width := 300
 	SELF:gvDetails:Columns["PACKAGE_UID"]:Visible := FALSE 
 	TRY
@@ -1799,16 +1799,16 @@ PRIVATE METHOD gvResulsFocusedChanged( sender AS System.Object, e AS DevExpress.
 		LOCAL memoEdit2 := DevExpress.XtraEditors.Repository.RepositoryItemMemoEdit{} AS DevExpress.XtraEditors.Repository.RepositoryItemMemoEdit
 		SELF:gcDetails:RepositoryItems:Add(memoEdit2)
 		SELF:gvDetails:Columns["Comments"]:ColumnEdit := memoEdit2
-		SELF:gvDetails:Columns["Comments"]:OptionsColumn:FixedWidth := True 
-		SELF:gvDetails:Columns["Comments"]:OptionsColumn:ReadOnly := False 
+		SELF:gvDetails:Columns["Comments"]:OptionsColumn:FixedWidth := TRUE 
+		SELF:gvDetails:Columns["Comments"]:OptionsColumn:ReadOnly := FALSE 
 		SELF:gvDetails:Columns["Comments"]:Width := 200
 		SELF:gvDetails:Columns["CommentsUID"]:Visible := FALSE	
-		SELF:gvDetails:Columns["CA"]:OptionsColumn:FixedWidth := True 
+		SELF:gvDetails:Columns["CA"]:OptionsColumn:FixedWidth := TRUE 
 		SELF:gvDetails:Columns["CA"]:Width := 80
 	ENDIF
 	CATCH
 
-	end try
+	END TRY
 	//SELF:gvDetails:BestFitColumns()
 	//SELF:gcDetails:ForceInitialize()
 
@@ -1830,21 +1830,21 @@ PRIVATE METHOD gvResultsSelectionChanged() AS System.Void
 	LOCAL iSelectedRowHandles AS INT[]
 	iSelectedRowHandles := gvResults:GetSelectedRows()
 
-    IF iSelectedRowsCount == 0 .or. iSelectedRowHandles:Length < 1
+    IF iSelectedRowsCount == 0 .OR. iSelectedRowHandles:Length < 1
 		MessageBox.Show("No selected Rows")
 		RETURN
     ENDIF
-	Local oDTSelectedRows := ArrayList{} as ArrayList
+	LOCAL oDTSelectedRows := ArrayList{} AS ArrayList
 
-	LOCAL iCount := 1 as INT
+	LOCAL iCount := 1 AS INT
 	WHILE  iCount <= iSelectedRowsCount
-			LOCAL iRowHandleLocal := iSelectedRowHandles[iCount] as int
+			LOCAL iRowHandleLocal := iSelectedRowHandles[iCount] AS INT
 			iCount++
             IF iRowHandleLocal >= 0
 				LOCAL oDataRowTemp := gvResults:GetDataRow(iRowHandleLocal) AS DataRow
 				IF oDataRowTemp == NULL
 					LOOP
-				endif
+				ENDIF
                 oDTSelectedRows:Add(oDataRowTemp)
 			ENDIF
     ENDDO
@@ -1872,13 +1872,13 @@ PRIVATE METHOD gvResultsSelectionChanged() AS System.Void
 		oDTFMDataLocal:Columns:Add("CommentsUID", typeof(STRING))
 		oDTFMDataLocal:Columns:Add("CA", typeof(STRING))
 	ENDIF
-	LOCAL charSpl1 := (char)169 AS Char
-	LOCAL charSpl2 := (char)168 AS Char
+	LOCAL charSpl1 := (CHAR)169 AS CHAR
+	LOCAL charSpl2 := (CHAR)168 AS CHAR
 	
 
 	
 	LOCAL cMemo AS STRING
-	LOCAL iFind, iFindEnd as int
+	LOCAL iFind, iFindEnd AS INT
 
 
 	FOREACH oRow AS DataRow IN oDTSelectedRows
@@ -1887,13 +1887,13 @@ PRIVATE METHOD gvResultsSelectionChanged() AS System.Void
 
 		LOCAL cSplit3, cSplit2, cItems := cUIDs:Split('-') AS STRING[]
 		IF oRow == NULL
-			loop
+			LOOP
 		ENDIF
 
 
 
 		IF cUIDs == NULL || cUIDs==""
-			loop
+			LOOP
 		ENDIF
 
 	
@@ -1906,7 +1906,7 @@ PRIVATE METHOD gvResultsSelectionChanged() AS System.Void
 			cSplit2 := cItem:Split(':')
 			LOCAL cStatement := " SELECT DateTimeGMT, UserName, VESSELS.VesselName, Memo FROM FMDataPackages "+;
 								" Inner Join VESSELS ON VESSELS.VESSEL_UNIQUEID = FMDataPackages.VESSEL_UNIQUEID "+;
-								" WHERE FMDataPackages.PACKAGE_UID="+cSplit2[1]:ToString() as String
+								" WHERE FMDataPackages.PACKAGE_UID="+cSplit2[1]:ToString() AS STRING
 			oDTFMDataPackagesLocal:Clear()	
 			oDTFMDataPackagesLocal := oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement)
 			LOCAL oRowDate := oDTFMDataPackagesLocal:Rows[0] AS DataRow
@@ -1986,15 +1986,15 @@ PRIVATE METHOD gvResultsSelectionChanged() AS System.Void
 	SELF:gcDetails:RepositoryItems:Add(memoEdit)
 	SELF:gvDetails:Columns["Question"]:ColumnEdit := memoEdit
 	
-	SELF:gvDetails:Columns["Vessel"]:OptionsColumn:FixedWidth := True 
+	SELF:gvDetails:Columns["Vessel"]:OptionsColumn:FixedWidth := TRUE 
 	SELF:gvDetails:Columns["Vessel"]:Width := 100
-	SELF:gvDetails:Columns["Category"]:OptionsColumn:FixedWidth := True 
+	SELF:gvDetails:Columns["Category"]:OptionsColumn:FixedWidth := TRUE 
 	SELF:gvDetails:Columns["Category"]:Width := 80
-	SELF:gvDetails:Columns["Date"]:OptionsColumn:FixedWidth := True 
+	SELF:gvDetails:Columns["Date"]:OptionsColumn:FixedWidth := TRUE 
 	SELF:gvDetails:Columns["Date"]:Width :=   70
-	SELF:gvDetails:Columns["HeldBy"]:OptionsColumn:FixedWidth := True 
+	SELF:gvDetails:Columns["HeldBy"]:OptionsColumn:FixedWidth := TRUE 
 	SELF:gvDetails:Columns["HeldBy"]:Width := 40
-	SELF:gvDetails:Columns["Question"]:OptionsColumn:FixedWidth := True 
+	SELF:gvDetails:Columns["Question"]:OptionsColumn:FixedWidth := TRUE 
 	SELF:gvDetails:Columns["Question"]:Width := 300
 	SELF:gvDetails:Columns["PACKAGE_UID"]:Visible := FALSE 
 	TRY
@@ -2002,16 +2002,16 @@ PRIVATE METHOD gvResultsSelectionChanged() AS System.Void
 		LOCAL memoEdit2 := DevExpress.XtraEditors.Repository.RepositoryItemMemoEdit{} AS DevExpress.XtraEditors.Repository.RepositoryItemMemoEdit
 		SELF:gcDetails:RepositoryItems:Add(memoEdit2)
 		SELF:gvDetails:Columns["Comments"]:ColumnEdit := memoEdit2
-		SELF:gvDetails:Columns["Comments"]:OptionsColumn:FixedWidth := True 
-		SELF:gvDetails:Columns["Comments"]:OptionsColumn:ReadOnly := False 
+		SELF:gvDetails:Columns["Comments"]:OptionsColumn:FixedWidth := TRUE 
+		SELF:gvDetails:Columns["Comments"]:OptionsColumn:ReadOnly := FALSE 
 		SELF:gvDetails:Columns["Comments"]:Width := 200
 		SELF:gvDetails:Columns["CommentsUID"]:Visible := FALSE	
-		SELF:gvDetails:Columns["CA"]:OptionsColumn:FixedWidth := True 
+		SELF:gvDetails:Columns["CA"]:OptionsColumn:FixedWidth := TRUE 
 		SELF:gvDetails:Columns["CA"]:Width := 80
 	ENDIF
 	CATCH
 
-	end try
+	END TRY
 	//SELF:gvDetails:BestFitColumns()
 	//SELF:gcDetails:ForceInitialize()
 			
@@ -2025,7 +2025,7 @@ CLASS objectToCheck INHERIT OBJECT
 
 	EXPORT cTableUID AS STRING
 	EXPORT cColumnIndex AS STRING
-	EXPORT cColumnName as String
+	EXPORT cColumnName AS STRING
 	EXPORT cValue AS STRING
 	EXPORT iId AS INT
 
@@ -2038,8 +2038,8 @@ CLASS objectToCheck INHERIT OBJECT
 		SELF:cTableUID := ""
 		SELF:cColumnIndex :=""
 		SELF:cValue := ""
-		self:iId:=0
-	RETURN self
+		SELF:iId:=0
+	RETURN SELF
 
 	
 END CLASS
@@ -2047,11 +2047,11 @@ END CLASS
 CLASS UIDtoCheckForValue INHERIT OBJECT
 
 	EXPORT cTableUID AS STRING
-	EXPORT cTableName as STRING
+	EXPORT cTableName AS STRING
 	EXPORT cUID AS STRING
 	EXPORT cValue AS STRING
 	EXPORT cName AS STRING
-	EXPORT iObjectId as INT
+	EXPORT iObjectId AS INT
 	EXPORT cMyLineUIDs AS STRING
 	EXPORT iExpDays AS INT
 
@@ -2068,7 +2068,7 @@ CLASS UIDtoCheckForValue INHERIT OBJECT
 		SELF:iObjectId := 0
 		SELF:cMyLineUIDs := ""
 		SELF:iExpDays :=0
-	RETURN self
+	RETURN SELF
 
 	
 END CLASS

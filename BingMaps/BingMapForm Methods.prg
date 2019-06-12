@@ -380,11 +380,11 @@ RETURN
 
 
 PRIVATE METHOD MapUserControl_PreviewKeyDown(sender AS OBJECT, e AS System.Windows.Input.KeyEventArgs) AS VOID
-	IF e:Key <> Key.F4 .and. e:Key <> Key.F5 .and. e:Key <> Key.F9 .and. e:Key <> Key.F11
+	IF e:Key <> Key.F4 .AND. e:Key <> Key.F5 .AND. e:Key <> Key.F9 .AND. e:Key <> Key.F11
 		RETURN
 	ENDIF
 
-	IF SELF:MyMapUserControl:currentPushpinLocation == NULL .and. InListExact(e:Key, Key.F4, Key.F5)
+	IF SELF:MyMapUserControl:currentPushpinLocation == NULL .AND. InListExact(e:Key, Key.F4, Key.F5)
 		RETURN
 	ENDIF
 
@@ -583,7 +583,7 @@ METHOD routeLine_MouseLeftButtonDown(sender AS System.Object, e AS System.Window
 		//memowrit(cTempDocDir+"\after.txt", cStr)
 
 	SELF:MyMapUserControl:currentPushpinLocation := NULL
-	WHILE ! lFound .and. nTries < 5
+	WHILE ! lFound .AND. nTries < 5
 		// Near: from 0.1 up to 0.4
 		nTries++
 		lFound := SELF:LocateShortestDistance(oLocations, oLocClicked, nNear * nTries, cError, cErrorTitle, SELF:MyMapUserControl:currentPushpinLocation, SELF:WaypointDate, SELF:WaypointGmtDiff)
@@ -669,7 +669,7 @@ METHOD CreatePushpin() AS VOID
 	// Remove last CRLF
 	cInfo := cInfo:Substring(0, cInfo:Length - 2)
 
-	LOCAL dLocal as DateTime
+	LOCAL dLocal AS DateTime
 	LOCAL nHours := (INT)SELF:WaypointGmtDiff AS INT
 	dLocal := SELF:WaypointDate:AddHours(nHours)
 
@@ -747,7 +747,7 @@ METHOD LocateFMDataRecord(cOper AS STRING, oPrevLoc AS Location) AS LOGIC
 	nLongitude := GPSCoordinate_To_DecDegrees(cLongitude) //* nDegreeToRadiansFactor
 
 	//wb(oPrevLoc:Latitude, nLatitude)
-	IF oPrevLoc:Latitude == nLatitude .and. oPrevLoc:Longitude == nLongitude
+	IF oPrevLoc:Latitude == nLatitude .AND. oPrevLoc:Longitude == nLongitude
 		RETURN FALSE
 	ENDIF
 
@@ -1048,7 +1048,7 @@ CLASS MyMapPolyline INHERIT MapPolyline
 		END GET
 
 		SET
-			SELF:ProjectedPoints := Value
+			SELF:ProjectedPoints := VALUE
 		END SET
 	END	PROPERTY
 

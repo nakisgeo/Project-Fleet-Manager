@@ -14,14 +14,14 @@
 
 
 PARTIAL CLASS ReportsForm INHERIT DevExpress.XtraEditors.XtraForm
-	PRIVATE oDTReports as DataTable
+	PRIVATE oDTReports AS DataTable
 	PRIVATE oEditColumn AS GridColumn
 	PRIVATE oEditRow AS DataRowView
-	PRIVATE cItemTypeValue as STRING
+	PRIVATE cItemTypeValue AS STRING
 	PRIVATE oChangedReportColor AS Color
 	PRIVATE lPendingDuplicate AS LOGIC
 	PRIVATE cUIDtoDuplicate AS STRING
-	PRIVATE oMatchIds as DataTable
+	PRIVATE oMatchIds AS DataTable
 
 METHOD ReportsForm_OnLoad() AS VOID
 	oSoftway:ReadFormSettings_DevExpress(SELF, SELF:splitContainerControl_Reports, oMainForm:alForms, oMainForm:alData)
@@ -33,7 +33,7 @@ METHOD ReportsForm_OnLoad() AS VOID
 	SELF:GridViewReports:OptionsBehavior:AllowIncrementalSearch := TRUE
 	SELF:GridViewReports:OptionsPrint:PrintDetails := TRUE
 	SELF:GridViewReports:OptionsSelection:EnableAppearanceFocusedCell := FALSE
-	SELF:GridViewReports:OptionsSelection:MultiSelect := False
+	SELF:GridViewReports:OptionsSelection:MultiSelect := FALSE
 	SELF:GridViewReports:OptionsView:ColumnAutoWidth := FALSE
 
 	SELF:Fill_CheckedLBCVessels("0")
@@ -53,9 +53,9 @@ METHOD CreateGridReports() AS VOID
 				" FROM FMReportTypes"+oMainForm:cNoLockTerm+;
 				" ORDER BY ReportBaseNum"
 	SELF:oDTReports:=oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement)
-	Self:oDTReports:TableName:="Reports"
+	SELF:oDTReports:TableName:="Reports"
 	// Create Primary Key
-	oSoftway:CreatePK(Self:oDTReports, "REPORT_UID")
+	oSoftway:CreatePK(SELF:oDTReports, "REPORT_UID")
 
 	SELF:GridReports:DataSource := SELF:oDTReports
 RETURN
@@ -63,7 +63,7 @@ RETURN
 
 METHOD CreateGridReports_Columns() AS VOID
 LOCAL oColumn AS GridColumn
-Local nVisible:=0, nAbsIndex:=0 as int
+LOCAL nVisible:=0, nAbsIndex:=0 AS INT
 
 // Freeze column: Set Fixed property
 
@@ -86,11 +86,11 @@ Local nVisible:=0, nAbsIndex:=0 as int
     oColumn:AppearanceCell:TextOptions:HAlignment := DevExpress.Utils.HorzAlignment.Center
     oColumn:AppearanceHeader:Options:UseTextOptions := TRUE
     oColumn:AppearanceHeader:TextOptions:HAlignment := DevExpress.Utils.HorzAlignment.Center
-	Local oRepositoryItemComboBoxItemType := RepositoryItemComboBox{} as RepositoryItemComboBox
+	LOCAL oRepositoryItemComboBoxItemType := RepositoryItemComboBox{} AS RepositoryItemComboBox
 	oRepositoryItemComboBoxItemType:Items:AddRange(<System.Object>{ "Vessel", "Office" })
     oRepositoryItemComboBoxItemType:Properties:TextEditStyle := DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor
 	//Add a repository item to the repository items of grid control
-	Self:GridReports:RepositoryItems:Add(oRepositoryItemComboBoxItemType)
+	SELF:GridReports:RepositoryItems:Add(oRepositoryItemComboBoxItemType)
 	//Now you can define the repository item as an inplace editor of columns
 	oColumn:ColumnEdit := oRepositoryItemComboBoxItemType
 
@@ -135,7 +135,7 @@ METHOD BeforeLeaveRow_Reports(e AS DevExpress.XtraGrid.Views.Base.RowAllowEventA
 RETURN
 
 
-Method CustomUnboundColumnData_Reports(e as DevExpress.XtraGrid.Views.Base.CustomColumnDataEventArgs) as void
+METHOD CustomUnboundColumnData_Reports(e AS DevExpress.XtraGrid.Views.Base.CustomColumnDataEventArgs) AS VOID
 	// Provides data for the UnboundColumns
 
 	IF ! e:IsGetData
@@ -143,7 +143,7 @@ Method CustomUnboundColumnData_Reports(e as DevExpress.XtraGrid.Views.Base.Custo
 	ENDIF
 
 	LOCAL oRow AS DataRow
-	LOCAL cField,cValue as String
+	LOCAL cField,cValue AS STRING
 	DO CASE
 	CASE e:Column:FieldName == "uReportColor"
 		oRow:=SELF:oDTReports:Rows[e:ListSourceRowIndex]
@@ -170,28 +170,28 @@ Method CustomUnboundColumnData_Reports(e as DevExpress.XtraGrid.Views.Base.Custo
 RETURN
 
 
-Method SetEditModeOff_Common(oGridView as GridView) as void
-Try
-	if oGridView:FocusedColumn <> NULL .and. oGridView:FocusedColumn:UnboundType == DevExpress.Data.UnboundColumnType.Boolean
-		if ! oGridView:OptionsSelection:EnableAppearanceFocusedCell
-			oGridView:OptionsSelection:EnableAppearanceFocusedCell := True
-		endif
-		oGridView:FocusedColumn:OptionsColumn:AllowEdit := True
-		Break
-	endif
+METHOD SetEditModeOff_Common(oGridView AS GridView) AS VOID
+TRY
+	IF oGridView:FocusedColumn <> NULL .AND. oGridView:FocusedColumn:UnboundType == DevExpress.Data.UnboundColumnType.Boolean
+		IF ! oGridView:OptionsSelection:EnableAppearanceFocusedCell
+			oGridView:OptionsSelection:EnableAppearanceFocusedCell := TRUE
+		ENDIF
+		oGridView:FocusedColumn:OptionsColumn:AllowEdit := TRUE
+		BREAK
+	ENDIF
 
-	if ! oGridView:OptionsSelection:EnableAppearanceFocusedCell
-		Break
-	endif
+	IF ! oGridView:OptionsSelection:EnableAppearanceFocusedCell
+		BREAK
+	ENDIF
 
-	oGridView:OptionsSelection:EnableAppearanceFocusedCell := False
+	oGridView:OptionsSelection:EnableAppearanceFocusedCell := FALSE
 
-	if Self:oEditColumn <> NULL
-		Self:oEditColumn:OptionsColumn:AllowEdit := False
-		Self:oEditColumn := NULL
-	endif
+	IF SELF:oEditColumn <> NULL
+		SELF:oEditColumn:OptionsColumn:AllowEdit := FALSE
+		SELF:oEditColumn := NULL
+	ENDIF
 
-	if Self:oEditRow <> NULL
+	IF SELF:oEditRow <> NULL
 		SELF:oEditRow := NULL
 	ENDIF
 CATCH
@@ -236,21 +236,21 @@ METHOD Reports_Add() AS VOID
 
 	cStatement:="INSERT INTO FMReportTypes (ReportName, ReportColor) VALUES"+;
 				" ('_New Report', 0)"
-	if ! oSoftway:AdoCommand(oMainForm:oGFH, oMainForm:oConn, cStatement)
-		Self:Reports_Refresh()
-		Return
-	endif
+	IF ! oSoftway:AdoCommand(oMainForm:oGFH, oMainForm:oConn, cStatement)
+		SELF:Reports_Refresh()
+		RETURN
+	ENDIF
 	cUID:=oSoftway:GetLastInsertedIdentityFromScope(oMainForm:oGFH, oMainForm:oConn, "FMReportTypes", "REPORT_UID")
 
-	Self:Reports_Refresh()
+	SELF:Reports_Refresh()
 
-	Local nFocusedHandle as int
-	nFocusedHandle:=Self:GridViewReports:LocateByValue(0, Self:GridViewReports:Columns["REPORT_UID"], Convert.ToInt32(cUID))
-	if nFocusedHandle == DevExpress.XtraGrid.GridControl.InvalidRowHandle
-		Return
-	endif
-	Self:GridViewReports:ClearSelection()
-	Self:GridViewReports:FocusedRowHandle:=nFocusedHandle
+	LOCAL nFocusedHandle AS INT
+	nFocusedHandle:=SELF:GridViewReports:LocateByValue(0, SELF:GridViewReports:Columns["REPORT_UID"], Convert.ToInt32(cUID))
+	IF nFocusedHandle == DevExpress.XtraGrid.GridControl.InvalidRowHandle
+		RETURN
+	ENDIF
+	SELF:GridViewReports:ClearSelection()
+	SELF:GridViewReports:FocusedRowHandle:=nFocusedHandle
 	SELF:GridViewReports:SelectRow(nFocusedHandle)
 	IF lPendingDuplicate
 		MessageBox.Show("Enter the new report Base Number to start the duplication of items.","Action Pending.")
@@ -313,7 +313,7 @@ METHOD DuplicateReport() AS VOID
 RETURN
 
 METHOD completeDuplication(cReportUID AS STRING,cReportBaseNumber AS STRING) AS LOGIC
-		LOCAL cStatement as String
+		LOCAL cStatement AS STRING
 		TRY
 			LOCAL oDTReportItemsLocal AS DataTable
 			cStatement:="SELECT * FROM FMReportItems"+oMainForm:cNoLockTerm+;
@@ -329,9 +329,9 @@ METHOD completeDuplication(cReportUID AS STRING,cReportBaseNumber AS STRING) AS 
 			LOCAL nNewReportBaseNumber := convert.ToInt32(cReportBaseNumber) AS INT
 			IF !SELF:checkIfNewReportBaseNumberIsValid(nCountSourceItems,nNewReportBaseNumber)
 				MessageBox.Show("Duplication aborted. This Base Number will result in an overlap.","Error.")
-				RETURN false
+				RETURN FALSE
 			ENDIF
-			LOCAL iCount := 0 as INT
+			LOCAL iCount := 0 AS INT
 			FOREACH  row AS DataRow IN oDTReportItemsLocal:Rows
 			    //TextBox1.Text = row["ImagePath"].ToString()
 				SELF:Items_Add(row,cReportBaseNumber,iCount,cReportUID)
@@ -347,7 +347,7 @@ RETURN TRUE
 
 METHOD correctCalculatedField(cReportUID AS STRING) AS LOGIC
 		LOCAL cStatement AS STRING
-		LOCAL cTemp,cSecTemp/*,cThirdTemp*/ as String
+		LOCAL cTemp,cSecTemp/*,cThirdTemp*/ AS STRING
 		TRY
 			LOCAL oDTReportItemsLocal AS DataTable
 			cStatement:="SELECT * FROM FMReportItems"+oMainForm:cNoLockTerm+;
@@ -356,7 +356,7 @@ METHOD correctCalculatedField(cReportUID AS STRING) AS LOGIC
 			oDTReportItemsLocal:TableName:="Items"
 			oSoftway:CreatePK(oDTReportItemsLocal, "Item_UID")	
 			//LOCAL nCountSourceItems := oDTReportItemsLocal:Rows:Count AS INT
-			LOCAL iCount := 0 as INT
+			LOCAL iCount := 0 AS INT
 			FOREACH  row AS DataRow IN oDTReportItemsLocal:Rows
 				cTemp := row:Item["CalculatedField"]:ToString():Trim()
 				IF  cTemp:length > 0
@@ -382,8 +382,8 @@ RETURN TRUE
 METHOD checkIfNewReportBaseNumberIsValid(nCountSourceItems AS INT,nNewReportBaseNumber AS INT) AS LOGIC
 	TRY
 			LOCAL oDTReportItemsLocal AS DataTable
-			local cStatement:="SELECT ReportBaseNum FROM FMReportTypes"+oMainForm:cNoLockTerm+;
-						" ORDER BY ReportBaseNum ASC " as String
+			LOCAL cStatement:="SELECT ReportBaseNum FROM FMReportTypes"+oMainForm:cNoLockTerm+;
+						" ORDER BY ReportBaseNum ASC " AS STRING
 			//cStatement := oSoftway:SelectTop(cStatement)
 			//cExistedValue:=oSoftway:RecordExists(oMainForm:oGFH, oMainForm:oConn, cStatement, "REPORT_UID")
 			oDTReportItemsLocal:=oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement)
@@ -392,14 +392,14 @@ METHOD checkIfNewReportBaseNumberIsValid(nCountSourceItems AS INT,nNewReportBase
 			oSoftway:CreatePK(oDTReportItemsLocal, "ReportBaseNum")
 			FOREACH  row AS DataRow IN oDTReportItemsLocal:Rows
 				LOCAL cRowBN := row:Item["ReportBaseNum"]:ToString():trim() AS STRING
-				IF cRowBN != NULL .and. cRowBN:Length>0
+				IF cRowBN != NULL .AND. cRowBN:Length>0
 					LOCAL nRowBN := convert.ToInt32(cRowBN) AS INT
-					IF nRowBN > nNewReportBaseNumber .and. nRowBN < nCountSourceItems+nNewReportBaseNumber
-						return false
+					IF nRowBN > nNewReportBaseNumber .AND. nRowBN < nCountSourceItems+nNewReportBaseNumber
+						RETURN FALSE
 					ENDIF
 				ENDIF
 			NEXT
-	CATCH exc as Exception
+	CATCH exc AS Exception
 			MessageBox.Show(exc:ToString())
 			RETURN FALSE
 		END TRY
@@ -411,21 +411,21 @@ METHOD Items_Add(oRowToAdd AS DataRow,cReportBaseNumber AS STRING,iCount AS INT,
 	LOCAL cStatement AS STRING
 	//LOCAL cReportUID := oSoftway:GetLastInsertedIdentityFromScope(oMainForm:oGFH, oMainForm:oConn, "FMReportTypes", "REPORT_UID") AS STRING
 	LOCAL nReportBaseNumber := Convert.ToInt32(cReportBaseNumber) AS INT
-	LOCAL cNextItemNo := (nReportBaseNumber+iCount):ToString() as String
+	LOCAL cNextItemNo := (nReportBaseNumber+iCount):ToString() AS STRING
 	
-	LOCAL cNewName:= oSoftway:ConvertWildcards(oRowToAdd:Item["ItemName"]:ToString():Trim(),False)
-	LOCAL cCalculatedField:= oRowToAdd:Item["CalculatedField"]:ToString():Trim()
-	LOCAL cItemTypeValues := oSoftway:ConvertWildcards(oRowToAdd:Item["ItemTypeValues"]:ToString():Trim(),false)
-	LOCAL cCat_IUD        := oRowToAdd:Item["CATEGORY_UID"]:ToString():trim()
-	Local cUnit			  := oSoftway:ConvertWildcards(oRowToAdd:Item["Unit"]:tostring():trim(),false)
+	LOCAL cNewName:= oSoftway:ConvertWildcards(oRowToAdd:Item["ItemName"]:ToString():Trim(),FALSE) AS STRING
+	LOCAL cCalculatedField:= oRowToAdd:Item["CalculatedField"]:ToString():Trim() AS STRING
+	LOCAL cItemTypeValues := oSoftway:ConvertWildcards(oRowToAdd:Item["ItemTypeValues"]:ToString():Trim(),FALSE) AS STRING
+	LOCAL cCat_IUD        := oRowToAdd:Item["CATEGORY_UID"]:ToString():trim() AS STRING
+	LOCAL cUnit			  := oSoftway:ConvertWildcards(oRowToAdd:Item["Unit"]:tostring():trim(),FALSE) AS STRING
 	
-	IF cCat_IUD != NULL .and. cCat_IUD == ""
+	IF cCat_IUD != NULL .AND. cCat_IUD == ""
 		cCat_IUD := "0"
 	ENDIF
-	LOCAL cItem_Type		  := oRowToAdd:Item["ItemType"]:ToString():Trim()		
+	LOCAL cItem_Type		  := oRowToAdd:Item["ItemType"]:ToString():Trim()		 AS STRING
 	
-	LOCAL cSLAA := oRowToAdd:Item["SLAA"]:ToString():Trim()
-	IF cSLAA != NULL .and. cSLAA == "False"
+	LOCAL cSLAA := oRowToAdd:Item["SLAA"]:ToString():Trim() AS STRING
+	IF cSLAA != NULL .AND. cSLAA == "False"
 		cSLAA := "0"
 	ELSEIF cSLAA == NULL
 		cSLAA := "0"
@@ -433,8 +433,8 @@ METHOD Items_Add(oRowToAdd AS DataRow,cReportBaseNumber AS STRING,iCount AS INT,
 		cSLAA := "1"
 	ENDIF
 	
-	LOCAL cNotNumbered := oRowToAdd:Item["NotNumbered"]:ToString():Trim()
-	IF cNotNumbered != NULL .and. cNotNumbered == "False"
+	LOCAL cNotNumbered := oRowToAdd:Item["NotNumbered"]:ToString():Trim() AS STRING
+	IF cNotNumbered != NULL .AND. cNotNumbered == "False"
 		cNotNumbered := "0"
 	ELSEIF cNotNumbered == NULL
 		cNotNumbered := "0"
@@ -442,8 +442,8 @@ METHOD Items_Add(oRowToAdd AS DataRow,cReportBaseNumber AS STRING,iCount AS INT,
 		cNotNumbered := "1"
 	ENDIF
 	
-	LOCAL cShowOnlyOffice := oRowToAdd:Item["ShowOnlyOffice"]:ToString():Trim()
-	IF cShowOnlyOffice != NULL .and. cShowOnlyOffice == "False"
+	LOCAL cShowOnlyOffice := oRowToAdd:Item["ShowOnlyOffice"]:ToString():Trim() AS string
+	IF cShowOnlyOffice != NULL .AND. cShowOnlyOffice == "False"
 		cShowOnlyOffice := "0"
 	ELSEIF cShowOnlyOffice == NULL
 		cShowOnlyOffice := "0"
@@ -453,9 +453,9 @@ METHOD Items_Add(oRowToAdd AS DataRow,cReportBaseNumber AS STRING,iCount AS INT,
 
 	cStatement:="INSERT INTO FMReportItems (REPORT_UID, ItemNo, ItemName, ItemType, ExpDays, CATEGORY_UID, ItemTypeValues,CalculatedField,SLAA,ShowOnlyOffice, NotNumbered, Unit ) VALUES"+;
 				" ("+cReportUID+", '"+cNextItemNo+"', '"+cNewName+"', '"+cItem_Type+"', 0,"+cCat_IUD+", '"+cItemTypeValues+"','"+cCalculatedField+"',"+cSLAA+","+cShowOnlyOffice+","+cNotNumbered+", '"+cUnit+"' )"
-	if ! oSoftway:AdoCommand(oMainForm:oGFH, oMainForm:oConn, cStatement)
+	IF ! oSoftway:AdoCommand(oMainForm:oGFH, oMainForm:oConn, cStatement)
 		//MessageBox.Show(cStatement, "failed")
-		Return
+		RETURN
 	ENDIF
 	oMatchIds:Rows:Add(oRowToAdd:Item["ItemNo"]:ToString(),cNextItemNo)
 	/*LOCAL cUID:=oSoftway:GetLastInsertedIdentityFromScope(oMainForm:oGFH, oMainForm:oConn, "FMReportItems", "ITEM_UID") AS STRING
@@ -483,7 +483,7 @@ METHOD Reports_Edit(oRow AS DataRowView, oColumn AS GridColumn) AS VOID
 		RETURN
 	ENDIF
 
-	IF InListExact(cField, "ReportBaseNum", "ReportName", "uReportType") .and. oRow["ReportName"]:ToString():ToUpper():StartsWith("MODE")
+	IF InListExact(cField, "ReportBaseNum", "ReportName", "uReportType") .AND. oRow["ReportName"]:ToString():ToUpper():StartsWith("MODE")
 		wb("The column '"+oColumn:Caption+"' is ReadOnly for the System Report: "+CRLF+oRow["ReportName"]:ToString())
 		RETURN
 	ENDIF
@@ -581,25 +581,25 @@ LOCAL cStatement, cUID, cField, cValue, cDuplicate AS STRING
 
 	// Validate cValue
 	DO CASE
-	CASE InListExact(cField, "ReportName") .and. cValue:Length > 128
+	CASE InListExact(cField, "ReportName") .AND. cValue:Length > 128
 		ErrorBox("The field '"+cField+"' must contain up to 128 characters", "Editing aborted")
 		SELF:Reports_Refresh()
 		RETURN
 
-	CASE cField == "ReportName" .and. cValue:Length = 0
+	CASE cField == "ReportName" .AND. cValue:Length = 0
 		ErrorBox("The field '"+cField+"' cannot be empty", "Editing aborted")
 		SELF:Reports_Refresh()
 		RETURN
 
-	CASE InListExact(cField, "ReportBaseNum") .and. cValue:Length > 5
+	CASE InListExact(cField, "ReportBaseNum") .AND. cValue:Length > 5
 		ErrorBox("The field '"+cField+"' must contain up to 6 characters", "Editing aborted")
 		SELF:Reports_Refresh()
 		RETURN
 
-	CASE cField == "ReportBaseNum" .and. cValue <> ""
+	CASE cField == "ReportBaseNum" .AND. cValue <> ""
 		// Validate ReportBaseNum
 		LOCAL nValue := Convert.ToInt32(cValue) AS INT
-		IF nValue % 100 <> 0 .or. nValue == 1000 .or. nValue == 2000
+		IF nValue % 100 <> 0 .OR. nValue == 1000 .OR. nValue == 2000
 			ErrorBox("The field '"+cField+"' must be divided by 100"+CRLF+CRLF+"Valid values are: from 100 up to 9900"+CRLF+CRLF+"(Excluding system reserved values: 1000 and 2000)", "Editing aborted")
 			SELF:Reports_Refresh()
 			RETURN
@@ -673,7 +673,7 @@ LOCAL cStatement, cUID, cField, cValue, cDuplicate AS STRING
 	// Invalidates the region occupied by the current View (adds it to the control's update region that will be repainted
 	// during the next paint operation), and causes a paint message to be sent to the grid control
 	SELF:GridViewReports:Invalidate()
-	IF InListExact(cField, "ReportBaseNum") .and. lPendingDuplicate
+	IF InListExact(cField, "ReportBaseNum") .AND. lPendingDuplicate
 		IF SELF:completeDuplication(oRow:Item["REPORT_UID"]:ToString(),cValue)
 			lPendingDuplicate := FALSE
 			cUIDtoDuplicate := ""
@@ -690,26 +690,26 @@ METHOD Reports_Refresh() AS VOID
 	LOCAL oRow AS DataRowView
 	oRow:=(DataRowView)SELF:GridViewReports:GetRow(SELF:GridViewReports:FocusedRowHandle)
 
-	if oRow <> NULL
+	IF oRow <> NULL
 		cUID := oRow:Item["REPORT_UID"]:ToString()
 	ENDIF
 
-	Self:CreateGridReports()
+	SELF:CreateGridReports()
 
-	if oRow <> NULL
-		Local col as DevExpress.XtraGrid.Columns.GridColumn
-		Local nFocusedHandle as int
+	IF oRow <> NULL
+		LOCAL col AS DevExpress.XtraGrid.Columns.GridColumn
+		LOCAL nFocusedHandle AS INT
 
-		col:=Self:GridViewReports:Columns["REPORT_UID"]
-		nFocusedHandle:=Self:GridViewReports:LocateByValue(0, col, Convert.ToInt32(cUID))
-		if nFocusedHandle == DevExpress.XtraGrid.GridControl.InvalidRowHandle
-			Return
-		endif
+		col:=SELF:GridViewReports:Columns["REPORT_UID"]
+		nFocusedHandle:=SELF:GridViewReports:LocateByValue(0, col, Convert.ToInt32(cUID))
+		IF nFocusedHandle == DevExpress.XtraGrid.GridControl.InvalidRowHandle
+			RETURN
+		ENDIF
 
-		Self:GridViewReports:ClearSelection()
-		Self:GridViewReports:FocusedRowHandle:=nFocusedHandle
-		Self:GridViewReports:SelectRow(nFocusedHandle)
-	endif	
+		SELF:GridViewReports:ClearSelection()
+		SELF:GridViewReports:FocusedRowHandle:=nFocusedHandle
+		SELF:GridViewReports:SelectRow(nFocusedHandle)
+	ENDIF	
 RETURN
 
 
@@ -729,8 +729,8 @@ METHOD ManageReportItems() AS VOID
 RETURN
 
 
-Method Reports_Print() as void
-	Self:PrintPreviewGridReports()
+METHOD Reports_Print() AS VOID
+	SELF:PrintPreviewGridReports()
 RETURN
 
 
@@ -738,41 +738,41 @@ RETURN
 
 METHOD PrintPreviewGridReports() AS VOID
 	// Check whether the XtraGrid control can be previewed.
-	if ! Self:GridReports:IsPrintingAvailable
+	IF ! SELF:GridReports:IsPrintingAvailable
 		ErrorBox("The 'DevExpress.XtraPrinting' Library is not found")
-		return
-	endif
+		RETURN
+	ENDIF
 
 	// Opens the Preview window.
 	//Self:GridCompanies:ShowPrintPreview()
 
 	// Create a PrintingSystem component.
-	Local oPS := PrintingSystem{} as DevExpress.XtraPrinting.PrintingSystem
+	LOCAL oPS := PrintingSystem{} AS DevExpress.XtraPrinting.PrintingSystem
 	// Create a link that will print a control.
-	Local oLink := PrintableComponentLink{oPS} as DevExpress.XtraPrinting.PrintableComponentLink
+	LOCAL oLink := PrintableComponentLink{oPS} AS DevExpress.XtraPrinting.PrintableComponentLink
 	// Specify the control to be printed.
-	oLink:Component := Self:GridReports
+	oLink:Component := SELF:GridReports
 	// Set the paper format.
 	oLink:PaperKind := System.Drawing.Printing.PaperKind.A4
-	oLink:Landscape:=True
+	oLink:Landscape:=TRUE
 	// Subscribe to the CreateReportHeaderArea event used to generate the report header.
-	oLink:CreateReportHeaderArea += CreateAreaEventHandler{self, @PrintableComponentLinkReports_CreateReportHeaderArea()}
+	oLink:CreateReportHeaderArea += CreateAreaEventHandler{SELF, @PrintableComponentLinkReports_CreateReportHeaderArea()}
 	// Generate the report.
 	oLink:CreateDocument()
 	// Hide Send via eMail TooBar Button
 	oPS:SetCommandVisibility(PrintingSystemCommand.SendFile, CommandVisibility.None)
 	// Show the report.
 	oLink:ShowPreview()
-Return
+RETURN
 
 
-Method PrintableComponentLinkReports_CreateReportHeaderArea(sender as object, e as CreateAreaEventArgs) as void
-Local cReportHeader := "Reports - Printed on "+Datetime.Now:ToString(ccDateFormat)+", "+Datetime.Now:ToString("HH:mm:ss")+" - User: "+oUser:UserID as string
+METHOD PrintableComponentLinkReports_CreateReportHeaderArea(sender AS OBJECT, e AS CreateAreaEventArgs) AS VOID
+LOCAL cReportHeader := "Reports - Printed on "+Datetime.Now:ToString(ccDateFormat)+", "+Datetime.Now:ToString("HH:mm:ss")+" - User: "+oUser:UserID AS STRING
 
 	e:Graph:StringFormat := BrickStringFormat{StringAlignment.Center}
 	e:Graph:Font := Font{"Tahoma", 14, FontStyle.Bold}
 
-	Local rec := RectangleF{0, 0, e:Graph:ClientPageSize:Width, 50} as RectangleF
+	LOCAL rec := RectangleF{0, 0, e:Graph:ClientPageSize:Width, 50} AS RectangleF
 	e:Graph:DrawString(cReportHeader, Color.Black, rec, DevExpress.XtraPrinting.BorderSide.None)
 RETURN
 
@@ -798,7 +798,7 @@ METHOD Fill_CheckedLBCVessels(cReportUID AS STRING) AS VOID
 	FOR n:=0 UPTO nCount
 		cUID := oDT:Rows[n]:Item["VESSEL_UNIQUEID"]:ToString()
 		cVslCode := oDT:Rows[n]:Item["VslCode"]:ToString():Trim()
-		IF cVslCode <> "" .and. oSoftway:StringIsNumeric(cVslCode, "")
+		IF cVslCode <> "" .AND. oSoftway:StringIsNumeric(cVslCode, "")
 			cVslCode := Convert.ToInt64(cVslCode):ToString()
 		ENDIF
 		cVessel := PadL(cVslCode, 2, " ")+" "+oDT:Rows[n]:Item["VesselName"]:ToString()
@@ -826,11 +826,11 @@ METHOD SelectedVesselCheckedChanged(e AS DevExpress.XtraEditors.Controls.ItemChe
 	// Update FMUserVessels Table 
 	LOCAL cStatement, cReportUID, cUID AS STRING
 	cReportUID := oRow["REPORT_UID"]:ToString()
-	IF cReportUID == "7" .and. SELF:CheckedLBCVessels:Items[e:Index]:CheckState == CheckState.Unchecked
+	IF cReportUID == "7" .AND. SELF:CheckedLBCVessels:Items[e:Index]:CheckState == CheckState.Unchecked
 		WB("Can not change this report.")
 		SELF:CheckedLBCVessels:Items[e:Index]:CheckState := CheckState.Checked
 		RETURN
-	ELSEIF cReportUID == "7"  .and. SELF:CheckedLBCVessels:Items[e:Index]:CheckState == CheckState.Checked
+	ELSEIF cReportUID == "7"  .AND. SELF:CheckedLBCVessels:Items[e:Index]:CheckState == CheckState.Checked
 		RETURN
 	ENDIF
 	cUID := SELF:CheckedLBCVessels:Items[e:Index]:Value:ToString()
@@ -838,7 +838,7 @@ METHOD SelectedVesselCheckedChanged(e AS DevExpress.XtraEditors.Controls.ItemChe
 	IF e:State == CheckState.Checked
 		cStatement:="INSERT INTO FMReportTypesVessel (REPORT_UID, VESSEL_UNIQUEID)"+;
 					" SELECT "+cReportUID+","+cUID+;
-					Iif(symServer == #MySQL, " FROM GlobalSettings", "")+;
+					IIF(symServer == #MySQL, " FROM GlobalSettings", "")+;
 					" WHERE NOT EXISTS"+;
 					" (SELECT REPORT_UID FROM FMReportTypesVessel"+;
 					"	WHERE REPORT_UID="+cReportUID+;

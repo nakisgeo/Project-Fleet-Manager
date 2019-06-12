@@ -257,7 +257,7 @@ CLASS ReportChangeLog INHERIT System.Windows.Forms.Form
     PRIVATE METHOD ReportChangeLog_Shown( sender AS System.Object, e AS System.EventArgs ) AS System.Void
 			
 			SELF:refreshMyLogs()
-			self:panelEdit:Visible := !SELF:lShowOnly
+			SELF:panelEdit:Visible := !SELF:lShowOnly
 			IF SELF:lShowOnly
 				SELF:gcLog:Dock := DockStyle.Fill
 				LOCAL oRow  AS system.data.datarow 
@@ -275,7 +275,7 @@ CLASS ReportChangeLog INHERIT System.Windows.Forms.Form
 
     PRIVATE METHOD refreshMyLogs() AS VOID
 			SELF:gcLog:DataSource := NULL
-			local dsLocal :=  DataSet{} as dataset
+			LOCAL dsLocal :=  DataSet{} AS dataset
             
             LOCAL cStatement := " SELECT FMReportChangeLog.*, RTRIM(Users.UserName) as UserName From FMReportChangeLog "+;
 								" Inner Join Users on Users.User_UniqueId = FMReportChangeLog.FK_User_UniqueId "+;
@@ -283,14 +283,14 @@ CLASS ReportChangeLog INHERIT System.Windows.Forms.Form
 			
 			SELF:oDTMyLogs := oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement)
 			SELF:oDTMyLogs:TableName := "Logs"
-			dsLocal:Tables:Add(self:oDTMyLogs)
+			dsLocal:Tables:Add(SELF:oDTMyLogs)
 			SELF:gcLog:DataSource := dsLocal
 			SELF:gcLog:DataMember := "Logs"
             SELF:gcLog:ForceInitialize()
 	
-			self:gvLog:Columns["LOG_UID"]:Visible := false
-			self:gvLog:Columns["REPORT_UID"]:Visible := false
-			self:gvLog:Columns["FK_User_UniqueId"]:Visible := false
+			SELF:gvLog:Columns["LOG_UID"]:Visible := FALSE
+			SELF:gvLog:Columns["REPORT_UID"]:Visible := FALSE
+			SELF:gvLog:Columns["FK_User_UniqueId"]:Visible := FALSE
 
 	RETURN
 
@@ -304,18 +304,18 @@ CLASS ReportChangeLog INHERIT System.Windows.Forms.Form
 
 		IF SELF:gcLog:Enabled //Kano insert
 
-			local cStatement:="INSERT INTO FMReportChangeLog (REPORT_UID, LogDateTime, Version, FK_User_UniqueId, LogNotes) VALUES"+;
+			LOCAL cStatement:="INSERT INTO FMReportChangeLog (REPORT_UID, LogDateTime, Version, FK_User_UniqueId, LogNotes) VALUES"+;
 					" ("+SELF:cMyReportUID+", '"+cDate+"', '"+cVersion+"', "+oUser:USER_UNIQUEID+",'"+cNotes+"')" AS STRING
 			IF oSoftway:AdoCommand(oMainForm:oGFH, oMainForm:oConn, cStatement)
 				txtNotes:Text :=""
 				txtVersion:Text:=""
 				SELF:dtLogDate:Value := DateTime.Now
-				self:refreshMyLogs()
+				SELF:refreshMyLogs()
 				SELF:hideEditControls()
 				RETURN
 			ENDIF
 		ELSE // Kano Edit
-			LOCAL cTag := SELF:buttonCreateLog:Tag:ToString()
+			LOCAL cTag := SELF:buttonCreateLog:Tag:ToString() AS STRING
 			SELF:buttonCreateLog:Tag := ""
 			LOCAL cStatement:="Update FMReportChangeLog Set Version='"+cVersion+"', LogNotes='"+cNotes+"', LogDateTime='"+cDate+"' WHERE "+;
 					" LOG_UID="+cTag AS STRING
@@ -377,7 +377,7 @@ CLASS ReportChangeLog INHERIT System.Windows.Forms.Form
 
     RETURN
 
-    PRIVATE Method hideEditControls() AS VOID
+    PRIVATE METHOD hideEditControls() AS VOID
 		SELF:gcLog:Enabled := FALSE
 		SELF:panelEdit:Visible := FALSE
 		SELF:toolStrip1:Enabled := TRUE
@@ -389,13 +389,13 @@ CLASS ReportChangeLog INHERIT System.Windows.Forms.Form
 		SELF:gcLog:Dock := System.Windows.Forms.DockStyle.Bottom
 		SELF:gcLog:Location := System.Drawing.Point{0, 166}
 		SELF:gcLog:Size := System.Drawing.Size{771, 293}
-		SELF:buttonCreateLog:Visible := true
+		SELF:buttonCreateLog:Visible := TRUE
 		SELF:panelEdit:Visible := TRUE
 		SELF:toolStrip1:Enabled := FALSE
 	RETURN
 
     PRIVATE METHOD buttonCancel_Click( sender AS System.Object, e AS System.EventArgs ) AS System.Void
-			self:hideEditControls()
+			SELF:hideEditControls()
         RETURN
 
     PRIVATE METHOD gvLog_DoubleClick( sender AS System.Object, e AS System.EventArgs ) AS System.Void
@@ -406,7 +406,7 @@ CLASS ReportChangeLog INHERIT System.Windows.Forms.Form
 			LOCAL oRow AS DataRowView
 			oRow:=(DataRowView)SELF:gvLog:GetRow(info:RowHandle)
 			SELF:showEditControls()
-			SELF:buttonCreateLog:Visible := false
+			SELF:buttonCreateLog:Visible := FALSE
 			txtNotes:Text := oRow:Item["LogNotes"]:ToString()	
 			txtVersion:Text := oRow:Item["Version"]:ToString()	
 			dtLogDate:Value := DateTime.Parse(oRow:Item["LogDateTime"]:ToString())		

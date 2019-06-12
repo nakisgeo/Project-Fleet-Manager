@@ -14,8 +14,8 @@ PARTIAL CLASS TableReportsSelectionForm INHERIT System.Windows.Forms.Form
 
 PRIVATE METHOD exportGridToExcelToolStripMenuItemClick() AS System.Void
 
-			local cFile := cTempDocDir+"\FindingsResult_on_"+Datetime.Now:ToString("dd_MM_yyyy__HH_mm_ss")+".xls" as String
-			IF gcDetails:Datasource<>null
+			LOCAL cFile := cTempDocDir+"\FindingsResult_on_"+Datetime.Now:ToString("dd_MM_yyyy__HH_mm_ss")+".xls" AS STRING
+			IF gcDetails:Datasource<>NULL
 				gcDetails:ExportToXls(cFile)
 
 				LOCAL oXL AS Microsoft.Office.Interop.Excel.Application

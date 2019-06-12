@@ -11,7 +11,7 @@
 PARTIAL CLASS MainForm
 
 METHOD ImportExcelData() AS VOID
-	IF SELF:TreeListVessels:FocusedNode == NULL .or. oMainForm:LBCReports:SelectedValue == NULL
+	IF SELF:TreeListVessels:FocusedNode == NULL .OR. oMainForm:LBCReports:SelectedValue == NULL
 		wb("Please select a Vessel", "No Vessel selected")
 		RETURN
 	ENDIF
@@ -538,7 +538,7 @@ cStr += ", C.O.: "+cCO+", L.O(A/E): "+cAELO+", EVAP.: "+cEvap+", F. W.: "+cFW
 		cTemp := cNextPort:Replace(cETA, ""):Trim()
 		// Locate the end of ETA Date
 		nPos := cNextPort:IndexOf(" ")
-		IF nPos == -1 .and. cETA == ""
+		IF nPos == -1 .AND. cETA == ""
 			ErrorBox("Invalid ETA: "+cNextPort+CRLF+;
 					"for DateTime: "+cDate+CRLF+;
 					"Please correct and retry")
@@ -570,7 +570,7 @@ cStr += ", C.O.: "+cCO+", L.O(A/E): "+cAELO+", EVAP.: "+cEvap+", F. W.: "+cFW
 			cEtaTime += c
 		NEXT*/
 	ENDIF
-cStr += ", EtaDate: "+Iif(dEtaDate == DateTime.MinValue, "not found", cEtaDate)	//+", EtaTime: "+Iif(cEtaTime == "", "not found", cEtaTime)
+cStr += ", EtaDate: "+IIF(dEtaDate == DateTime.MinValue, "not found", cEtaDate)	//+", EtaTime: "+Iif(cEtaTime == "", "not found", cEtaTime)
 
 	cComments:= oRow["Comments"]:ToString():Trim()
 cStr += ", Comments: "+cComments

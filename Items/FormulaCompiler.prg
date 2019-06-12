@@ -11,7 +11,7 @@ CLASS FormulaCompiler
 	PRIVATE aTokens AS ArrayList
 
 	//PRIVATE aFormulas, aValues AS ArrayList
-	private oReportTabForm as ReportTabForm
+	PRIVATE oReportTabForm AS ReportTabForm
 
 CONSTRUCTOR(_GridViewItems AS DevExpress.XtraGrid.Views.Grid.GridView, _cValue AS STRING, _aTokens AS ArrayList)
 	SELF:GridViewItems := _GridViewItems
@@ -43,7 +43,7 @@ METHOD TokensChecked(cError REF STRING) AS LOGIC
 			// Term is a number
 			LOOP
 
-		CASE cTerm:Length > 2 .and. cTerm:StartsWith("ID")
+		CASE cTerm:Length > 2 .AND. cTerm:StartsWith("ID")
 			cItemID := cTerm:Substring(2):Trim()
 			IF ! SELF:LocateItemID(cItemID)
 				cError := cTerm+": ItemID="+cItemID+" not found"+CRLF+CRLF
@@ -158,7 +158,7 @@ METHOD ReplaceExpressionTerms(cParText AS STRING, cFormula AS STRING) AS STRING
 			ENDIF
 			//wb("cVariable="+cVariable+CRLF+"nChar="+nChar:ToString()+CRLF+"nLen="+nLen:ToString()+CRLF+"cParText:Substring(nChar + 1, 1) == '-'="+(cParText:Substring(nChar + 1, 1) == "-"):ToString()+CRLF+;
 			//"cParText:Substring(nChar + 2, 1) == '-'="+(cParText:Substring(nChar + 2, 1) == "-"):ToString(), "+-*/")
-			IF (nChar < nLen .and. cParText:Substring(nChar + 1, 1) == "-" .or. nChar + 1 < nLen .and. cParText:Substring(nChar + 2, 1) == "-")
+			IF (nChar < nLen .AND. cParText:Substring(nChar + 1, 1) == "-" .OR. nChar + 1 < nLen .AND. cParText:Substring(nChar + 2, 1) == "-")
 				LOCAL cLastByte := "" AS STRING
 				cVariable := SELF:GetNegativeNumber(cParText, nChar, cLastByte)
 				//	wb("cValueText="+cValueText+CRLF+"cVariable="+cVariable+CRLF+"Rem=|"+cParText:Substring(nChar):Replace(" ", "W")+"|"+CRLF+"nChar="+nChar:ToString(), "-")
@@ -317,7 +317,7 @@ RETURN cNum
 METHOD GetRightNumber(cTermExpr AS STRING, nPos AS INT) AS STRING
 	LOCAL cNum AS STRING
 	LOCAL cByte AS STRING
-	LOCAL nLen := cTermExpr:Length - 1 as INT
+	LOCAL nLen := cTermExpr:Length - 1 AS INT
 
 	WHILE nPos <= nLen
 		cByte := cTermExpr:Substring(nPos, 1)
@@ -336,7 +336,7 @@ METHOD GetSingleVariableAmount(cVariable AS STRING, cFormula AS STRING) AS STRIN
 	ENDIF
 
 	LOCAL cItemID := cVariable AS STRING
-	IF cVariable:Length > 2 .and. cVariable:StartsWith("ID")
+	IF cVariable:Length > 2 .AND. cVariable:StartsWith("ID")
 		cItemID := cVariable:Substring(2):Trim()
 	ENDIF
 
@@ -394,7 +394,7 @@ METHOD LocateItemID(cItemID AS STRING) AS LOGIC
 	LOCAL nHandle AS INT
 	nHandle := SELF:GridViewItems:LocateByValue(0, SELF:GridViewItems:Columns["ItemNo"], cItemID)
 /*	// Use LocateByDisplayText() instead of LocateByValue() for INTEGER SQL columns
-	nHandle:=Self:GridViewCountries:LocateByDisplayText(0, Self:GridViewCountries:Columns["Country"], cCountry)*/
+	nHandle:=SELF:GridViewCountries:LocateByDisplayText(0, SELF:GridViewCountries:Columns["Country"], cCountry)*/
 	IF nHandle == DevExpress.XtraGrid.GridControl.InvalidRowHandle
 		RETURN FALSE
 	ENDIF
@@ -415,7 +415,7 @@ RETURN TRUE
 
 METHOD GetItemIDValue(cItemID AS STRING) AS STRING
 	// Locate the row
-	LOCAL cAmount := "0"
+	LOCAL cAmount := "0" AS string
 
 	//wb(cItemID)
 	IF cItemID:ToUpper() == "PROPELLERPITCH"

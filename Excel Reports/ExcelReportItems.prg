@@ -165,13 +165,13 @@ METHOD CreateExcelReportItems(cVesselName AS STRING, oDTFMItems AS System.Data.D
 		LOCAL cPackageUID, cItemUID, cData AS STRING
 		LOCAL oRows AS DataRow[]
 		LOCAL cMemo, cStatement AS STRING
-		LOCAL charSpl1 := (char)169 AS Char
-		LOCAL charSpl2 := (char)168 AS Char
+		LOCAL charSpl1 := (CHAR)169 AS CHAR
+		LOCAL charSpl2 := (CHAR)168 AS CHAR
 		LOCAL cItemsArray AS STRING[]
 		LOCAL cItemsTemp  AS STRING[]
 		LOCAL cStringDateTimeGMT AS STRING
-		LOCAL oDateTime as DateTime
-		LOCAL lDateSet as LOGIC
+		LOCAL oDateTime AS DateTime
+		LOCAL lDateSet AS LOGIC
 
 		oSheet:Cells[1, 1] := "DateTime of the report."
 		//Set The Dates
@@ -183,7 +183,7 @@ METHOD CreateExcelReportItems(cVesselName AS STRING, oDTFMItems AS System.Data.D
 					cStringDateTimeGMT := oDateTime:ToString()
 					oSheet:Cells[nRow, 1] := cStringDateTimeGMT
 					nRow ++
-		next
+		NEXT
 
 
 		FOREACH oRowItem AS DataRow IN oDTFMItems:Rows
@@ -194,7 +194,7 @@ METHOD CreateExcelReportItems(cVesselName AS STRING, oDTFMItems AS System.Data.D
 			oSheet:Cells[1, nCol] := oRowItem["ItemName"]:ToString()+" ("+oRowItem["ItemNo"]:ToString()+")"
 			cItemUID := oRowItem["ITEM_UID"]:ToString()
 			nRow := 2
-			lDateSet := false
+			lDateSet := FALSE
 			FOREACH oRowDate AS DataRow IN oDTFMDates:Rows
 				cPackageUID := oRowDate["PACKAGE_UID"]:ToString()
 				// Locate FMData
@@ -218,12 +218,12 @@ METHOD CreateExcelReportItems(cVesselName AS STRING, oDTFMItems AS System.Data.D
 									" WHERE PACKAGE_UID="+cPackageUID
 						cMemo := oSoftway:RecordExists(oMainForm:oGFH, oMainForm:oConn, cStatement, "Memo")
 						//wb(cMemo, "Here")
-						IF cMemo <> "" .and. cMemo:Contains(charSpl2)
+						IF cMemo <> "" .AND. cMemo:Contains(charSpl2:ToString())
 						//
 							cItemsArray := cMemo:Split(charSpl1)
 							FOREACH cItem AS STRING IN cItemsArray
 								TRY
-									IF cItem <> NULL .and. cItem <> ""
+									IF cItem <> NULL .AND. cItem <> ""
 										cItemsTemp := cItem:Split(charSpl2)
 										IF  cItemUID == cItemsTemp[1] 
 											oRangeLocal := oSheet:Range[oSheet:Cells[nRow, nCol], oSheet:Cells[nRow, nCol]]

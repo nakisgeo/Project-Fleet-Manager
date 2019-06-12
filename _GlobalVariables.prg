@@ -1,5 +1,5 @@
-PUBLIC GLOBAL cProgramVersion:="1.2.1.07" AS STRING
-PUBLIC GLOBAL cMyDatabaseVersion := 1 as INT
+PUBLIC GLOBAL cProgramVersion:="1.2.1.08" AS STRING
+PUBLIC GLOBAL cMyDatabaseVersion := 1 AS INT
 
 PUBLIC GLOBAL oSoftway AS Softway
 PUBLIC GLOBAL oMainForm AS MainForm

@@ -28,17 +28,17 @@ PARTIAL CLASS MatchForm INHERIT System.Windows.Forms.Form
 	EXPORT cType := "" AS STRING
 	EXPORT cVessel_UID :="" AS STRING 
 	//Variables to load from SQL 
-	EXPORT cDepNextPortUID := "0" as STRING
-	EXPORT cArrivalUID := "0" as STRING
-	EXPORT cArrivalHFOUid := "0" as STRING
+	EXPORT cDepNextPortUID := "0" AS STRING
+	EXPORT cArrivalUID := "0" AS STRING
+	EXPORT cArrivalHFOUid := "0" AS STRING
 	EXPORT cArrivalLFOUid := "0" AS STRING
-	EXPORT cArrivalMDOUid := "0" as STRING
-	EXPORT cArrivalPort := "0" as STRING
-	EXPORT cDepHFOUid := "0" as STRING
+	EXPORT cArrivalMDOUid := "0" AS STRING
+	EXPORT cArrivalPort := "0" AS STRING
+	EXPORT cDepHFOUid := "0" AS STRING
 	EXPORT cDepLFOUid := "0" AS STRING
 	EXPORT cDepMDOUid := "0" AS STRING
 	EXPORT cDepartureUID := "0" AS STRING
-	EXPORT cDeparturePort := "0" as STRING
+	EXPORT cDeparturePort := "0" AS STRING
 	EXPORT cVoyageStartDate := "" AS STRING
 	EXPORT cVoyageEndDate := "" AS STRING
 	EXPORT cBunkDepHFOUid := "0" AS STRING
@@ -48,7 +48,7 @@ PARTIAL CLASS MatchForm INHERIT System.Windows.Forms.Form
 
 PRIVATE METHOD MatchFormOnLoad AS VOID
 	SELF:CreateGridPackages_Columns()
-	self:readGlobalSettings()
+	SELF:readGlobalSettings()
 	SELF:oDS:Relations:Clear()
 	//SELF:gridControl1:LevelTree:Nodes:Clear()
 	SELF:oDS := DataSet{}
@@ -57,7 +57,7 @@ PRIVATE METHOD MatchFormOnLoad AS VOID
 	LOCAL cExtraSQL := " " AS STRING
 	IF SELF:cType == "A"
 		cExtraSQL := " AND REPORT_UID = "+SELF:cArrivalUID+" AND Vessel_Uniqueid="+SELF:cVessel_UID+;
-					 " AND FMDataPackages.DateTimeGMT >= '"+self:cVoyageStartDate+"' AND FMDataPackages.DateTimeGMT <= '"+self:cVoyageEndDate+"'"
+					 " AND FMDataPackages.DateTimeGMT >= '"+SELF:cVoyageStartDate+"' AND FMDataPackages.DateTimeGMT <= '"+SELF:cVoyageEndDate+"'"
 		
 		cStatement:=" SELECT FMDataPackages.DateTimeGMT,Data4.Data As PortOfArrival ,FMDataPackages.PACKAGE_UID"+;
 					" ,Data1.Data as HFO, Data2.Data as LFO, Data3.Data as MGO"+;
@@ -72,13 +72,13 @@ PRIVATE METHOD MatchFormOnLoad AS VOID
 		SELF:oDTPackages:=oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement)
 	ELSE
 		cExtraSQL := " AND REPORT_UID = "+SELF:cDepartureUID+" AND Vessel_Uniqueid="+SELF:cVessel_UID+;
-					 " AND FMDataPackages.DateTimeGMT >= '"+self:cVoyageStartDate+"' AND FMDataPackages.DateTimeGMT <= '"+self:cVoyageEndDate+"'"
+					 " AND FMDataPackages.DateTimeGMT >= '"+SELF:cVoyageStartDate+"' AND FMDataPackages.DateTimeGMT <= '"+SELF:cVoyageEndDate+"'"
 		
 		cStatement:=" SELECT FMDataPackages.DateTimeGMT, Data5.Data As PortOfDeparture , FMDataPackages.PACKAGE_UID, Data1.Data as NextPort"+;
 					" ,Data2.Data as HFO, Data3.Data as LFO, Data4.Data as MGO, Data6.Data as BunkeredHFO, Data7.Data as BunkeredLFO, Data8.Data as BunkeredMDO"+;
 					" FROM FMDataPackages "+;
-					" Left Outer Join FMData as Data5 ON FMDataPackages.PACKAGE_UID=Data5.PACKAGE_UID AND Data5.ITEM_UID="+self:cDeparturePort+;
-					" Left Outer Join FMData as Data1 ON FMDataPackages.PACKAGE_UID=Data1.PACKAGE_UID AND Data1.ITEM_UID="+self:cDepNextPortUID+;
+					" Left Outer Join FMData as Data5 ON FMDataPackages.PACKAGE_UID=Data5.PACKAGE_UID AND Data5.ITEM_UID="+SELF:cDeparturePort+;
+					" Left Outer Join FMData as Data1 ON FMDataPackages.PACKAGE_UID=Data1.PACKAGE_UID AND Data1.ITEM_UID="+SELF:cDepNextPortUID+;
 					" Left Outer Join FMData as Data2 ON FMDataPackages.PACKAGE_UID=Data2.PACKAGE_UID AND Data2.ITEM_UID="+SELF:cDepHFOUid+;
 					" Left Outer Join FMData as Data3 ON FMDataPackages.PACKAGE_UID=Data3.PACKAGE_UID AND Data3.ITEM_UID="+SELF:cDepLFOUid+;
 					" Left Outer Join FMData as Data4 ON FMDataPackages.PACKAGE_UID=Data4.PACKAGE_UID AND Data4.ITEM_UID="+SELF:cDepMDOUid+;
@@ -118,8 +118,8 @@ PRIVATE METHOD readGlobalSettings() AS VOID
 				" ORDER BY Vessel_UniqueID"
 	LOCAL oDT := oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement) AS DataTable
 	FOREACH oRow AS DataRow IN oDT:Rows
-			self:cArrivalUID :=	oRow["Arrival_REPORT_UID"]:ToString()
-			self:cDepartureUID :=	oRow["Departure_REPORT_UID"]:ToString()
+			SELF:cArrivalUID :=	oRow["Arrival_REPORT_UID"]:ToString()
+			SELF:cDepartureUID :=	oRow["Departure_REPORT_UID"]:ToString()
 			SELF:cDepNextPortUID := oRow["DepartureNextPort_ITEM_UID"]:ToString()
 			SELF:cArrivalHFOUid := oRow["Arrival_HFOROB_Item_UID"]:ToString()
 			SELF:cArrivalLFOUid := oRow["Arrival_LFOROB_Item_UID"]:ToString()
@@ -140,7 +140,7 @@ PRIVATE METHOD readGlobalSettings() AS VOID
 			SELF:cBunkDepMDOUid := oRow["DepartureBunkeredMDO_Item_UID"]:ToString()
 			IF cBunkDepMDOUid==""
 				cBunkDepMDOUid := "0"
-			endif
+			ENDIF
 	NEXT
 RETURN
 

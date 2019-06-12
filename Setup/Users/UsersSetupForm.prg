@@ -551,7 +551,7 @@ PARTIAL CLASS UsersSetupForm INHERIT DevExpress.XtraEditors.XtraForm
 		SELF:LBCUsers:DataSource := SELF:oDTUsers
 		SELF:LBCUsers:DisplayMember := "UserName"
 		SELF:LBCUsers:ValueMember := "USER_UNIQUEID"
-		lSuspendNotification := true
+		lSuspendNotification := TRUE
 		//LOCAL cReportName := oMainForm:LBCReports:GetDisplayItemValue(oMainForm:LBCReports:SelectedIndex):ToString() AS STRING
 	RETURN TRUE
 	
@@ -569,151 +569,151 @@ PARTIAL CLASS UsersSetupForm INHERIT DevExpress.XtraEditors.XtraForm
 			ENDIF
 			IF oRow["CanEditVoyages"]:ToString():Trim() == "True"
 				//SELF:canEditVoyages:
-				self:lSuspendNotification := false
+				SELF:lSuspendNotification := FALSE
 				SELF:canEditVoyages:Checked := TRUE
-				self:lSuspendNotification := true
+				SELF:lSuspendNotification := TRUE
 			ELSE
-				self:lSuspendNotification := false
+				SELF:lSuspendNotification := FALSE
 				SELF:canEditVoyages:Checked := FALSE
-				self:lSuspendNotification := true
+				SELF:lSuspendNotification := TRUE
 			ENDIF
 			IF oRow["CanEditReports"]:ToString():Trim() == "True"
 				//SELF:canEditVoyages:
-				self:lSuspendNotification := false
+				SELF:lSuspendNotification := FALSE
 				SELF:canEditReports:Checked := TRUE
-				self:lSuspendNotification := true
+				SELF:lSuspendNotification := TRUE
 			ELSE
-				self:lSuspendNotification := false
+				SELF:lSuspendNotification := FALSE
 				SELF:canEditReports:Checked := FALSE
-				self:lSuspendNotification := true
+				SELF:lSuspendNotification := TRUE
 			ENDIF
 			IF oRow["CanEditReportData"]:ToString():Trim() == "True"
 				//SELF:canEditVoyages:
-				self:lSuspendNotification := false
+				SELF:lSuspendNotification := FALSE
 				SELF:checkBox2:Checked := TRUE
-				self:lSuspendNotification := true
+				SELF:lSuspendNotification := TRUE
 			ELSE
-				self:lSuspendNotification := false
+				SELF:lSuspendNotification := FALSE
 				SELF:checkBox2:Checked := FALSE
-				self:lSuspendNotification := true
+				SELF:lSuspendNotification := TRUE
 			ENDIF
 			IF oRow["CanDeleteReportData"]:ToString():Trim() == "True"
 				//SELF:canEditVoyages:
-				self:lSuspendNotification := false
+				SELF:lSuspendNotification := FALSE
 				SELF:checkBox1:Checked := TRUE
-				self:lSuspendNotification := true
+				SELF:lSuspendNotification := TRUE
 			ELSE
-				self:lSuspendNotification := false
+				SELF:lSuspendNotification := FALSE
 				SELF:checkBox1:Checked := FALSE
-				self:lSuspendNotification := true
+				SELF:lSuspendNotification := TRUE
 			ENDIF
 			IF oRow["CanEnterToolsArea"]:ToString():Trim() == "True"
 				//SELF:canEditVoyages:
-				self:lSuspendNotification := false
+				SELF:lSuspendNotification := FALSE
 				SELF:checkBox3:Checked := TRUE
-				self:lSuspendNotification := true
+				SELF:lSuspendNotification := TRUE
 			ELSE
-				self:lSuspendNotification := false
+				SELF:lSuspendNotification := FALSE
 				SELF:checkBox3:Checked := FALSE
-				self:lSuspendNotification := true
+				SELF:lSuspendNotification := TRUE
 			ENDIF
 			
 			IF oRow["CanCreateReports"]:ToString():Trim() == "True"
 				//SELF:canEditVoyages:
-				self:lSuspendNotification := false
+				SELF:lSuspendNotification := FALSE
 				SELF:canCreateReports:Checked := TRUE
-				self:lSuspendNotification := true
+				SELF:lSuspendNotification := TRUE
 			ELSE
-				self:lSuspendNotification := false
+				SELF:lSuspendNotification := FALSE
 				SELF:canCreateReports:Checked := FALSE
-				self:lSuspendNotification := true
+				SELF:lSuspendNotification := TRUE
 			ENDIF
 			
 			IF oRow["CanDeleteOfficeReports"]:ToString():Trim() == "True"
 				//SELF:canEditVoyages:
-				self:lSuspendNotification := false
+				SELF:lSuspendNotification := FALSE
 				SELF:canDeleteOfficeReports:Checked := TRUE
-				self:lSuspendNotification := true
+				SELF:lSuspendNotification := TRUE
 			ELSE
-				self:lSuspendNotification := false
+				SELF:lSuspendNotification := FALSE
 				SELF:canDeleteOfficeReports:Checked := FALSE
-				self:lSuspendNotification := true
+				SELF:lSuspendNotification := TRUE
 			ENDIF
 			
 			IF oRow["CanSeeAllOfficeReports"]:ToString():Trim() == "True"
 				//SELF:canEditVoyages:
-				self:lSuspendNotification := false
+				SELF:lSuspendNotification := FALSE
 				SELF:CanSeeAllOfficeReports:Checked := TRUE
-				self:lSuspendNotification := true
+				SELF:lSuspendNotification := TRUE
 			ELSE
-				self:lSuspendNotification := false
+				SELF:lSuspendNotification := FALSE
 				SELF:CanSeeAllOfficeReports:Checked := FALSE
-				self:lSuspendNotification := true
+				SELF:lSuspendNotification := TRUE
 			ENDIF
 			
 			IF oRow["CanEditFinalizedOfficeReports"]:ToString():Trim() == "True"
 				//SELF:canEditVoyages:
-				self:lSuspendNotification := false
+				SELF:lSuspendNotification := FALSE
 				SELF:CanEditFinalizedOfficeReports:Checked := TRUE
-				self:lSuspendNotification := true
+				SELF:lSuspendNotification := TRUE
 			ELSE
-				self:lSuspendNotification := false
+				SELF:lSuspendNotification := FALSE
 				SELF:CanEditFinalizedOfficeReports:Checked := FALSE
-				self:lSuspendNotification := true
+				SELF:lSuspendNotification := TRUE
 			ENDIF
 			
 			IF oRow["isGeneralManager"]:ToString():Trim() == "True"
 				//SELF:canEditVoyages:
-				self:lSuspendNotification := false
+				SELF:lSuspendNotification := FALSE
 				SELF:CHBisGM:Checked := TRUE
-				self:lSuspendNotification := true
+				SELF:lSuspendNotification := TRUE
 			ELSE
-				self:lSuspendNotification := false
+				SELF:lSuspendNotification := FALSE
 				SELF:CHBisGM:Checked := FALSE
-				self:lSuspendNotification := true
+				SELF:lSuspendNotification := TRUE
 			ENDIF
 			
 			IF oRow["IsHeadUser"]:ToString():Trim() == "True"
-				self:lSuspendNotification := false
+				SELF:lSuspendNotification := FALSE
 				SELF:CBHeadUser:Checked := TRUE
-				self:lSuspendNotification := true
+				SELF:lSuspendNotification := TRUE
 			ELSE
-				self:lSuspendNotification := false
+				SELF:lSuspendNotification := FALSE
 				SELF:CBHeadUser:Checked := FALSE
-				self:lSuspendNotification := true
+				SELF:lSuspendNotification := TRUE
 			ENDIF
 			
 			IF oRow["CanEditReportResults"]:ToString():Trim() == "True"
 				//SELF:canEditVoyages:
-				self:lSuspendNotification := false
+				SELF:lSuspendNotification := FALSE
 				SELF:ckbUsercanEditReportResults:Checked := TRUE
-				self:lSuspendNotification := true
+				SELF:lSuspendNotification := TRUE
 			ELSE
-				self:lSuspendNotification := false
+				SELF:lSuspendNotification := FALSE
 				SELF:ckbUsercanEditReportResults:Checked := FALSE
-				self:lSuspendNotification := true
+				SELF:lSuspendNotification := TRUE
 			ENDIF
 
 			IF oRow["CanEditReportChangeLog"]:ToString():Trim() == "True"
 				//SELF:canEditVoyages:
-				self:lSuspendNotification := false
+				SELF:lSuspendNotification := FALSE
 				SELF:CBEditReportChangeLog:Checked := TRUE
-				self:lSuspendNotification := true
+				SELF:lSuspendNotification := TRUE
 			ELSE
-				self:lSuspendNotification := false
+				SELF:lSuspendNotification := FALSE
 				SELF:CBEditReportChangeLog:Checked := FALSE
-				self:lSuspendNotification := true
+				SELF:lSuspendNotification := TRUE
 			ENDIF
 
 			IF oRow["InformUserForGMApproval"]:ToString():Trim() == "True"
 				//SELF:canEditVoyages:
-				self:lSuspendNotification := false
+				SELF:lSuspendNotification := FALSE
 				SELF:cbInformUserForGMApproval:Checked := TRUE
-				self:lSuspendNotification := true
+				SELF:lSuspendNotification := TRUE
 			ELSE
-				self:lSuspendNotification := false
+				SELF:lSuspendNotification := FALSE
 				SELF:cbInformUserForGMApproval:Checked := FALSE
-				self:lSuspendNotification := true
+				SELF:lSuspendNotification := TRUE
 			ENDIF
 
 			IF oRow["InformUserForGMApprovalEmail"]:ToString():Trim() != ""
@@ -952,7 +952,7 @@ RETURN
 						" ORDER BY UserName"
 			LOCAL oDTFMUsers := oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement) AS DataTable
 			SELF:formUsersList(oDTFMUsers)
-			SELF:LBCUsers_SelectedIndexChanged(self:LBCUsers,null)
+			SELF:LBCUsers_SelectedIndexChanged(SELF:LBCUsers,NULL)
 		ENDIF
         RETURN
 
@@ -993,10 +993,10 @@ RETURN
 		ENDIF
     RETURN
     PRIVATE METHOD cbInformUserForGMApproval_CheckedChanged( sender AS System.Object, e AS System.EventArgs ) AS System.Void
-			self:cbInformUserForGMApprovalCheckedChanged()
+			SELF:cbInformUserForGMApprovalCheckedChanged()
         RETURN
     PRIVATE METHOD bttnEmailToSendOnGMApprovals_Click( sender AS System.Object, e AS System.EventArgs ) AS System.Void
-			self:bttnEmailToSendOnGMApprovalsClick()
+			SELF:bttnEmailToSendOnGMApprovalsClick()
         RETURN
 
 END CLASS

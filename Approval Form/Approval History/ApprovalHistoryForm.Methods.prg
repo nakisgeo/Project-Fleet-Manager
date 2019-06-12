@@ -42,13 +42,13 @@ EXPORT METHOD getHistory() AS VOID
 		
 		cCaseToState := ""			
 					
-		local cCasePackageStatus := "CASE FMDataPackages.Status "+;
+		LOCAL cCasePackageStatus := "CASE FMDataPackages.Status "+;
 					"WHEN '0' THEN 'Pending'"+;
 					"WHEN '1' THEN 'Submitted to Dep Manager'"+;
 					"WHEN '2' THEN 'Dep Manager Approved'"+;
 					"WHEN '3' THEN 'GM Acknowledged'"+;
 					"ELSE 'Unknown Status'"+;
-					"END as CurrentReportStatus "	as String
+					"END as CurrentReportStatus "	AS STRING
 		
 		cCaseStatus := "CASE ApprovalData.Status "+;
 					"WHEN '0' THEN 'Not Seen'"+;
@@ -93,7 +93,7 @@ EXPORT METHOD getHistory() AS VOID
 		IF oRows <> NULL && oRows:Length <> 0
 			oRowTemp := oRows[1]
 			oRow := oDTGrid:NewRow()
-			LOCAL cResultOfApproval := oRowTemp:Item["ApprovalStatus"]:ToString():Trim()
+			LOCAL cResultOfApproval := oRowTemp:Item["ApprovalStatus"]:ToString():Trim() AS STRING
 			LOCAL cEndStatus := oRowTemp:Item["To_State"]:ToString():Trim() AS STRING
 			IF cEndStatus=="2"
 				oRow:Item["Description"] := "Submitted to General Manager by"
@@ -106,7 +106,7 @@ EXPORT METHOD getHistory() AS VOID
 			oRow := oDTGrid:NewRow()
 			LOCAL cDate := oRowTemp:Item["DateActed"]:ToString() AS STRING
 			IF cDate <> NULL && cDate<>""
-				if cEndStatus=="2"
+				IF cEndStatus=="2"
 					oRow:Item["Description"] := "General Manager Approved by"
 				ELSE
 					IF cResultOfApproval == "Returned"

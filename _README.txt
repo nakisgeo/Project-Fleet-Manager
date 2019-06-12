@@ -184,6 +184,9 @@ FleetManager.EXE versions:
 1.2.1.07: 18/04/19
 	- MRV Report Finalized
 
+1.2.1.08: 07.06.19
+	- Added : Check/Unchek all items when exporting to excel
+
 Mode:
 - Use Common Items in Reports
 - Show all Items

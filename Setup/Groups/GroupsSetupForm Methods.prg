@@ -78,9 +78,10 @@ LOCAL oDT AS DataTable
 
 	SELF:ListViewUsers:Items:Clear()
 
-	cStatement:="SELECT USER_UNIQUEID, UserName"+;
+	cStatement:=" SELECT FMUsers.USER_UNIQUEID, RTRIM(Users.UserName) AS UserName"+;
 				" FROM FMUsers"+;
-				" WHERE USER_UNIQUEID IN"+;
+				" INNER JOIN Users ON Users.USER_UNIQUEID=FMUsers.USER_UNIQUEID "+;
+				" WHERE FMUsers.USER_UNIQUEID IN"+;
 				" (SELECT USER_UID FROM FMUserGroupLinks"+;
 				" WHERE GROUP_UID="+cGroupUID+")" 
 	oDT:=oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement)
@@ -111,16 +112,18 @@ LOCAL oDT AS DataTable
 
 	SELF:ListViewNonUsers:Items:Clear()
 
-	cStatement:="SELECT USER_UNIQUEID, UserName"+;
+	cStatement:="SELECT FMUsers.USER_UNIQUEID, RTRIM(Users.UserName) AS UserName"+;
 				" FROM FMUsers"+;
-				" WHERE USER_UNIQUEID NOT IN"+;
+				" INNER JOIN Users ON Users.USER_UNIQUEID=FMUsers.USER_UNIQUEID "+;
+				" WHERE FMUsers.USER_UNIQUEID NOT IN"+;
 				" (SELECT USER_UID FROM FMUserGroupLinks"+;
 				" WHERE GROUP_UID="+cGroupUID+")"
 	//MemoWrit("C:\NonUsers.TXT", cStatement) 
 	oDT:=oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement)
 
 	IF oDT:Rows:Count == 0
-		cStatement:="SELECT FMUsers.USER_UNIQUEID, FMUsers.UserName FROM FMUsers"
+		cStatement:="SELECT FMUsers.USER_UNIQUEID, RTRIM(Users.UserName) FROM FMUsers"+;
+		" INNER JOIN Users ON Users.USER_UNIQUEID=FMUsers.USER_UNIQUEID "
 		oDT:=oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement)
 	ENDIF
 

@@ -26,19 +26,19 @@ CLASS PipeManager IMPLEMENTS IChannelManager
     PRIVATE NumberPipes := 5 AS DWORD
     PRIVATE numChannels := 0 AS INT
     /*const*/ PRIVATE PIPE_MAX_STUFFED_TIME := 5000 AS INT
-    PRIVATE PipeName := "SoftwayFleetManagerPipe" AS STRING
+    PRIVATE PipeName := "SoftwayCommunicatorPipe" AS STRING
     EXPORT Pipes AS System.Collections.Hashtable
     EXPORT SyncRoot := OBJECT{} AS OBJECT
 
     // Methods
-    VIRTUAL METHOD HandleRequest(request AS STRING) AS STRING
-    //METHOD HandleRequest(request AS STRING) AS STRING
+    //VIRTUAL METHOD HandleRequest(request AS STRING) AS STRING
+    METHOD HandleRequest(request AS STRING) AS STRING
         //ServerForm.ActivityRef:AppendText(String.Concat(request, System.Environment.NewLine))
         //wb(String.Concat(request, System.Environment.NewLine))
         RETURN STRING.Concat("Response to: ", request)
 
-    VIRTUAL METHOD Initialize() AS VOID
-    //METHOD Initialize() AS VOID
+    //VIRTUAL METHOD Initialize() AS VOID
+    METHOD Initialize() AS VOID
 		IF cLicensedCompany:ToUpper():StartsWith("SEASCAPE") //.or. cLicensedCompany:ToUpper():StartsWith("SOFTWAY")
 			SELF:PipeName += oUser:UserID
 		ENDIF
@@ -47,13 +47,13 @@ CLASS PipeManager IMPLEMENTS IChannelManager
         SELF:Mre := System.Threading.ManualResetEvent{FALSE}
         SELF:MainThread := System.Threading.Thread{System.Threading.ThreadStart{ SELF, @MyStart() }}
         SELF:MainThread:IsBackground := TRUE
-        SELF:MainThread:Name := "Softway FleetManager Pipe"
+        SELF:MainThread:Name := "Softway Communicator Pipe"
         SELF:MainThread:Start()
 		//wb(SELF:MainThread:Name, "PipeManager:Initialize")
         System.Threading.Thread.Sleep(1000)
 
-    VIRTUAL METHOD RemoveServerChannel(param AS OBJECT) AS VOID
-    //METHOD RemoveServerChannel(param AS OBJECT) AS VOID
+    //VIRTUAL METHOD RemoveServerChannel(param AS OBJECT) AS VOID
+    METHOD RemoveServerChannel(param AS OBJECT) AS VOID
         LOCAL handle AS INT
         //
         handle := (INT)param 
@@ -140,8 +140,8 @@ CLASS PipeManager IMPLEMENTS IChannelManager
 			ErrorBox(e:Message)
         END TRY
 
-    //METHOD Stop() AS VOID
-    VIRTUAL METHOD Stop() AS VOID
+    METHOD Stop() AS VOID
+    //VIRTUAL METHOD Stop() AS VOID
         LOCAL keys AS INT[]
         //LOCAL key AS INT
         //LOCAL Fab_FOE_key AS System.Collections.IEnumerator
@@ -223,8 +223,8 @@ CLASS PipeManager IMPLEMENTS IChannelManager
 
         END TRY
 
-    //METHOD WakeUp() AS VOID
-    VIRTUAL METHOD WakeUp() AS VOID
+    METHOD WakeUp() AS VOID
+    //VIRTUAL METHOD WakeUp() AS VOID
         //
         IF (SELF:Mre != NULL)
             //
@@ -233,8 +233,8 @@ CLASS PipeManager IMPLEMENTS IChannelManager
 
 
     // Properties
-    //PROPERTY Listen AS LOGIC
-    VIRTUAL PROPERTY Listen AS LOGIC
+    PROPERTY Listen AS LOGIC
+    //VIRTUAL PROPERTY Listen AS LOGIC
         //VIRTUAL GET
         GET
             //

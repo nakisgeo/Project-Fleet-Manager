@@ -21,7 +21,7 @@ PRIVATE METHOD btnOverdueReport_Clicked() AS VOID
 
 	txtProgress:Text :=""
 
-	LOCAL cFieldNameToCheckLocal := self:txtFieldNameToCheck:Text AS STRING
+	LOCAL cFieldNameToCheckLocal := SELF:txtFieldNameToCheck:Text AS STRING
 	//LOCAL cReportsToCheckSQLLocal := " Report_UID in (1029) " as String
 
 	IF SELF:DateFrom:DateTime > SELF:DateTo:DateTime
@@ -29,9 +29,9 @@ PRIVATE METHOD btnOverdueReport_Clicked() AS VOID
 			SELF:DateTo:Focus()
 			RETURN
 	ENDIF
-	local cStatement as String
+	LOCAL cStatement AS STRING
 	
-	LOCAL cValue := ""
+	LOCAL cValue := "" AS string
 	aObjects:Clear()
 	aUIDtoCheck:Clear()
 	LOCAL iCountObjLocal := 1 AS INT
@@ -72,7 +72,7 @@ PRIVATE METHOD btnOverdueReport_Clicked() AS VOID
 		RETURN
 	ENDIF
 	
-	LOCAL dEnd := self:DateTo:DateTime AS DateTime
+	LOCAL dEnd := SELF:DateTo:DateTime AS DateTime
 
 	//Load the Report Items
 	cStatement:="SELECT FMReportItems.*"+;
@@ -95,7 +95,7 @@ PRIVATE METHOD btnOverdueReport_Clicked() AS VOID
 	LOCAL iNumberOfTableColumns, iExpDays:=0 AS INT
 	LOCAL cItemTypeValues, cNameLocal, cExpDays:="" AS STRING
 	LOCAL cLineUIDS:="",cTempUid_Local:="",cTempNameLocal:="" AS STRING
-	LOCAL lLineToAdd := false as LOGIC
+	LOCAL lLineToAdd := FALSE AS LOGIC
 	
 	LOCAL cColumnNames, cItems,cColumnsLocal  AS STRING[]
 	
@@ -118,7 +118,7 @@ PRIVATE METHOD btnOverdueReport_Clicked() AS VOID
 					iInsideCount := 1
 					cLineUIDS := ""
 					iInsideTableCount := iCount + 1
-					WHILE cIsSLAA != "False" .and. iInsideTableCount<iCountRows
+					WHILE cIsSLAA != "False" .AND. iInsideTableCount<iCountRows
 						// An o arithmos kolonas einia idios me auton pou psaxnw
 						oRowInside :=  oDTReportItems:Rows[iInsideTableCount]
 						cInsideType := oRowInside["ItemType"]:ToString()
@@ -134,7 +134,7 @@ PRIVATE METHOD btnOverdueReport_Clicked() AS VOID
 							LOOP
 						ENDIF
 						LOCAL oUIDtoCheckForValue := UIDtoCheckForValue{}  AS UIDtoCheckForValue 
-						IF iIndexToCheckLocal == iInsideCount .and. cInsideType!="L" .and. cExpDays <> NULL .and. Convert.ToInt32(cExpDays)>0
+						IF iIndexToCheckLocal == iInsideCount .AND. cInsideType!="L" .AND. cExpDays <> NULL .AND. Convert.ToInt32(cExpDays)>0
 							//Prosethese ena antikeimeno me UID kai value sto array
 							//oUIDtoCheckForValue:cValue := oTempObj:cValue
 							//oUIDtoCheckForValue:iObjectId := oTempObj:iId
@@ -142,7 +142,7 @@ PRIVATE METHOD btnOverdueReport_Clicked() AS VOID
 							//oUIDtoCheckForValue:cTableName := cNameLocal
 							cTempNameLocal := oRowInside["ItemName"]:ToString()
 							iExpDays := Convert.ToInt32(cExpDays)
-							lLineToAdd := true
+							lLineToAdd := TRUE
 						ENDIF
 						cIsSLAA := oRowInside["SLAA"]:ToString()
 						iInsideTableCount++
@@ -163,7 +163,7 @@ PRIVATE METHOD btnOverdueReport_Clicked() AS VOID
 							cLineUIDS := ""
 							cTempNameLocal:=""
 							cTempUid_Local:=""
-							lLineToAdd := false
+							lLineToAdd := FALSE
 						ENDIF
 					ENDDO
 				//ENDIF
@@ -185,20 +185,20 @@ RETURN
 
 
 
-PRIVATE METHOD createExcelOverdue(dEnd AS DateTime) as void
+PRIVATE METHOD createExcelOverdue(dEnd AS DateTime) AS VOID
 	
 	LOCAL lIncludeStatistics, lExcel AS LOGIC
 	LOCAL lExactMatch := TRUE AS LOGIC
 	LOCAL nDataStartOnColumn := 3 AS INT
-	LOCAL charSpl1 := (char)169 AS Char
-	LOCAL charSpl2 := (char)168 AS Char		
+	LOCAL charSpl1 := (CHAR)169 AS CHAR
+	LOCAL charSpl2 := (CHAR)168 AS CHAR		
 
-	IF SELf:ckbExcel:Checked
+	IF SELF:ckbExcel:Checked
 		lExcel := TRUE
 	ENDIF
 
 	IF SELF:ckbIncludeStatistics:Checked
-		lIncludeStatistics := true
+		lIncludeStatistics := TRUE
 	ENDIF
 
 
@@ -248,7 +248,7 @@ PRIVATE METHOD createExcelOverdue(dEnd AS DateTime) as void
 				oDTFMData := oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement)
 				oDTFMData:TableName := "FMData"
 				//an den yparxei report gia to sygkekrimeno tote shmainei oti einai overdue
-				IF oDTFMData==NULL .or. oDTFMData:Rows:Count<1
+				IF oDTFMData==NULL .OR. oDTFMData:Rows:Count<1
 					LOCAL oObjectFound := ObjectFound{}  AS ObjectFound
 					oObjectFound:cVesselUid := cTempVesselUID
 					oObjectFound:oUIDtoCheckForValue := oObjectToCheckLocal
@@ -258,7 +258,7 @@ PRIVATE METHOD createExcelOverdue(dEnd AS DateTime) as void
 				lFound := FALSE
 				FOREACH oRowDataTemp AS DataRow IN oDTFMData:Rows
 					IF oRowDataTemp["Data"]:ToString():ToUpper():Trim():Equals("YES");
-						.or. oRowDataTemp["Data"]:ToString():ToUpper():Trim():Equals("NO")
+						.OR. oRowDataTemp["Data"]:ToString():ToUpper():Trim():Equals("NO")
 						lFound := TRUE
 						EXIT
 					ENDIF
@@ -275,13 +275,13 @@ PRIVATE METHOD createExcelOverdue(dEnd AS DateTime) as void
 		LOCAL dsLocal := DataSet{} AS DataSet
 		LOCAL oDTFMDataLocal := DataTable{},oDTFMDataPackagesLocal := DataTable{} AS DataTable
 		LOCAL oRowTemp AS DataRow
-		LOCAL cResult as string
+		LOCAL cResult AS STRING
 		oDTFMDataLocal:TableName := "Details"
 		oDTFMDataLocal:Columns:Add("Vessel", typeof(STRING))
 		oDTFMDataLocal:Columns:Add("VESSEL_UNIQUEID", typeof(STRING))
 		oDTFMDataLocal:Columns:Add("Question", typeof(STRING))
 		FOREACH oObjectToCheckLocal AS ObjectFound IN oALObjectsFound
-			local cSplitArray := oObjectToCheckLocal:oUIDtoCheckForValue:cMyLineUIDs:Split(',') AS STRING[]
+			LOCAL cSplitArray := oObjectToCheckLocal:oUIDtoCheckForValue:cMyLineUIDs:Split(',') AS STRING[]
 			cStatement := " SELECT ItemName FROM FMReportItems "+;
 					  " WHERE  ITEM_UID="+cSplitArray[2]:ToString()
 			oDTFMDataPackagesLocal:Clear()	
@@ -314,7 +314,7 @@ PRIVATE METHOD createExcelOverdue(dEnd AS DateTime) as void
 		SELF:gcResults:DataSource := dsLocal
 		SELF:gcResults:DataMember := "Details"
 		SELF:gvResults:Columns["VESSEL_UNIQUEID"]:Visible := FALSE 
-		SELF:gvResults:Columns["Vessel"]:OptionsColumn:FixedWidth := True 
+		SELF:gvResults:Columns["Vessel"]:OptionsColumn:FixedWidth := TRUE 
 		SELF:gvResults:Columns["Vessel"]:Width := 100
 		SELF:gvResults:Columns["Question"]:OptionsColumn:FixedWidth := TRUE 
 		SELF:gvResults:Columns["Question"]:Width :=   400

@@ -28,16 +28,16 @@ PARTIAL CLASS ReportTabForm INHERIT System.Windows.Forms.Form
 
 	EXPORT IsLandscape AS LOGIC
 
-Export METHOD Form_ExportToPDF(lPrintPDF := false AS LOGIC) AS VOID
+EXPORT METHOD Form_ExportToPDF(lPrintPDF := FALSE AS LOGIC) AS VOID
 	//Graphics g1 = SELF:CreateGraphics()
 	//Image MyImage = new Bitmap(SELF:tabControl_Report:TabPages[0]:Size.Width, SELF:tabControl_Report:TabPages[0]:Size.Height, g1)
 	LOCAL oScreen := System.Windows.Forms.Screen.PrimaryScreen AS System.Windows.Forms.Screen
-	LOCAL iScreenHeight := oScreen:Bounds:Height as INT
+	LOCAL iScreenHeight := oScreen:Bounds:Height AS INT
 	LOCAL A4prefHeight := iScreenHeight-56 AS INT
 	LOCAL cPdfName := SELF:Text:Replace("/",".") AS STRING
 	cPdfName := cPdfName:Replace(":","_")
 	
-	SELF:cPDFFile := oMainForm:cTempDocDir+"\"+cPdfName+".PDF"
+	SELF:cPDFFile := cTempDocDir+"\"+cPdfName+".PDF"
 
 	// Create a new PDF document
 	oPdfDocument := PdfDocument{}
@@ -70,7 +70,7 @@ Export METHOD Form_ExportToPDF(lPrintPDF := false AS LOGIC) AS VOID
 		//	oControl:Visible := TRUE
 		//ENDIF
 
-		SELF:cImageFile := oMainForm:cTempDocDir+"\"+SELF:Name+" Page 1.PNG"
+		SELF:cImageFile := cTempDocDir+"\"+SELF:Name+" Page 1.PNG"
 		oBitmap:Save(SELF:cImageFile, ImageFormat.Png)
 
 		// Create an empty page
@@ -113,7 +113,7 @@ Export METHOD Form_ExportToPDF(lPrintPDF := false AS LOGIC) AS VOID
 		
 		IF oTabPage:PreferredSize:Height > A4prefHeight
 			LOCAL dDouble := (Decimal)oTabPage:PreferredSize:Height/(Decimal)A4prefHeight AS Decimal
-			nCountPagesNeeded := nCountPagesNeeded + (int)Math.Ceiling(dDouble)
+			nCountPagesNeeded := nCountPagesNeeded + (INT)Math.Ceiling(dDouble)
 		ELSE
 			nCountPagesNeeded := nCountPagesNeeded + 1
 		ENDIF
@@ -140,7 +140,7 @@ Export METHOD Form_ExportToPDF(lPrintPDF := false AS LOGIC) AS VOID
 		IF oTabPage:PreferredSize:Height < A4prefHeight
 			oBitmap := Bitmap{oTabPage:PreferredSize:Width, oTabPage:PreferredSize:Height}
 			oTabPage:DrawToBitmap(oBitmap, Rectangle{0, 0, oBitmap:Width, oBitmap:Height})
-			SELF:cImageFile := oMainForm:cTempDocDir+"\"+SELF:Name+" Page "+(iPage+1):ToString()+".PNG"
+			SELF:cImageFile := cTempDocDir+"\"+SELF:Name+" Page "+(iPage+1):ToString()+".PNG"
 			oBitmap:Save(SELF:cImageFile, ImageFormat.Png)
 			oPdfPage := oPdfDocument:AddPage()
 			oPdfPage:Size := PdfSharp.PageSize.A4
@@ -162,7 +162,7 @@ Export METHOD Form_ExportToPDF(lPrintPDF := false AS LOGIC) AS VOID
 						oTabPage:AutoScrollPosition := oPoint 
 						Application.DoEvents()
 						oTabPage:DrawToBitmap(oBitmap, Rectangle{0, 0, oBitmap:Width, oBitmap:Height})
-						SELF:cImageFile := oMainForm:cTempDocDir+"\"+SELF:Name+" Page "+(iPage+1):ToString()+".PNG"
+						SELF:cImageFile := cTempDocDir+"\"+SELF:Name+" Page "+(iPage+1):ToString()+".PNG"
 						oBitmap:Save(SELF:cImageFile, ImageFormat.Png)
 						oPdfPage := oPdfDocument:AddPage()
 						oPdfPage:Size := PdfSharp.PageSize.A4
@@ -197,7 +197,7 @@ Export METHOD Form_ExportToPDF(lPrintPDF := false AS LOGIC) AS VOID
 						SELF:DrawImage(SELF:cImageFile, oXGraphics, oPdfPage, iPage + 1)
 						iPage := iPage+1
 					ENDIF*/
-				next
+				NEXT
 		ENDIF
 		//oImage := System.Drawing.Image.FromHbitmap(SELF:tabControl_Report:Handle)
 		//SELF:DrawImage(oImage, oXGraphics, oPdfPage)
@@ -234,7 +234,7 @@ METHOD DrawImage(cImageFile AS STRING, oXGraphics AS XGraphics, oPdfPage AS PdfP
 
 	LOCAL nRatioWidth := (Double)oPdfPage:Width / (Double)SELF:oXImages[nPage]:PixelWidth AS Double
 	LOCAL nRatioHeight := (Double)oPdfPage:Height / (Double)SELF:oXImages[nPage]:PixelHeight AS Double
-	LOCAL nRationMin := Iif(nRatioWidth < nRatioHeight, nRatioWidth, nRatioHeight) AS Double
+	LOCAL nRationMin := IIF(nRatioWidth < nRatioHeight, nRatioWidth, nRatioHeight) AS Double
 	//oXGraphics.DrawImage(image, 0, 0, oPdfPage.Width, oPdfPage.Height)
 	oXGraphics:DrawImage(SELF:oXImages[nPage], 0, 0, nRationMin * SELF:oXImages[nPage]:PixelWidth, nRationMin * SELF:oXImages[nPage]:PixelHeight)
 	//EndBox(oXGraphics)
@@ -262,7 +262,7 @@ METHOD DrawImage(oImage AS System.Drawing.Image, oXGraphics AS XGraphics, oPdfPa
 RETURN*/
 
 
-METHOD CreatePDFProcess(lPrintPDF := false AS LOGIC) AS VOID
+METHOD CreatePDFProcess(lPrintPDF := FALSE AS LOGIC) AS VOID
 	//Process.Start(SELF:cPDFFile)
 
 	LOCAL oPdfProcess := Process{} AS Process

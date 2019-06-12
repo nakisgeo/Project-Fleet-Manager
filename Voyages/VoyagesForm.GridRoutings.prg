@@ -21,8 +21,8 @@ LOCAL nVisible:=0, nAbsIndex:=0 AS INT
 	oColumn:ColumnEdit := SELF:CreateRepositoryItemTextEdit_Port()
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
-	oColumn:=oMainForm:CreateDXColumn("FromEU", "FromEU",				False, DevExpress.Data.UnboundColumnType.Boolean, ;
-																		nAbsIndex++, nVisible++, 50, Self:GridViewRoutings)
+	oColumn:=oMainForm:CreateDXColumn("FromEU", "FromEU",				FALSE, DevExpress.Data.UnboundColumnType.Boolean, ;
+																		nAbsIndex++, nVisible++, 50, SELF:GridViewRoutings)
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	oColumn:=oMainForm:CreateDXColumn("+/-GMT", "uPortFromGMT_DIFF",FALSE, DevExpress.Data.UnboundColumnType.Decimal, ;
@@ -52,8 +52,8 @@ LOCAL nVisible:=0, nAbsIndex:=0 AS INT
 	oColumn:ColumnEdit := SELF:CreateRepositoryItemTextEdit_Port()
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
-	oColumn:=oMainForm:CreateDXColumn("ToEU", "ToEU",				False, DevExpress.Data.UnboundColumnType.Boolean, ;
-																		nAbsIndex++, nVisible++, 50, Self:GridViewRoutings)
+	oColumn:=oMainForm:CreateDXColumn("ToEU", "ToEU",				FALSE, DevExpress.Data.UnboundColumnType.Boolean, ;
+																		nAbsIndex++, nVisible++, 50, SELF:GridViewRoutings)
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	//oMainForm:CreateDXColumn("Agent", "Agent",			FALSE, DevExpress.Data.UnboundColumnType.STRING, ;
@@ -238,7 +238,7 @@ LOCAL nVisible:=0, nAbsIndex:=0 AS INT
 	oColumn:Visible:=FALSE
 RETURN
 
-METHOD formSQLRoutingsQuery(cTCextraSQL_Voyage AS STRING) as String
+METHOD formSQLRoutingsQuery(cTCextraSQL_Voyage AS STRING) AS STRING
 	LOCAL cStatement := "" AS STRING
 
 	cStatement := "SELECT EconRoutings.ROUTING_UID, EconRoutings.VOYAGE_UID, EconRoutings.Condition, Commenced,"+;

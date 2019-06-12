@@ -10,7 +10,7 @@ PARTIAL CLASS BodyISMForm INHERIT DevExpress.XtraEditors.XtraForm
 	EXPORT cReportName AS STRING
 	EXPORT cVesselName AS STRING
 	EXPORT cShowText AS STRING
-	PRIVATE cPreviousText := "" AS String
+	PRIVATE cPreviousText := "" AS STRING
 
 METHOD BodyISMForm_OnLoad() AS VOID
 	oSoftway:ReadFormSettings_DevExpress(SELF, NULL, oMainForm:alForms, oMainForm:alData)
@@ -301,7 +301,7 @@ RETURN cNum
 METHOD GetRightNumber(cTermExpr AS STRING, nPos AS INT) AS STRING
 	LOCAL cNum AS STRING
 	LOCAL cByte AS STRING
-	LOCAL nLen := cTermExpr:Length - 1 as INT
+	LOCAL nLen := cTermExpr:Length - 1 AS INT
 
 	WHILE nPos <= nLen
 		cByte := cTermExpr:Substring(nPos, 1)
@@ -317,9 +317,9 @@ RETURN cNum
 PRIVATE METHOD ButtonShowNamesClick() AS System.Void
 
 	
-	if SELF:ButtonShowNames:Tag:ToString() == "0"
+	IF SELF:ButtonShowNames:Tag:ToString() == "0"
 		cPreviousText := SELF:BodyISM:Text:Trim()
-		LOCAL cBodyISM := SELF:BodyISM:Text:Trim()
+		LOCAL cBodyISM := SELF:BodyISM:Text:Trim() AS STRING
 		IF cBodyISM == ""
 			wb("No Body text specified")
 		ENDIF
@@ -386,7 +386,7 @@ METHOD ReplaceFieldWithName(cRet REF STRING, cItemNo AS STRING, oRow AS DataRow)
 RETURN
 
 
-METHOD CompileExpressionsWithName(cRet REF STRING, cOper AS STRING, cName as String) AS VOID
+METHOD CompileExpressionsWithName(cRet REF STRING, cOper AS STRING, cName AS STRING) AS VOID
 	//LOCAL cAmount, cValueText AS STRING
 	LOCAL nPos, nPosEnd AS INT
 

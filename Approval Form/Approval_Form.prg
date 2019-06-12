@@ -82,7 +82,7 @@ PARTIAL CLASS Approval_Form INHERIT System.Windows.Forms.Form
 			SELF:Approval_Form_OnLoad()
         RETURN
     PRIVATE METHOD gridView1_CustomUnboundColumnData( sender AS System.Object, e AS DevExpress.XtraGrid.Views.Base.CustomColumnDataEventArgs ) AS System.Void
-			self:CustomUnboundColumnData_Companies(e)
+			SELF:CustomUnboundColumnData_Companies(e)
 		RETURN
     PRIVATE METHOD gridView1_DoubleClick( sender AS System.Object, e AS System.EventArgs ) AS System.Void
 			SELF:DoubleClickOnView(sender,e)
@@ -94,7 +94,7 @@ PARTIAL CLASS Approval_Form INHERIT System.Windows.Forms.Form
 			SELF:myRowStyle(sender,e)
         RETURN
     PRIVATE METHOD Approval_Form_FormClosed( sender AS System.Object, e AS System.Windows.Forms.FormClosedEventArgs ) AS System.Void
-			oMainForm:oMyApproval_Form := null
+			oMainForm:oMyApproval_Form := NULL
 		RETURN
     PRIVATE METHOD gridView1_CustomColumnSort( sender AS System.Object, e AS DevExpress.XtraGrid.Views.Base.CustomColumnSortEventArgs ) AS System.Void
 			SELF:customColumnSort(sender,e)

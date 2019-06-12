@@ -54,7 +54,7 @@ PARTIAL CLASS MainForm INHERIT DevExpress.XtraEditors.XtraForm
 	EXPORT oDTReports, oDTReportsOffice AS DataTable
 
     EXPORT oNavBarForm:=NavBarForm{} AS NavBarForm
-    EXPORT oNavBarPrograms:=oNavBarForm:NavBarPrograms AS DevExpress.XtraNavBar.NavBarControl
+    //EXPORT oNavBarPrograms:=oNavBarForm:NavBarPrograms AS DevExpress.XtraNavBar.NavBarControl
 
 	EXPORT nThickness AS INT
 	//PRIVATE nShowLastReports := 90 AS INT
@@ -66,8 +66,8 @@ PARTIAL CLASS MainForm INHERIT DevExpress.XtraEditors.XtraForm
 	//Time Charter Antonis 1.12.14
 	PUBLIC lisTC AS LOGIC
 	PUBLIC cTCParent AS STRING
-	Public myReportTabForm AS ReportTabForm
-	PUBLIC cTempDocDIr AS STRING
+	PUBLIC myReportTabForm AS ReportTabForm
+	//PUBLIC cTempDocDIr AS STRING
 	PUBLIC LBCReports  AS DevExpress.XtraEditors.ListBoxControl
 	
 	// Print Report
@@ -81,7 +81,7 @@ PARTIAL CLASS MainForm INHERIT DevExpress.XtraEditors.XtraForm
 	// Managers
 	PRIVATE lisManagerGlobal AS LOGIC
 	PRIVATE lisGMGlobal AS LOGIC
-	PRIVATE myTimer := Timer{} as Timer
+	PRIVATE myTimer := Timer{} AS Timer
 	//
 	PUBLIC  oMyApproval_Form AS Approval_Form
 	//SMTP Setting
@@ -93,13 +93,13 @@ METHOD MainForm_OnLoad() AS VOID
 	SELF:Text := "Fleet Manager program .NET Edition V."+cProgramVersion
 	SELF:Text+=" - Server: "+cSQLDataSource+" ("+symServer:ToString()+")"
 	
-	printReport:PrintPage += PrintPageEventHandler{self,@printReport_PrintPage()}
+	printReport:PrintPage += PrintPageEventHandler{SELF,@printReport_PrintPage()}
 
 	// NavBar: Set ActiveGroup to COMMUNICATOR
 	SELF:DockPanelProgramsBar:Options:ShowCloseButton := FALSE
-	SELF:oNavBarPrograms:ActiveGroup:=SELF:oNavBarPrograms:Groups["FleetManager"]
+	SELF:oNavBarForm:NavBarPrograms:ActiveGroup:=SELF:oNavBarForm:NavBarPrograms:Groups["FleetManager"]
 	// NavBar Groups
-	SELF:oNavBarPrograms:ActiveGroupChanged += DevExpress.XtraNavBar.NavBarGroupEventHandler{ SELF, @NavBarPrograms_ActiveGroupChanged() }
+	SELF:oNavBarForm:NavBarPrograms:ActiveGroupChanged += DevExpress.XtraNavBar.NavBarGroupEventHandler{ SELF, @NavBarPrograms_ActiveGroupChanged() }
 	// NavBar Items
 	SELF:oNavBarForm:Fleet:LinkClicked += DevExpress.XtraNavBar.NavBarLinkEventHandler{ SELF, @Fleet_LinkClicked() }
 	SELF:oNavBarForm:FMVessels:LinkClicked += DevExpress.XtraNavBar.NavBarLinkEventHandler{ SELF, @FMVessels_LinkClicked() }
@@ -114,7 +114,7 @@ METHOD MainForm_OnLoad() AS VOID
 	
 	SELF:oNavBarForm:FMHelpAbout:LinkClicked += DevExpress.XtraNavBar.NavBarLinkEventHandler{ SELF, @HelpAbout_LinkClicked() }
 	SELF:oNavBarForm:CheckForUpdates:LinkClicked += DevExpress.XtraNavBar.NavBarLinkEventHandler{ SELF, @CheckForUpdates_LinkClicked() }
-	SELF:DockPanelProgramsBar_Container:Controls:Add(SELF:oNavBarPrograms)
+	SELF:DockPanelProgramsBar_Container:Controls:Add(SELF:oNavBarForm:NavBarPrograms)
 
 	LOCAL cTagSelection AS STRING
 	TRY
@@ -130,7 +130,7 @@ METHOD MainForm_OnLoad() AS VOID
 		
 	END
 
-	IF cTagSelection == NULL .or. cTagSelection == ""
+	IF cTagSelection == NULL .OR. cTagSelection == ""
 		cTagSelection := "25%"
 	ENDIF
 	SELF:barEditItemDisplayMap:EditValue := ctagselection
@@ -155,9 +155,6 @@ METHOD MainForm_OnLoad() AS VOID
 		
 	END TRY
 
-	SELF:cTempDocDir := Application.StartupPath + "\TempDoc"
-	SELF:CreateDirectory(SELF:cTempDocDir)
-	SELF:ClearDirectory(self:cTempDocDIr,0)
 	//SELF:xtraTabPage_Voyages:Visible := FALSE
 	// The groupSeparator or the decimalSeparator act as decimalSeparator 
 	LOCAL numberFormatInfo := System.Globalization.CultureInfo.CurrentCulture:NumberFormat AS System.Globalization.numberFormatInfo
@@ -175,8 +172,14 @@ METHOD MainForm_OnLoad() AS VOID
 		RETURN
 	ENDIF
 	SELF:lUserLoggedOn := TRUE
+
+	cTempDocDir := Application.StartupPath + "\TempDoc_FM_" + oUser:UserID
 	
-	IF cLicensedCompany:ToUpper():Contains("DEMO") .or.  cLicensedCompany:ToUpper():Contains("VAMVASHIP")
+	
+	SELF:CreateDirectory(cTempDocDir)
+	SELF:ClearDirectory(cTempDocDIr,0)
+	
+	IF cLicensedCompany:ToUpper():Contains("DEMO") .OR.  cLicensedCompany:ToUpper():Contains("VAMVASHIP")
 		SELF:BBIImportExcelData:Visibility := DevExpress.XtraBars.BarItemVisibility.Always
 	ELSE
 		SELF:BBIImportExcelData:Visibility := DevExpress.XtraBars.BarItemVisibility.Never
@@ -243,7 +246,7 @@ METHOD MainForm_OnLoad() AS VOID
 	LBCReports := LBCReportsVessel
 	//SELF:BingMapUserControl:ShowSelectedVesselsOnMap()
 	lDisplayAll := TRUE
-	self:oDRSMTPSettings := self:returnSMTPSetting()
+	SELF:oDRSMTPSettings := SELF:returnSMTPSetting()
 
 RETURN
 
@@ -300,7 +303,7 @@ METHOD MainForm_OnShown() AS VOID
 	//SELF:TreeListVesselsReports:OptionsBehavior:Editable := FALSE
 	//SELF:TreeListVessels:AllowRecursiveNodeChecking := TRUE
 	
-	SELF:Fill_TreeListVessels(true)
+	SELF:Fill_TreeListVessels(TRUE)
 	IF SELF:GetVesselUID == "0"
 		SELF:Fill_LBCReports(NULL)
 		LBCReports := LBCReportsVessel
@@ -342,17 +345,17 @@ METHOD MainForm_OnShown() AS VOID
 	
 RETURN
 
-METHOD timerClick( sender AS System.Object, e AS System.EventArgs ) as Void
+METHOD timerClick( sender AS System.Object, e AS System.EventArgs ) AS VOID
 	LOCAL oBW := BackgroundWorker{} AS BackgroundWorker
 	oBW:WorkerReportsProgress := TRUE
-	oBW:WorkerSupportsCancellation := true
+	oBW:WorkerSupportsCancellation := TRUE
 	oBW:DoWork += DoWorkEventHandler{SELF,@TimerMethodcheckForApprovals()}
-	oBW:ProgressChanged += ProgressChangedEventHandler{self,@WorkerReported()}
+	oBW:ProgressChanged += ProgressChangedEventHandler{SELF,@WorkerReported()}
 	oBW:RunWorkerAsync()
 RETURN
 
-METHOD TimerMethodcheckForApprovals( sender AS System.Object, e AS DoWorkEventArgs ) as Void
-		local worker := (BackgroundWorker)sender as BackgroundWorker
+METHOD TimerMethodcheckForApprovals( sender AS System.Object, e AS DoWorkEventArgs ) AS VOID
+		LOCAL worker := (BackgroundWorker)sender AS BackgroundWorker
 		IF SELF:checkForPendingApprovals()
 			worker:ReportProgress(100)
 		ELSE
@@ -381,7 +384,7 @@ METHOD treeList1_DoubleClick( sender AS OBJECT,  e AS EventArgs) AS VOID
 
 			LOCAL  tree := DevExpress.XtraTreeList.TreeList{} AS TreeList
             tree := (TreeList)sender 
-            LOCAL  hi := tree:CalcHitInfo(tree:PointToClient(System.Windows.Forms.Control.MousePosition)) as TreeListHitInfo
+            LOCAL  hi := tree:CalcHitInfo(tree:PointToClient(System.Windows.Forms.Control.MousePosition)) AS TreeListHitInfo
             IF hi:Node != NULL 
                //process hi.Node here
 			   //wb(hi:Node:Tag)
@@ -436,14 +439,14 @@ METHOD ConnectToSoftwayDatabase() AS LOGIC
 IF oSoftway:UserLogonInfoProvided
 	IF ! SELF:_InitializeSqlServer()
 		SELF:Close()
-		RETURN false
+		RETURN FALSE
 	ENDIF
 ELSE
 	LOCAL oLogonDialog AS LogonDialog
 	IF SELF:_InitializeSqlServer()
-		IF ! lLogonSelectionFormUsed .and. (oUser:lShowLogonDialog .or. oUser:Password <> "")	// .and. symServer <> #SQLCE)
+		IF ! lLogonSelectionFormUsed .AND. (oUser:lShowLogonDialog .OR. oUser:Password <> "")	// .and. symServer <> #SQLCE)
 			// Use the simple Logon dialog - 1st logon try
-			Self:CloseSplashScreen()
+			SELF:CloseSplashScreen()
 			Application.DoEvents()
 			oLogonDialog:=LogonDialog{}
 			oLogonDialog:Text := Application.ProductName+" logon dialog"
@@ -452,10 +455,10 @@ ELSE
 				SELF:lUserLoggedOn:=FALSE
 				SELF:Close()
 				RETURN FALSE
-			endif
+			ENDIF
 			IF ! SELF:_InitializeSqlServer()
 				// Use the simple Logon dialog - 2nd logon try
-				Self:CloseSplashScreen()
+				SELF:CloseSplashScreen()
 				Application.DoEvents()
 				oLogonDialog:=LogonDialog{}
 				oLogonDialog:Text := Application.ProductName+" logon dialog"
@@ -490,7 +493,7 @@ ELSE
 	ENDIF
 ENDIF
 
-	IF ! oSoftway:TableExists(SELF:oGFH, SELF:oConn, "EconFleet") .or. ! oSoftway:TableExists(SELF:oGFH, SELF:oConn, "EconRoutings") 
+	IF ! oSoftway:TableExists(SELF:oGFH, SELF:oConn, "EconFleet") .OR. ! oSoftway:TableExists(SELF:oGFH, SELF:oConn, "EconRoutings") 
 		SELF:CloseSplashScreen()
 		WarningBox("Some Tables are missing"+CRLF+;
 						"Press <OK> to create the Tables")
@@ -597,7 +600,7 @@ ENDIF
 	//	WB(SELF:oConnBlob:State:ToString())	
 	//ENDIF
 
-	IF ! oSoftway:TableExists(SELF:oGFH, SELF:oConn, "Cargoes") .or.  ! oSoftway:TableExists(SELF:oGFH, SELF:oConn, "FMCargoRoutingLink") .or.  ! oSoftway:TableExists(SELF:oGFH, SELF:oConn, "CargoesTypes")
+	IF ! oSoftway:TableExists(SELF:oGFH, SELF:oConn, "Cargoes") .OR.  ! oSoftway:TableExists(SELF:oGFH, SELF:oConn, "FMCargoRoutingLink") .OR.  ! oSoftway:TableExists(SELF:oGFH, SELF:oConn, "CargoesTypes")
 		SELF:CloseSplashScreen()
 		WarningBox("Cargo Tables is missing"+CRLF+;
 						"Press <OK> to create the Table.")
@@ -838,7 +841,7 @@ TRY
 		BREAK
 	ENDIF
 
-	IF cSQLPassword <> oUser:Password .and. symServer <> #SQLCE .and. symServer <> #SQLite
+	IF cSQLPassword <> oUser:Password .AND. symServer <> #SQLCE .AND. symServer <> #SQLite
 		ErrorBox("Invalid password"+CRLF+;
 				"The SQL Authentication password is different from Softway User password", "Logon failed")
 		//Self:Close()
@@ -849,7 +852,7 @@ TRY
 	oMsgGlobals:=MsgGlobals{oSoftway, SELF:oGFH, SELF:oConn}
 	oUser:ReadAllUsers(oSoftway, SELF:oGFH, SELF:oConn, oMsgGlobals)
 
-Catch e as Exception
+CATCH e AS Exception
 	SELF:CloseSplashScreen()
 	ErrorBox(e:Message, "SQL Authentication error")
 	RETURN FALSE
@@ -995,7 +998,7 @@ TRY
 		ENDIF
 	ENDIF
 
-	IF cSQLPassword <> oUser:Password .and. symServer <> #SQLCE .and. symServer <> #SQLite
+	IF cSQLPassword <> oUser:Password .AND. symServer <> #SQLCE .AND. symServer <> #SQLite
 		ErrorBox("Invalid password"+CRLF+;
 				"The SQL Authentication password is different from Softway User password", "Logon failed")
 		//Self:Close()
@@ -1006,7 +1009,7 @@ TRY
 	//oMsgGlobals:=MsgGlobals{oSoftway, SELF:oGFH, SELF:oConn}
 	//oUser:ReadAllUsers(oSoftway, SELF:oGFH, SELF:oConn, oMsgGlobals)
 
-Catch e as Exception
+CATCH e AS Exception
 	//SELF:CloseSplashScreen()
 	//WB("Error")
 	ErrorBox(e:Message, "SQL Authentication error")
@@ -1048,7 +1051,7 @@ METHOD CreateSoftwayBlobDatabase(cSQLInitialCatalog AS STRING) AS LOGIC
 	END CASE
 RETURN TRUE
 
-METHOD CreateFMBlobData(cSoftwayDB as String, cBlobDB as String ,lDatabaseJustCreated AS LOGIC) AS LOGIC
+METHOD CreateFMBlobData(cSoftwayDB AS STRING, cBlobDB AS STRING ,lDatabaseJustCreated AS LOGIC) AS LOGIC
 	LOCAL cStatement AS STRING
 	IF ! oSoftway:TableExists(SELF:oGFHBlob, SELF:oConnBlob, "FMBlobData")
 		IF ! lDatabaseJustCreated
@@ -1135,7 +1138,7 @@ METHOD Fill_LBCReports(cVesselUID AS STRING) AS VOID
 	
 	IF cVesselUID == NULL
 		RETURN
-	endif	
+	ENDIF	
 	
 	//LOCAL cVesselUID AS STRING
 	LOCAL cStatement AS STRING
@@ -1315,7 +1318,7 @@ RETURN
 //RETURN
 
 
-METHOD Fill_TreeListVessels(lLoad := false as LOGIC) AS VOID   
+METHOD Fill_TreeListVessels(lLoad := FALSE AS LOGIC) AS VOID   
    
 	//LOCAL lLocallSuspendNotification as LOGIC
 	LOCAL cOldTag AS STRING
@@ -1458,7 +1461,7 @@ RETURN
     
 METHOD Fill_TreeList_Reports() AS LOGIC
 TRY
-	LOCAL LBCReportsLocal as DevExpress.XtraEditors.ListBoxControl
+	LOCAL LBCReportsLocal AS DevExpress.XtraEditors.ListBoxControl
 	IF SELF:ReportsTabUserControl:SelectedIndex == 0
 				LBCReportsLocal := SELF:LBCReportsVessel
 			ELSE
@@ -1476,7 +1479,7 @@ TRY
     LOCAL cUID := SELF:GetVesselUID AS STRING
 
 	IF SELF:TreeListVessels:FocusedNode == NULL
-		RETURN false
+		RETURN FALSE
 	ENDIF
 
 	//If we are in time definied showing
@@ -1497,7 +1500,7 @@ TRY
 		oSelectDatesSimpleForm:ShowDialog()
 		IF oSelectDatesSimpleForm:DialogResult <> DialogResult.OK
 			SELF:barEditItemPeriod:EditValue := "Last 6 months"
-			RETURN false
+			RETURN FALSE
 		ENDIF
 		dStart := oSelectDatesSimpleForm:DateFrom:DateTime
 		dEnd := oSelectDatesSimpleForm:DateTo:DateTime
@@ -1530,21 +1533,21 @@ TRY
 				" LEFT OUTER JOIN USERS ON EconVoyages.USER_UNIQUEID=USERS.USER_UNIQUEID"+;
 				" WHERE VESSEL_UNIQUEID="+SELF:TreeListVessels:FocusedNode:Tag:ToString()+cTCextraSQL_Voyage+cVoyageDateTerm+;
 				" ORDER BY StartDateGMT DESC"
-	MemoWrit(ctempdocdir+"\voyages.txt", cStatement)
+	//MemoWrit(ctempdocdir+"\voyages.txt", cStatement)
 	//wb(cStatement)
 	oDTVoyagesLocal:=oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement)
 	oDTVoyagesLocal:TableName:="EconVoyages"
 	// Create Primary Key
 	oSoftway:CreatePK(oDTVoyagesLocal, "VOYAGE_UID")
 
-    Local nCount := oDTVoyagesLocal:Rows:Count - 1,n as INT
+    LOCAL nCount := oDTVoyagesLocal:Rows:Count - 1,n AS INT
 	FOR n:=0 UPTO nCount
 		LOCAL cDateCommenced := oDTVoyagesLocal:Rows[n]:Item["StartDateGMT"]:ToString() AS STRING
 		LOCAL cDateFinit := oDTVoyagesLocal:Rows[n]:Item["EndDateGMT"]:ToString() AS STRING
 		LOCAL cVoyageNo := oDTVoyagesLocal:Rows[n]:Item["VoyageNo"]:ToString() AS STRING
 		LOCAL cVoyageID := oDTVoyagesLocal:Rows[n]:Item["VOYAGE_UID"]:ToString() AS STRING
 		LOCAL cDescr := oDTVoyagesLocal:Rows[n]:Item["Description"]:ToString() AS STRING
-		LOCAL iVoyageType as INT
+		LOCAL iVoyageType AS INT
 		TRY
 			 iVoyageType :=  int32.Parse(oDTVoyagesLocal:Rows[n]:Item["Type"]:ToString()) 
 		CATCH
@@ -1560,7 +1563,7 @@ TRY
 		ELSE
 			oNode:StateImageIndex := iVoyageType
 		ENDIF
-		IF cDateCommenced == NULL .or. cDateCommenced == ""
+		IF cDateCommenced == NULL .OR. cDateCommenced == ""
 		    //ErrorBox("No Start date defined for Voyage No :"+cVoyageNo)
             Application.DoEvents()
 		    //SELF:barEditItemPeriod:EditValue := "Last 3 months"
@@ -1568,13 +1571,13 @@ TRY
         ELSE
             cDateCommenced := DateTime.Parse(cDateCommenced):ToString("yyyy-MM-dd HH:mm:ss")
 		ENDIF
-		IF cDateFinit == Null .or. cDateFinit == ""
+		IF cDateFinit == NULL .OR. cDateFinit == ""
 		    cDateFinit := "2100-01-01 00:00:00"
         ELSE
 		    cDateFinit := DateTime.Parse(cDateFinit):ToString("yyyy-MM-dd HH:mm:ss")
         ENDIF
 		//Local cDateTerm := " AND FMDataPackages.DateTimeGMT BETWEEN '"+dStart1:ToString("yyyy-MM-dd HH:mm:ss")+"' AND '"+dEnd1:ToString("yyyy-MM-dd HH:mm:ss")+"'" as STRING
-        Local cDateTerm := " AND FMDataPackages.DateTimeGMT BETWEEN '"+cDateCommenced+"' AND '"+cDateFinit+"'" as STRING
+        LOCAL cDateTerm := " AND FMDataPackages.DateTimeGMT BETWEEN '"+cDateCommenced+"' AND '"+cDateFinit+"'" AS STRING
         // For users that can see all reports
 		LOCAL oRowLocal := SELF:returnUserSetting(oUser:USER_UNIQUEID) AS DataRow
 		LOCAL cSeeAllReportsSQL := ""/*, cIsManagerSQL*/ , cResultSeeAllReports := oRowLocal["CanSeeAllOfficeReports"]:ToString() AS STRING
@@ -1582,7 +1585,7 @@ TRY
 		IF oRowLocal == NULL || cResultSeeAllReports == "False"
 			cSeeAllReportsSQL := " AND ((( FMReportTypes.ReportType='O' AND FMDataPackages.Matched=2 ) OR FMDataPackages.Username='"+oUser:UserName+"' ) OR FMReportTypes.ReportType='V' ) "
 		ENDIF
-		IF  (SELF:lisManagerGlobal .or. self:lisGMGlobal) .and. cResultSeeAllReports == "False" 
+		IF  (SELF:lisManagerGlobal .OR. SELF:lisGMGlobal) .AND. cResultSeeAllReports == "False" 
 			cSeeAllReportsSQL := " AND ((( FMReportTypes.ReportType='O' AND FMDataPackages.Matched=2 ) OR FMDataPackages.Username='"+oUser:UserName+"' OR ( FMDataPackages.PACKAGE_UID IN ( SELECT [Foreing_UID] FROM [ApprovalData] WHERE [Receiver_UID]="+oUser:USER_UNIQUEID+") ) ) OR FMReportTypes.ReportType='V' ) "
 		ENDIF
 		//
@@ -1606,7 +1609,7 @@ TRY
 					    cDateTerm+;
 					    " ORDER BY FMDataPackages.DateTimeGMT DESC, PACKAGE_UID DESC"
 	    ENDIF
-        MemoWrit(ctempdocdir+"\datapackages"+n:ToString()+".txt", cStatement)
+        MemoWrit(cTempDocDir + "\datapackages"+n:ToString()+".txt", cStatement)
 	
         LOCAL oDT := oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement) AS DataTable
 	    //, oDT:Rows:Count:ToString())
@@ -1618,14 +1621,14 @@ TRY
 		    cText := DateTime.Parse(oDT:Rows[n1]:Item["DateTimeGMT"]:ToString()):ToString("dd/MM/yyyy HH:mm")+" "+oDT:Rows[n1]:Item["ReportName"]:ToString()
 			IF SELF:LBCReportsOffice:Visible == TRUE
 				cText := oDT:Rows[n1]:Item["Username"]:ToString() + "-"+ cText  
-			endif
+			ENDIF
 			LOCAL cPackageUID := oDT:Rows[n1]:Item["PACKAGE_UID"]:ToString() AS STRING
 			LOCAL cMatched := oDT:Rows[n1]:Item["Matched"]:ToString() AS STRING
 			LOCAL cStatus := oDT:Rows[n1]:Item["Status"]:ToString() AS STRING
 			LOCAL cType := oDT:Rows[n1]:Item["ReportType"]:ToString() AS STRING
 		    //oCheckedListBoxItem := DevExpress.XtraEditors.Controls.CheckedListBoxItem{Convert.ToInt32(oDT:Rows[n]:Item["VESSEL_UNIQUEID"]:ToString()), cVessel}
 		    LOCAL oReportNode := SELF:TreeListVesselsReports:AppendNode(<OBJECT>{cText}, oNode) AS TreeListNode
-			IF cMatched == "1" .or. cMatched == "2"
+			IF cMatched == "1" .OR. cMatched == "2"
 				oReportNode:ImageIndex := 2
 				oReportNode:SelectImageIndex := 2
 			ELSE
@@ -1661,7 +1664,6 @@ TRY
 		SELF:TreeListVesselsReports:FocusedNode := oNode
 		SELF:TreeListReportsFocusChanged(NULL)
 	ENDIF
-    RETURN TRUE
 CATCH e  AS Exception
     //WB(e:StackTrace:ToString()+"///"+CRLF+"///"+e:Message:ToString())
     Application.DoEvents()
@@ -1671,10 +1673,10 @@ END
 RETURN TRUE
     
     
-METHOD TreeListReportsFocusChanged(sender as Object, lDontShowReport:= false as LOGIC) AS VOID
+METHOD TreeListReportsFocusChanged(sender AS OBJECT, lDontShowReport:= FALSE AS LOGIC) AS VOID
     TRY
        LOCAL oNode :=  SELF:TreeListVesselsReports:FocusedNode AS TreeListNode
-       IF oNode != Null
+       IF oNode != NULL
            IF oNode:Level == 0
                //wb("Voyage")
 			SELF:BBIEditReport:Visibility := BarItemVisibility.Never
@@ -1692,7 +1694,7 @@ METHOD TreeListReportsFocusChanged(sender as Object, lDontShowReport:= false as 
             oNode:ExpandAll()
 		   ELSE
 			 SELF:printButton:Visibility := BarItemVisibility.Always
-			 SELF:BBISubmit:Enabled := true
+			 SELF:BBISubmit:Enabled := TRUE
 			 //SELF:splitMapForm:SplitterPosition := (INT)(SELF:splitMapForm:Width*0.75)
 			 //SELF:splitMapForm:PanelVisibility := SplitPanelVisibility.Both
              //wb("Report")
@@ -1704,15 +1706,15 @@ METHOD TreeListReportsFocusChanged(sender as Object, lDontShowReport:= false as 
 			 ENDIF
 			LOCAL oRowLocal := SELF:returnUserSetting(oUser:USER_UNIQUEID) AS DataRow
 			LOCAL lisCreator := SELF:checkIFUserIsCreatorOfThePachage(oNode:Tag:ToString()) AS LOGIC
-			local lisMatched := self:checkIFReportIsFinalized(oNode:Tag:ToString()) as LOGIC
-			LOCAL lisOfficeReport :=  SELF:LBCReportsOffice:Visible as logic
+			LOCAL lisMatched := SELF:checkIFReportIsFinalized(oNode:Tag:ToString()) AS LOGIC
+			LOCAL lisOfficeReport :=  SELF:LBCReportsOffice:Visible AS LOGIC
 			//wb("M:"+lisMatched:ToString()+"/O:"+lisOfficeReport:ToString()+"/C:"+lisCreator:ToString())
 			
 			
 			IF lisOfficeReport		
 				//
 				LOCAL cUIDLocal := SELF:TreeListVesselsReports:FocusedNode:Tag:ToString() AS STRING
-				local cStatement := "Select Status FROM FMDataPackages WHERE [PACKAGE_UID]="+cUIDLocal as String
+				LOCAL cStatement := "Select Status FROM FMDataPackages WHERE [PACKAGE_UID]="+cUIDLocal AS STRING
 				LOCAL cStatusLocal := oSoftway:RecordExists(oMainForm:oGFH, oMainForm:oConn, cStatement, "Status") AS STRING
 				IF cStatusLocal == "0"
 					/*cStatement := "Select TOP 1 Username,[Appoval_UID] FROM Users, [ApprovalData] WHERE [Foreing_UID]="+cUIDLocal+" AND [Receiver_UID]=USER_UNIQUEID ORDER BY [Appoval_UID] ASC "
@@ -1798,7 +1800,7 @@ METHOD TreeListReportsFocusChanged(sender as Object, lDontShowReport:= false as 
 						SELF:BBICancel:Visibility :=  DevExpress.XtraBars.BarItemVisibility.Never
 					ENDIF
 				ELSEIF lisMatched  
-						if  oRowLocal["CanEditFinalizedOfficeReports"]:ToString() == "False" 
+						IF  oRowLocal["CanEditFinalizedOfficeReports"]:ToString() == "False" 
 							SELF:BBIEditReport:Visibility := BarItemVisibility.Never
 							SELF:BBISave:Visibility :=  DevExpress.XtraBars.BarItemVisibility.Never
 							SELF:BBICancel:Visibility :=  DevExpress.XtraBars.BarItemVisibility.Never
@@ -1807,7 +1809,7 @@ METHOD TreeListReportsFocusChanged(sender as Object, lDontShowReport:= false as 
 							SELF:BBISave:Visibility :=  DevExpress.XtraBars.BarItemVisibility.Always
 							SELF:BBICancel:Visibility :=  DevExpress.XtraBars.BarItemVisibility.Always
 						ENDIF
-						if  oRowLocal["CanDeleteOfficeReports"]:ToString() == "False" 
+						IF  oRowLocal["CanDeleteOfficeReports"]:ToString() == "False" 
 							SELF:BBIDelete:Visibility := DevExpress.XtraBars.BarItemVisibility.Never
 						ELSE
 							SELF:BBIDelete:Visibility := DevExpress.XtraBars.BarItemVisibility.Always
@@ -1815,7 +1817,7 @@ METHOD TreeListReportsFocusChanged(sender as Object, lDontShowReport:= false as 
 						
 						//SELF:BBIFinalize:Visibility := DevExpress.XtraBars.BarItemVisibility.Never
 				ELSEIF !lisCreator && !lisMatched 
-						if  oRowLocal["CanEditFinalizedOfficeReports"]:ToString() == "False" 
+						IF  oRowLocal["CanEditFinalizedOfficeReports"]:ToString() == "False" 
 							SELF:BBIEditReport:Visibility := BarItemVisibility.Never
 							SELF:BBISave:Visibility :=  DevExpress.XtraBars.BarItemVisibility.Never
 							SELF:BBICancel:Visibility :=  DevExpress.XtraBars.BarItemVisibility.Never
@@ -1824,7 +1826,7 @@ METHOD TreeListReportsFocusChanged(sender as Object, lDontShowReport:= false as 
 							SELF:BBISave:Visibility :=  DevExpress.XtraBars.BarItemVisibility.Always
 							SELF:BBICancel:Visibility :=  DevExpress.XtraBars.BarItemVisibility.Always
 						ENDIF
-						if  oRowLocal["CanDeleteOfficeReports"]:ToString() == "False" 
+						IF  oRowLocal["CanDeleteOfficeReports"]:ToString() == "False" 
 							SELF:BBIDelete:Visibility := DevExpress.XtraBars.BarItemVisibility.Never
 						ELSE
 							SELF:BBIDelete:Visibility := DevExpress.XtraBars.BarItemVisibility.Always
@@ -1872,7 +1874,7 @@ EXPORT METHOD checkIFUserIsCreatorOfThePachage(cNodeTag AS STRING) AS LOGIC
 	IF oSoftway:RecordExists(oMainForm:oGFH, oMainForm:oConn, cStatement, "Username") <> oUser:UserName
 		RETURN FALSE
 	ENDIF	
-return true
+RETURN TRUE
 
 EXPORT METHOD checkIFReportIsFinalized(cNodeTag AS STRING) AS LOGIC
 	//MessageBox.Show(cNodeTag)
@@ -1882,7 +1884,7 @@ EXPORT METHOD checkIFReportIsFinalized(cNodeTag AS STRING) AS LOGIC
 	IF oSoftway:RecordExists(oMainForm:oGFH, oMainForm:oConn, cStatement, "Matched") == "0"
 		RETURN FALSE
 	ENDIF	
-return true
+RETURN TRUE
 
 METHOD LocateNodeByTag(oNodes AS TreeListNodes, cTag AS STRING) AS TreeListNode
 	FOREACH oNode AS TreeListNode IN oNodes
@@ -1928,11 +1930,11 @@ METHOD TreeListVessels_OnAfterCheckNode(e AS DevExpress.XtraTreeList.NodeEventAr
 	IF cUID:StartsWith("Fleet")
 		FOREACH oChildNode AS DevExpress.XtraTreeList.Nodes.TreeListNode IN  oNode:Nodes
 			oChildNode:Checked := oNode:Checked
-			LOCAL cChildUID := oChildNode:Tag:ToString() as String
+			LOCAL cChildUID := oChildNode:Tag:ToString() AS STRING
 			IF oChildNode:Checked
 				cStatement:="INSERT INTO FMUserVessels (USER_UNIQUEID, VESSEL_UNIQUEID)"+;
 						" SELECT "+oUser:USER_UNIQUEID+","+cChildUID+;
-						Iif(symServer == #MySQL, " FROM GlobalSettings", "")+;
+						IIF(symServer == #MySQL, " FROM GlobalSettings", "")+;
 						" WHERE NOT EXISTS"+;
 						" (SELECT USER_UNIQUEID FROM FMUserVessels"+;
 						"	WHERE USER_UNIQUEID="+oUser:USER_UNIQUEID+;
@@ -1951,7 +1953,7 @@ METHOD TreeListVessels_OnAfterCheckNode(e AS DevExpress.XtraTreeList.NodeEventAr
 	IF e:Node:Checked
 		cStatement:="INSERT INTO FMUserVessels (USER_UNIQUEID, VESSEL_UNIQUEID)"+;
 					" SELECT "+oUser:USER_UNIQUEID+","+cUID+;
-					Iif(symServer == #MySQL, " FROM GlobalSettings", "")+;
+					IIF(symServer == #MySQL, " FROM GlobalSettings", "")+;
 					" WHERE NOT EXISTS"+;
 					" (SELECT USER_UNIQUEID FROM FMUserVessels"+;
 					"	WHERE USER_UNIQUEID="+oUser:USER_UNIQUEID+;
@@ -1980,13 +1982,13 @@ METHOD SelectedReportChanged() AS VOID
 	IF SELF:lSuspendNotification
 		RETURN
 	ENDIF
-	self:BingMapUserControl:ClearReportPins()	
+	SELF:BingMapUserControl:ClearReportPins()	
 	//SELF:lSuspendNotification := TRUE
 	//SELF:Fill_CheckedLBCVessels()
 	//SELF:Fill_TreeListVessels()
 	IF SELF:myReportTabForm <> NULL
 			SELF:myReportTabForm:Close()
-			Self:myReportTabForm:Dispose()
+			SELF:myReportTabForm:Dispose()
 	ENDIF
 	IF SELF:GetVesselUID <> "0"
 		SELF:Fill_TreeList_Reports()
@@ -2044,12 +2046,12 @@ METHOD SelectedVesselChanged() AS VOID
 	SELF:BingMapUserControl:ClearReportPins()
 	IF SELF:myReportTabForm <> NULL
 		SELF:myReportTabForm:Close()
-		Self:myReportTabForm:Dispose()
+		SELF:myReportTabForm:Dispose()
 	ENDIF
 	IF SELF:lSuspendNotification
 		RETURN
 	ELSE
-		lDisplayAll := false
+		lDisplayAll := FALSE
 	ENDIF
 	
 	SELF:lSuspendNotification := TRUE
@@ -2071,7 +2073,7 @@ METHOD SelectedVesselChanged() AS VOID
 		//wb(SELF:CheckedLBCVessels:SelectedItem:ToString(), cUID)
 		SELF:Fill_LBCReports(cUID)
         //SELF:Fill_LBCVesselReports(cUID)
-		self:LBCVesselReportsViewChanged()
+		SELF:LBCVesselReportsViewChanged()
 	ENDIF
 
 	// Show Vessel's Reports into LBCVesselReports
@@ -2099,7 +2101,7 @@ METHOD LBCVesselReportsViewChanged() AS VOID    //Antonis 27.11.14 When on Voyag
             SELF:TreeListVesselsReports:Visible := isTreeOnVesselReports
             RETURN
 		ELSE
-			IF SELF:TreeListVessels:FocusedNode == NULL .or. oMainForm:LBCReports:SelectedValue == NULL
+			IF SELF:TreeListVessels:FocusedNode == NULL .OR. oMainForm:LBCReports:SelectedValue == NULL
 				RETURN
 			ENDIF
 			IF SELF:TreeListVessels:Nodes:Count == 0
@@ -2128,7 +2130,7 @@ METHOD LBCDisplayMapViewChanged() AS VOID    //Antonis 27.11.14 When on Voyage S
 	CASE cPer:Equals("0%")
 			SELF:splitMapForm:SplitterPosition := (INT)(SELF:splitMapForm:Width-1)
 	ENDCASE
-	CATCH exc as Exception
+	CATCH exc AS Exception
 	END
 RETURN
 
@@ -2137,7 +2139,7 @@ METHOD Fill_LBCVesselReports(cUID AS STRING) AS VOID
 	IF oMainForm:LBCReports:SelectedValue == NULL
 		RETURN
     ENDIF
-	IF cUID:StartsWith("Fleet") || self:GetVesselUID == "0"
+	IF cUID:StartsWith("Fleet") || SELF:GetVesselUID == "0"
 		RETURN
 	ENDIF
 
@@ -2282,18 +2284,18 @@ METHOD CheckAllVessels() AS VOID
 RETURN
 
 
-Method AssignColor(cValue as string) as Color
-	Local nRed, nGreen, nBlue as int
-	Local oColor as Color
+METHOD AssignColor(cValue AS STRING) AS Color
+	LOCAL nRed, nGreen, nBlue AS INT
+	LOCAL oColor AS Color
 
 	oMainForm:SplitColorToRGB(cValue, nRed, nGreen, nBlue)
 	oColor:=Color.FromArgb(nRed, nGreen, nBlue)
-	if oColor == Color.Empty
+	IF oColor == Color.Empty
 		oColor:=Color.Transparent
-	else
+	ELSE
 		oColor:=oColor
-	endif
-Return oColor
+	ENDIF
+RETURN oColor
 
 
 //Method AssignColor(oControl as ColorEdit, cField as string) as void
@@ -2346,7 +2348,7 @@ METHOD ConvertColorToColorObject(cUserColor AS STRING) AS Color
 LOCAL nRed, nGreen, nBlue AS INT
 LOCAL oColor AS Color
 
-	IF cUserColor == "" .or. cUserColor == "0"
+	IF cUserColor == "" .OR. cUserColor == "0"
 		// Black background
 		oColor:=Color.Transparent
 	ELSE
@@ -2357,7 +2359,7 @@ RETURN oColor
 
 
 METHOD CreateDXColumn(cCaption AS STRING, cFieldName AS STRING, lEdit AS LOGIC, uType AS DevExpress.Data.UnboundColumnType,;
-						nGridColumnAbsoluteIndex as int, nIndex as int, nSize as int, ;
+						nGridColumnAbsoluteIndex AS INT, nIndex AS INT, nSize AS INT, ;
 						oGridView AS DevExpress.XtraGrid.Views.Grid.GridView) AS GridColumn
 	// For general use
 	LOCAL oGridColumn AS GridColumn
@@ -2400,7 +2402,7 @@ METHOD GetPropellerPitch() AS STRING
 RETURN cPP
 
 
-METHOD ShowReportForm(modal as LOGIC, createReport as LOGIC, lPrintReport := false as LOGIC,cSpecificItemUIDs := "" as String) AS VOID
+METHOD ShowReportForm(modal AS LOGIC, createReport AS LOGIC, lPrintReport := FALSE AS LOGIC,cSpecificItemUIDs := "" AS STRING) AS VOID
 	IF SELF:TreeListVessels:FocusedNode == NULL
 		RETURN
 	ENDIF
@@ -2409,7 +2411,7 @@ METHOD ShowReportForm(modal as LOGIC, createReport as LOGIC, lPrintReport := fal
 		RETURN
 	ENDIF
 
-	IF SELF:LBCVesselReports:SelectedItems:Count == 0 .and. self:TreeListVesselsReports:Visible == false
+	IF SELF:LBCVesselReports:SelectedItems:Count == 0 .AND. SELF:TreeListVesselsReports:Visible == FALSE
 		RETURN
 	ENDIF
 
@@ -2419,9 +2421,9 @@ METHOD ShowReportForm(modal as LOGIC, createReport as LOGIC, lPrintReport := fal
 	LOCAL cReportName := oMainForm:LBCReports:GetDisplayItemValue(oMainForm:LBCReports:SelectedIndex):ToString() AS STRING
 	LOCAL cVesselName := oMainForm:GetVesselUID AS STRING
 
-	IF cReportUID:Trim() == "7" .and.  SELF:TreeListVesselsReports:Visible == TRUE
+	IF cReportUID:Trim() == "7" .AND.  SELF:TreeListVesselsReports:Visible == TRUE
 		cReportUID := SELF:getReportIUDfromPackage(SELF:TreeListVesselsReports:FocusedNode:Tag:ToString())
-	endif
+	ENDIF
 	//
 	LOCAL cSpecificItemsSQL :="" AS STRING
 	IF cSpecificItemUIDs!=""
@@ -2460,13 +2462,13 @@ METHOD ShowReportForm(modal as LOGIC, createReport as LOGIC, lPrintReport := fal
 				SELF:myReportTabForm:Dispose()
 			ENDIF
 	
-			self:myReportTabForm := ReportTabForm{} 
+			SELF:myReportTabForm := ReportTabForm{} 
 			//SELF:splitMapForm:PanelVisibility := SplitPanelVisibility.Both
 			SELF:myReportTabForm:Text := cVesselName+ ": "+ cReportName			
 			SELF:myReportTabForm:cReportUID := cReportUID
 			SELF:myReportTabForm:cReportName := cReportName
 			SELF:myReportTabForm:cMyVesselName := SELF:GetVesselName
-			SELF:myReportTabForm:cVesselUID := self:GetVesselUID
+			SELF:myReportTabForm:cVesselUID := SELF:GetVesselUID
 			SELF:myReportTabForm:oDTItemCategories := oDTItemCategories
 			SELF:myReportTabForm:oDTReportItems := oDTReportItems
 			SELF:myReportTabForm:TopLevel := FALSE
@@ -2475,7 +2477,7 @@ METHOD ShowReportForm(modal as LOGIC, createReport as LOGIC, lPrintReport := fal
 			SELF:myReportTabForm:AutoScroll := TRUE
 			SELF:splitMapForm:Panel1:Controls:Add(SELF:myReportTabForm)
 			SELF:splitMapForm:Panel1:AutoScroll := TRUE
-			SElf:myReportTabForm:cMyPackageUID := TreeListVesselsReports:FocusedNode:Tag:ToString()
+			SELF:myReportTabForm:cMyPackageUID := TreeListVesselsReports:FocusedNode:Tag:ToString()
 			SELF:myReportTabForm:Dock := DockStyle.Fill
 			SELF:myReportTabForm:Show()
 			IF SELF:BBIEditReport:Visibility ==  DevExpress.XtraBars.BarItemVisibility.Always
@@ -2509,15 +2511,15 @@ METHOD ShowReportForm(modal as LOGIC, createReport as LOGIC, lPrintReport := fal
 				oMyReportTabForm:cReportUID := cReportUID
 				oMyReportTabForm:cReportName := cReportName
 				oMyReportTabForm:cMyVesselName := SELF:GetVesselName
-				oMyReportTabForm:cVesselUID := self:GetVesselUID
+				oMyReportTabForm:cVesselUID := SELF:GetVesselUID
 				oMyReportTabForm:oDTItemCategories := oDTItemCategories
 				oMyReportTabForm:oDTReportItems := oDTReportItems
 				oMyReportTabForm:AutoScroll := TRUE
 				oMyReportTabForm:ReportMainMenu:Visible := createReport
 				IF createReport
-					local cStatementLocal:="INSERT INTO FMDataPackages (VESSEL_UNIQUEID, REPORT_UID, DateTimeGMT, GmtDiff, MSG_UNIQUEID, Memo, Matched, Username) VALUES"+;
-					" ("+self:GetVesselUID+", "+cReportUID+", CURRENT_TIMESTAMP , 2,"+;
-					" 0, '' , 0, '"+oUser:Username+"' )" as String
+					LOCAL cStatementLocal:="INSERT INTO FMDataPackages (VESSEL_UNIQUEID, REPORT_UID, DateTimeGMT, GmtDiff, MSG_UNIQUEID, Memo, Matched, Username) VALUES"+;
+					" ("+SELF:GetVesselUID+", "+cReportUID+", CURRENT_TIMESTAMP , 2,"+;
+					" 0, '' , 0, '"+oUser:Username+"' )" AS STRING
 					IF ! oSoftway:AdoCommand(oMainForm:oGFH, oMainForm:oConn, cStatementLocal)
 						ErrorBox("Cannot insert FMDataPackages entry for Vessel="+cVesselName)
 						RETURN
@@ -2526,7 +2528,7 @@ METHOD ShowReportForm(modal as LOGIC, createReport as LOGIC, lPrintReport := fal
 					oMyReportTabForm:cMyPackageUID := cPackageUID
 					oMyReportTabForm:lEnableControls := createReport
 					oMyReportTabForm:lisNewReport := createReport
-				else
+				ELSE
 					oMyReportTabForm:cMyPackageUID := TreeListVesselsReports:FocusedNode:Tag:ToString()
 				ENDIF
 				oMyReportTabForm:Show()
@@ -2542,7 +2544,7 @@ METHOD ShowReportForm(modal as LOGIC, createReport as LOGIC, lPrintReport := fal
 	
 RETURN
 
-METHOD printOnBackground(cReportUID as String,cReportName as String,oDTItemCategories as DataTable,oDTReportItems as DataTable) as Void
+METHOD printOnBackground(cReportUID AS STRING,cReportName AS STRING,oDTItemCategories AS DataTable,oDTReportItems AS DataTable) AS VOID
 	LOCAL oMyReportTabForm := ReportTabForm{} AS ReportTabForm
 	//SELF:splitMapForm:PanelVisibility := SplitPanelVisibility.Both
 	oMyReportTabForm:Text := SELF:TreeListVesselsReports:FocusedNode:GetValue(0):ToString()+" for "+SELF:TreeListVessels:FocusedNode:GetValue(0):ToString()
@@ -2556,13 +2558,13 @@ METHOD printOnBackground(cReportUID as String,cReportName as String,oDTItemCateg
 	oMyReportTabForm:cMyPackageUID := TreeListVesselsReports:FocusedNode:Tag:ToString()
 	LOCAL oBW := BackgroundWorker{} AS BackgroundWorker
 	oBW:WorkerReportsProgress := TRUE
-	oBW:WorkerSupportsCancellation := true
+	oBW:WorkerSupportsCancellation := TRUE
 	oBW:DoWork += DoWorkEventHandler{SELF,@workerToPrint()}
-	oBW:ProgressChanged += ProgressChangedEventHandler{self,@WorkerReportedFinished()}
+	oBW:ProgressChanged += ProgressChangedEventHandler{SELF,@WorkerReportedFinished()}
 	oBW:RunWorkerAsync(oMyReportTabForm)
 RETURN
 
-METHOD workerToPrint( sender AS System.Object, e AS DoWorkEventArgs ) as Void
+METHOD workerToPrint( sender AS System.Object, e AS DoWorkEventArgs ) AS VOID
 				LOCAL worker := (BackgroundWorker)sender AS BackgroundWorker
 				LOCAL oMyReportTabForm := (ReportTabForm)e:Argument AS ReportTabForm
 				//		worker:CancelAsync()
@@ -2595,7 +2597,7 @@ METHOD ShowLinkedMessage() AS VOID
 		RETURN
 	ENDIF
 
-	IF SELF:LBCVesselReports:SelectedItems:Count == 0  .and. self:TreeListVesselsReports:Visible == false
+	IF SELF:LBCVesselReports:SelectedItems:Count == 0  .AND. SELF:TreeListVesselsReports:Visible == FALSE
 		RETURN
 	ENDIF
 
@@ -2659,7 +2661,7 @@ METHOD IsmFormBodyText() AS VOID
 		RETURN
 	ENDIF
 
-	IF SELF:LBCVesselReports:SelectedItems:Count == 0  .and. self:TreeListVesselsReports:Visible == false
+	IF SELF:LBCVesselReports:SelectedItems:Count == 0  .AND. SELF:TreeListVesselsReports:Visible == FALSE
 		RETURN
 	ENDIF
 
@@ -2771,7 +2773,7 @@ RETURN cBodyText
 
 
 METHOD TextEditValueToSQL(cValue AS STRING) AS STRING
-	IF cValue == NULL .or.cValue:ToString() == ""
+	IF cValue == NULL .OR.cValue:ToString() == ""
 		RETURN "0"
 	ENDIF
 	cValue := cValue:Replace(SELF:groupSeparator, ""):Replace(SELF:decimalSeparator, ".")
@@ -2831,7 +2833,7 @@ METHOD ShowSelectedVoyageOnMap() AS VOID
 	oBingMapForm:cVesselUID := cUID
 	oBingMapForm:oLBCItemVoyage := (MyLBCVoyageItem)oSelectVoyageForm:LBCVoyages:SelectedItem
 	oBingMapForm:oLBCItemRouting := (MyLBCVoyageItem)oSelectVoyageForm:LBCRouting:SelectedItem
-	IF oBingMapForm:oLBCItemVoyage == NULL .or. oBingMapForm:oLBCItemRouting == NULL
+	IF oBingMapForm:oLBCItemVoyage == NULL .OR. oBingMapForm:oLBCItemRouting == NULL
 		WB("No Voyage or Routing selected. Please try again.")
 		RETURN
 	ENDIF	
@@ -2849,12 +2851,12 @@ METHOD createNewReport()  AS VOID
 		IF SELF:GetVesselUID == "0"
 			MessageBox.Show("Select a Vessel to create the report.")
 			RETURN
-		endif		
+		ENDIF		
 		
 		IF SELF:ReportsTabUserControl:SelectedIndex == 0
 				MessageBox.Show("Can not create vessel report.")
 			ELSE
-				ShowReportForm(true,true)		
+				ShowReportForm(TRUE,TRUE)		
 		ENDIF
 RETURN
 
@@ -2865,11 +2867,11 @@ METHOD backBBI_ItemClickMethod() AS VOID
 	SELF:lisTC := FALSE
 	SELF:cTCParent := ""
 	SELF:backBBI:Enabled := FALSE
-	self:Fill_TreeList_Reports()
+	SELF:Fill_TreeList_Reports()
 RETURN
 
 
-Export METHOD getReportIUDfromPackage(cPackUID AS STRING) AS STRING
+EXPORT METHOD getReportIUDfromPackage(cPackUID AS STRING) AS STRING
 	LOCAL cStatement := "Select REPORT_UID From FMDataPackages Where Package_uid="+cPackUID AS STRING
 
 	LOCAL cReportUID := oSoftway:RecordExists(oMainForm:oGFH, oMainForm:oConn, cStatement, "REPORT_UID") AS STRING
@@ -2904,7 +2906,7 @@ METHOD ShowSetupUsersForm AS VOID
 		wb("This operation is not supported for Non-Master Users."+CRLF+;
 			"Please ask your system administrator (or a Master User) to perform this task")
 		RETURN
-	endif
+	ENDIF
 	
 	LOCAL oDTUsers AS DataTable
 	LOCAL cStatement AS STRING
@@ -2925,7 +2927,7 @@ METHOD ShowSetupUserGroupsForm() AS VOID
 		wb("This operation is not supported for Non-Master Users."+CRLF+;
 			"Please ask your system administrator (or a Master User) to perform this task")
 		RETURN
-	endif
+	ENDIF
 	
 	LOCAL oDTGroups AS DataTable
 	LOCAL cStatement AS STRING
@@ -2941,7 +2943,7 @@ RETURN
 
 
 METHOD ShowApprovalsForm() AS VOID
-	IF myTimer <> NULL .and. myTimer:Tag=="1"	
+	IF myTimer <> NULL .AND. (STRING)myTimer:Tag=="1"	
 		myTimer:Stop()	
 	ENDIF
 	
@@ -2973,7 +2975,7 @@ METHOD showGlobalSettingsForm AS VOID
 		wb("This operation is not supported for Non-Master Users."+CRLF+;
 			"Please ask your system administrator (or a Master User) to perform this task")
 		RETURN
-	endif
+	ENDIF
 	
 	LOCAL oMatchSettings := MatchSettings{} AS MatchSettings
 	oMatchSettings:checkForCrewOwnedVessels()
@@ -3066,8 +3068,8 @@ METHOD cancelChanges AS LOGIC
 					LOCAL dTabTag AS Dictionary<STRING, STRING>	
 					dTabTag := (Dictionary<STRING, STRING>)oTabPageLocal:Tag	
 
-					LOCAL cTagLocal := dTabTag["Status"]:ToString()
-					LOCAL cCatUIDLocal := dTabTag["TabId"]:ToString()
+					LOCAL cTagLocal := dTabTag["Status"]:ToString() AS STRING
+					LOCAL cCatUIDLocal := dTabTag["TabId"]:ToString() AS STRING
 
 					IF cTagLocal == "Appeared"
 						FOREACH ctrl AS Control IN oTabPageLocal:Controls
@@ -3078,12 +3080,12 @@ METHOD cancelChanges AS LOGIC
 						oTabPageLocal:Tag := dTabTag
 					ENDIF
 				NEXT
-				LOCAL oTabPageLocal := SELF:myReportTabForm:tabControl_Report:SelectedTab AS TabPage 
-				FOREACH ctrl AS Control IN oTabPageLocal:Controls
-					oTabPageLocal:Controls:Remove(ctrl)
+				LOCAL oTabPageLocal1 := SELF:myReportTabForm:tabControl_Report:SelectedTab AS TabPage 
+				FOREACH ctrl AS Control IN oTabPageLocal1:Controls
+					oTabPageLocal1:Controls:Remove(ctrl)
 					Application.DoEvents()
-				Next
-				SELF:myReportTabForm:TabPage_Enter(oTabPageLocal,NULL)
+				NEXT
+				SELF:myReportTabForm:TabPage_Enter(oTabPageLocal1,NULL)
 			ELSE
 				SELF:ShowReportForm(FALSE,FALSE)	
 			ENDIF
@@ -3091,10 +3093,10 @@ METHOD cancelChanges AS LOGIC
 
 
 			SELF:BBIEditReport:Enabled := TRUE
-			SELF:BBISubmit:Enabled := true
-			SELF:BBIFinalize:Enabled := false
+			SELF:BBISubmit:Enabled := TRUE
+			SELF:BBIFinalize:Enabled := FALSE
 			SELF:BBISave:Enabled := FALSE
-			SELF:BBICancel:Enabled := false
+			SELF:BBICancel:Enabled := FALSE
 			//LOCAL cStatement:="Update FMDataPackages set Visible = 0 Where Package_Uid = "+cPackageUID AS STRING
 			//oSoftway:AdoCommand(oGFH, oConn, cStatement)
 			//SELF:TreeListVesselsReports:DeleteNode(SELF:TreeListVesselsReports:FocusedNode)
@@ -3110,7 +3112,7 @@ EXPORT METHOD returnSMTPSetting() AS datarow
 		
 		IF oSoftway:TableExists(oMainForm:oGFH,  oMainForm:oConn, "FMTrueGlobalSettings")
 
-			local cStatement:="SELECT TOP 1 * FROM FMTrueGlobalSettings" as String
+			LOCAL cStatement:="SELECT TOP 1 * FROM FMTrueGlobalSettings" AS STRING
 			LOCAL oDTLocal := oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement) AS DataTable
 		
 			FOREACH oRow AS DataRow IN oDTLocal:Rows
@@ -3180,7 +3182,7 @@ EXPORT METHOD updateUserSetting(fieldToUpdate AS STRING, valueToUpdate AS STRING
 				END		
 RETURN
 
-METHOD splitterChanged(lLogic AS LOGIC)
+METHOD splitterChanged(lLogic AS LOGIC) AS LOGIC
 	TRY
 			LOCAL iCountLength AS INT
 			iCountLength := (INT) SELF:splitMapForm:SplitterPosition/SELF:splitMapForm:Width
@@ -3188,7 +3190,7 @@ METHOD splitterChanged(lLogic AS LOGIC)
 			SELF:barEditItemDisplayMap:EditValue := iCountLength:ToString()+"%"
 	CATCH 
 	END
-RETURN true
+RETURN TRUE
 
 METHOD GetItemType(cID AS STRING) AS STRING
 	LOCAL cStatement, cItemType AS STRING
@@ -3201,7 +3203,7 @@ RETURN cItemType
 
 PROPERTY GetVesselUID AS STRING
 	GET
-		IF SELF:TreeListVessels:FocusedNode == NULL .or. SELF:TreeListVessels:FocusedNode:Tag:ToString():StartsWith("Fleet")
+		IF SELF:TreeListVessels:FocusedNode == NULL .OR. SELF:TreeListVessels:FocusedNode:Tag:ToString():StartsWith("Fleet")
 			RETURN "0"
 		ENDIF
 		RETURN SELF:TreeListVessels:FocusedNode:Tag:ToString()
@@ -3364,7 +3366,7 @@ EXPORT METHOD addFileToDatabase(cFile AS STRING,cItemUid AS STRING, cPackageUIDL
 	//WB("Size="+oFS:Length:ToString())
 	oFS:Close()
 	//WB("Size="+oFS:Length:ToString())
-	LOCAL cFileName := System.IO.Path.GetFileName(cFile)+"."+cItemUid   as String
+	LOCAL cFileName := System.IO.Path.GetFileName(cFile)+"."+cItemUid   AS STRING
 	LOCAL cUpdate:="INSERT INTO FMBlobData (PACKAGE_UID, ITEM_UID, Filename, BlobData) VALUES"+;
 					" ("+cPackageUIDLocal+", "+cItemUid+", '"+cFileName+"', @image)" AS STRING
 	IF (SELF:oConnBlob == NULL .OR. SELF:oConnBlob:State == ConnectionState.Closed)
@@ -3375,7 +3377,7 @@ EXPORT METHOD addFileToDatabase(cFile AS STRING,cItemUid AS STRING, cPackageUIDL
 	oSqlCommand:Connection := SELF:oConnBlob
 	LOCAL oParameter := SELF:oGFHBlob:Parameter() AS DBParameter
 	oParameter:ParameterName := "@image"	
-	oParameter:Value := (object)bytes
+	oParameter:Value := (OBJECT)bytes
 	oSqlCommand:Parameters:Add(oParameter)
 	IF oSqlCommand:ExecuteNonQuery() == 0
 		MessageBox.Show("Error.")
@@ -3423,7 +3425,7 @@ RETURN*/
 //		CHANGED BY KIRIAKOS in order to support the new database connection
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-METHOD finalizeReport(cChangeTo := "1" as String) AS VOID
+METHOD finalizeReport(cChangeTo := "1" AS STRING) AS VOID
 	TRY	
 	//IF SELF:myReportTabForm:ValidateMandatoryFields()
 	//		SELF:myReportTabForm:saveNormalValues()
@@ -3443,7 +3445,7 @@ METHOD finalizeReport(cChangeTo := "1" as String) AS VOID
 	END
 RETURN
 
-METHOD changeFinalizedBitInDB(cChangeTo := "1" as String) as logic
+METHOD changeFinalizedBitInDB(cChangeTo := "1" AS STRING) AS LOGIC
 		TRY
 			/*IF QuestionBox("Are you sure you want to Finalize the Selected Report ?", ;
 							"Finalize Data") <> System.Windows.Forms.DialogResult.Yes
@@ -3459,11 +3461,11 @@ METHOD changeFinalizedBitInDB(cChangeTo := "1" as String) as logic
 			WB(exc:StackTrace)
 			RETURN FALSE
 		END
-RETURN	true
+RETURN	TRUE
 	
 	
 METHOD print_ItemClickMethod() AS VOID
-		self:ShowReportForm(true,false,true)
+		SELF:ShowReportForm(TRUE,FALSE,TRUE)
 		//myReportTabForm:Form_ExportToPDF()
 		
 		/*
@@ -3588,7 +3590,7 @@ METHOD findMyStatus() AS STRING
 	ENDIF
 RETURN MyStatus  
 
-METHOD findMyStatus(cPackageUID as String) AS STRING
+METHOD findMyStatus(cPackageUID AS STRING) AS STRING
 	LOCAL MyStatus := "" AS STRING
 	TRY		
 		LOCAL cStatement AS STRING
@@ -3605,9 +3607,9 @@ RETURN MyStatus
 ////////////////////////////////////////////////////////////////////
 //			Submit To Manager
 ////////////////////////////////////////////////////////////////////
-EXPORT METHOD submitCaseToManager(cPackageUID := "0" as String) AS VOID
+EXPORT METHOD submitCaseToManager(cPackageUID := "0" AS STRING) AS VOID
 		LOCAL cUpdate AS STRING
-		LOCAL lManager := lisManagerGlobal //SELF:isDeptManager() AS logic
+		LOCAL lManager := lisManagerGlobal AS LOGIC
 	TRY
 	LOCAL cStatusLocal, cNextStatus AS STRING
 	
@@ -3621,7 +3623,7 @@ EXPORT METHOD submitCaseToManager(cPackageUID := "0" as String) AS VOID
 		cPackageUID := SELF:TreeListVesselsReports:FocusedNode:Tag:ToString() 
 	ENDIF
 	
-	IF cStatusLocal == "0" .and. !lManager  // Den exei ginei kanena submit kai einia yparxousa forma
+	IF cStatusLocal == "0" .AND. !lManager  // Den exei ginei kanena submit kai einia yparxousa forma
 		
 		IF  cPackageUID==SELF:TreeListVesselsReports:FocusedNode:Tag:ToString()
 		IF !SELF:myReportTabForm:ValidateMandatoryFields()
@@ -3631,11 +3633,11 @@ EXPORT METHOD submitCaseToManager(cPackageUID := "0" as String) AS VOID
 							"Submit Report") <> System.Windows.Forms.DialogResult.Yes
 				RETURN 
 		ENDIF
-		endif
+		ENDIF
 		cNextStatus := "1"
 
-	ELSEIF cStatusLocal == "1" .or. lManager
-		IF lManager .and. cStatusLocal=="0"
+	ELSEIF cStatusLocal == "1" .OR. lManager
+		IF lManager .AND. cStatusLocal=="0"
 			IF !SELF:myReportTabForm:ValidateMandatoryFields()
 				RETURN
 			ENDIF
@@ -3659,13 +3661,13 @@ EXPORT METHOD submitCaseToManager(cPackageUID := "0" as String) AS VOID
 				SELF:approveCase()	
 		ENDIF
 	ENDIF*/
-			Local cManager :="" as String
+			LOCAL cManager :="" AS STRING
 			
 			IF lManager //.and. cStatusLocal == "1" 
 				cManager := SELF:findGM() 
 			ELSE
 				LOCAL cMyGroup := SELF:findMyGroup() AS STRING
-				cManager := self:findMyManager(cMyGroup)
+				cManager := SELF:findMyManager(cMyGroup)
 			ENDIF
 			IF cManager:Equals("")
 				wb("No Manager exists")
@@ -3673,11 +3675,11 @@ EXPORT METHOD submitCaseToManager(cPackageUID := "0" as String) AS VOID
 			ENDIF
 	
  
-			LOCAL cDescLocal  as String
+			LOCAL cDescLocal  AS STRING
 			IF cPackageUID == "0"
 				cDescLocal := SELF:GetVesselName+"-"+SELF:TreeListVesselsReports:FocusedNode:GetDisplayText(0)
 			ELSE
-				local cStatement as String
+				LOCAL cStatement AS STRING
 				cStatement:="SELECT FMDataPackages.DateTimeGMT, FMReportTypes.ReportName,FMDataPackages.REPORT_UID,FMDataPackages.Username "+;
 					    " FROM FMDataPackages"+SELF:cNoLockTerm+;
 					    " INNER JOIN FMReportTypes ON FMReportTypes.REPORT_UID=FMDataPackages.REPORT_UID "+;
@@ -3698,7 +3700,7 @@ EXPORT METHOD submitCaseToManager(cPackageUID := "0" as String) AS VOID
 			IF oSqlCommand:ExecuteNonQuery() == 0
 					MessageBox.Show("Error.")
 			ENDIF
-			IF cStatusLocal == "0" .and. !lManager
+			IF cStatusLocal == "0" .AND. !lManager
 				LOCAL cStatement:="Update FMDataPackages set Status = 1 Where Package_Uid = "+cPackageUID AS STRING
 				oSoftway:AdoCommand(oGFH, oConn, cStatement)
 				wb("Submission Completed.")
@@ -3713,7 +3715,7 @@ RETURN
 ////////////////////////////////////////////////////////////////////
 //			Return To User
 ////////////////////////////////////////////////////////////////////
-EXPORT METHOD returnCaseToUser(cPackageUID := "0" as String) AS VOID
+EXPORT METHOD returnCaseToUser(cPackageUID := "0" AS STRING) AS VOID
 		LOCAL cUpdate AS STRING
 	TRY
 	LOCAL cStatusLocal AS STRING
@@ -3758,7 +3760,7 @@ END
 
 RETURN
 
-EXPORT METHOD approveCase(lLoud := true as LOGIC) AS VOID
+EXPORT METHOD approveCase(lLoud := TRUE AS LOGIC) AS VOID
 TRY
 	IF lLoud
 		IF QuestionBox("Are you sure you want to Acknowledge the Selected Report ?", ;
@@ -3769,7 +3771,7 @@ TRY
 	LOCAL cPackageUID := SELF:TreeListVesselsReports:FocusedNode:Tag:ToString() AS STRING
 	LOCAL iStatus := int16.Parse(SELF:findMyStatus()) AS INT
 	
-	IF iStatus == 1 .or. iStatus == 0
+	IF iStatus == 1 .OR. iStatus == 0
 		iStatus := 2
 	ELSEIF iStatus == 2
 		iStatus := 3
@@ -3796,10 +3798,10 @@ TRY
 		LOCAL cVesselName := oSoftway:RecordExists(oMainForm:oGFH, oMainForm:oConn, cStatement, "VesselName") AS STRING		
 
 		LOCAL cPackageName := SELF:TreeListVesselsReports:FocusedNode:GetValue(0):ToString() AS STRING
-		LOCAL cEmailSubject := cVesselName+ "'s report : "+cPackageName + " Acknowledged "
+		LOCAL cEmailSubject := cVesselName+ "'s report : "+cPackageName + " Acknowledged " AS STRING
 		LOCAL cEmailText := CRLF + " This email is to inform you that the report : "+cPackageName + CRLF +;
 							" for Vessel : "+cVesselName +;
-							" was just acknowledged by user "+oUser:UserName
+							" was just acknowledged by user "+oUser:UserName  AS STRING
 		//Approve apo General Manager
 		cStatement:=" Select Users.UserId, Users.UserName, Users.User_UniqueId, "+;
 					" FMUsers.InformUserForGMApprovalEmail "+;
@@ -3813,7 +3815,7 @@ TRY
 		ENDIF
 		LOCAL n AS INT
 		FOREACH oRow AS DataRow IN oDTInformUserForGMApproval:Rows
-			self:sendEmail(oRow["InformUserForGMApprovalEmail"]:ToString():Trim(),cEmailText, cEmailSubject)
+			SELF:sendEmail(oRow["InformUserForGMApprovalEmail"]:ToString():Trim(),cEmailText, cEmailSubject)
 		NEXT
 
 	ELSE
@@ -3865,8 +3867,8 @@ RETURN
 EXPORT METHOD markApprovalAsSeen() AS VOID
 TRY
 	LOCAL cPackageUID := SELF:TreeListVesselsReports:FocusedNode:Tag:ToString() AS STRING
-	local cStatement	:=	" UPDATE ApprovalData SET Status = 1, Date_Acted = CURRENT_TIMESTAMP WHERE Foreing_UID = "+cPackageUID+;
-					" AND Program_UID=2 AND Receiver_UID="+oUser:USER_UNIQUEID+" AND Status=0" as String
+	LOCAL cStatement	:=	" UPDATE ApprovalData SET Status = 1, Date_Acted = CURRENT_TIMESTAMP WHERE Foreing_UID = "+cPackageUID+;
+					" AND Program_UID=2 AND Receiver_UID="+oUser:USER_UNIQUEID+" AND Status=0" AS STRING
 	oSoftway:AdoCommand(oGFH, oConn, cStatement)
 CATCH exc AS Exception	
 		wb(exc:StackTrace)
@@ -3938,18 +3940,18 @@ RETURN
 
 METHOD checkForPendingApprovals() AS LOGIC
 
-		LOCAL cMyUser := oUser:User_Uniqueid as String
-		local iProgramUID := 2 as INT
+		LOCAL cMyUser := oUser:User_Uniqueid AS STRING
+		LOCAL iProgramUID := 2 AS INT
 		LOCAL cExtraSQL := "" AS STRING
 		IF iProgramUID <> 0
 			cExtraSQL := " AND [Program_UID]="+iProgramUID:ToString()+" AND  ApprovalData.Status=0 "
-		ENDIf
+		ENDIF
 			
 		LOCAL cStatement:="SELECT [Appoval_UID]"+;
 				" FROM [ApprovalData]"+;
 				" WHERE (Receiver_UID="+cMyUser+") "+ cExtraSQL+;
 				" ORDER BY Appoval_UID DESC " AS STRING
-		 LOCAL oDTApprovalsLocal :=oSoftway:ResultTable(SELF:oGFH, SELF:oConn, cStatement) as DataTable
+		 LOCAL oDTApprovalsLocal :=oSoftway:ResultTable(SELF:oGFH, SELF:oConn, cStatement) AS DataTable
 		 IF oDTApprovalsLocal:Rows:Count > 0
 			 RETURN TRUE
 		 ENDIF

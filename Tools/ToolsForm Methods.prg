@@ -20,7 +20,7 @@ PARTIAL CLASS ToolsForm INHERIT DevExpress.XtraEditors.XtraForm
 	PRIVATE cVesselName AS STRING
 
 METHOD ToolsForm_OnLoad() AS VOID
-	IF oMainForm:TreeListVessels:FocusedNode == NULL .or. oMainForm:LBCReports:SelectedValue == NULL
+	IF oMainForm:TreeListVessels:FocusedNode == NULL .OR. oMainForm:LBCReports:SelectedValue == NULL
 		SELF:ButtonExportTables:Enabled := FALSE
 	ENDIF
 
@@ -57,9 +57,9 @@ METHOD ToolsForm_OnLoad() AS VOID
 	
 	LOCAL oRowLocal := oMainForm:returnUserSetting(oUser:USER_UNIQUEID) AS DataRow
 	//WB(oRowLocal["CanEnterToolsArea"]:ToString())
-	IF oRowLocal == null .or. oRowLocal["CanEnterToolsArea"]:ToString() == "False"
+	IF oRowLocal == NULL .OR. oRowLocal["CanEnterToolsArea"]:ToString() == "False"
 		SELF:ButtonBodyIsm:Enabled := FALSE
-		SELF:ButtonExportTables:Enabled := false 
+		SELF:ButtonExportTables:Enabled := FALSE 
 	ENDIF
 	
 RETURN
@@ -77,12 +77,12 @@ RETURN
 
 
 METHOD ExportTablesToVessel() AS VOID
-	IF oMainForm:GetVesselUID == "0" .or. oMainForm:LBCReports:SelectedValue == NULL
+	IF oMainForm:GetVesselUID == "0" .OR. oMainForm:LBCReports:SelectedValue == NULL
 		RETURN
 	ENDIF
 
 	LOCAL cEMail := SELF:TBeMail:Text:Trim() AS STRING
-	IF cEMail == "" .or. ! cEMail:Contains("@") .or. ! cEMail:Contains(".")
+	IF cEMail == "" .OR. ! cEMail:Contains("@") .OR. ! cEMail:Contains(".")
 		wb("No eMail specified", "Invalid eMail")
 		SELF:TBeMail:Focus()
 		RETURN
@@ -243,13 +243,13 @@ RETURN
 
 
 METHOD ExportOfficeTables() AS VOID
-	IF oMainForm:GetVesselUID == "0" .or. oMainForm:LBCReports:SelectedValue == NULL
+	IF oMainForm:GetVesselUID == "0" .OR. oMainForm:LBCReports:SelectedValue == NULL
 		MessageBox.Show("Pls select a vessel.")
 		RETURN
 	ENDIF
 
 	LOCAL cEMail := SELF:TBeMail:Text:Trim() AS STRING
-	IF cEMail == "" .or. ! cEMail:Contains("@") .or. ! cEMail:Contains(".")
+	IF cEMail == "" .OR. ! cEMail:Contains("@") .OR. ! cEMail:Contains(".")
 		wb("No eMail specified", "Invalid eMail")
 		SELF:TBeMail:Focus()
 		RETURN
@@ -386,7 +386,7 @@ METHOD ExportOfficeTables() AS VOID
 	AADD(aFiles, cXMLFile)
 	oDTReportItems:WriteXml(cXMLFile, XmlWriteMode.WriteSchema, FALSE)
 	
-	local oFolderBrowserDialog := FolderBrowserDialog{} as 	FolderBrowserDialog
+	LOCAL oFolderBrowserDialog := FolderBrowserDialog{} AS 	FolderBrowserDialog
 	LOCAL oResult := oFolderBrowserDialog:ShowDialog() AS DialogResult
 	IF oResult == DialogResult.OK && !STRING.IsNullOrWhiteSpace(oFolderBrowserDialog:SelectedPath)
 		LOCAL cZipFile := oFolderBrowserDialog:SelectedPath + "\FMDataSet_"+oSoftway:FileNameValidate(SELF:cVesselName)+;
@@ -447,7 +447,7 @@ METHOD ExportTablesToAllVessels() AS VOID
 
 
 	LOCAL cEMail := SELF:TBeMail:Text:Trim() AS STRING
-	IF cEMail == "" .or. ! cEMail:Contains("@") .or. ! cEMail:Contains(".")
+	IF cEMail == "" .OR. ! cEMail:Contains("@") .OR. ! cEMail:Contains(".")
 		wb("No eMail specified", "Invalid eMail")
 		SELF:TBeMail:Focus()
 		RETURN
@@ -555,10 +555,10 @@ METHOD ExportTablesToAllVessels() AS VOID
 		oDTVessel:TableName := "FMVessels"
 
 				// Check if SupVessels.PropellerPitch is defined
-		LOCAL cCheckPropellerPitch := "" as String
+		LOCAL cCheckPropellerPitch := "" AS STRING
 		cCheckPropellerPitch := oDRVessel["PropellerPitch"]:ToString()
 
-		IF cCheckPropellerPitch == null || cCheckPropellerPitch:Trim() == ""
+		IF cCheckPropellerPitch == NULL || cCheckPropellerPitch:Trim() == ""
 			ErrorBox("You have to specify the PropellerPitch for the Vessel: "+oDRVessel["VesselName"]:ToString(), "Export aborted")
 			LOOP
 		ENDIF

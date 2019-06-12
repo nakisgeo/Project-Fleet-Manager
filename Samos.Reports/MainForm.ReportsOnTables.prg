@@ -25,16 +25,16 @@ PARTIAL CLASS MainForm INHERIT DevExpress.XtraEditors.XtraForm
 
 	PRIVATE oMyTableReportsSelectionForm AS TableReportsSelectionForm
 
-PUBLIC METHOD RestartTimerAndFormToNull() as Void
+PUBLIC METHOD RestartTimerAndFormToNull() AS VOID
 		myTimer:Tag := "1"
 		myTimer:Start()
-		oMyTableReportsSelectionForm := null
+		oMyTableReportsSelectionForm := NULL
 RETURN
 
- PRIVATE METHOD showReportSelectionForm(cReportUID := "" AS STRING, lPerRole := false as LOGIC) AS System.Void
+ PRIVATE METHOD showReportSelectionForm(cReportUID := "" AS STRING, lPerRole := FALSE AS LOGIC) AS System.Void
 			IF oMyTableReportsSelectionForm != NULL			
 				oMyTableReportsSelectionForm:BringToFront()	
-				return			
+				RETURN			
 			ENDIF
 
 			myTimer:Stop()
@@ -43,7 +43,7 @@ RETURN
 				cReportUID := SELF:LBCReports:SelectedValue:ToString()
 			ENDIF
 			//LOCAL cReportName := SELF:LBCReports:GetDisplayItemValue(SELF:LBCReports:SelectedIndex):ToString() AS STRING
-			LOCAL cReportName := "" as String
+			LOCAL cReportName := "" AS STRING
 			/*IF cReportName:ToUpper():StartsWith("MODE")
 				wb("You must select a specific report, current selection is: "+cReportName)
 				RETURN
@@ -54,7 +54,7 @@ RETURN
 				//wb("Please select a Vessel")
 				//RETURN
 			ENDIF
-			LOCAL cVesselName := "All" //oMainForm:GetVesselName AS STRING
+			LOCAL cVesselName := "All" AS STRING
 			LOCAL oSelectDatesSimpleForm := TableReportsSelectionForm{} AS TableReportsSelectionForm
 			oSelectDatesSimpleForm:DateFrom:DateTime := Datetime.Today
 			oSelectDatesSimpleForm:DateTo:DateTime := TimeZoneInfo.ConvertTime(Datetime.Now, TimeZoneInfo.Utc)

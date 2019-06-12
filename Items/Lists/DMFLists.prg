@@ -401,7 +401,7 @@ PARTIAL CLASS ListsForm INHERIT DevExpress.XtraEditors.XtraForm
         SELF:ResumeLayout(FALSE)
         SELF:PerformLayout()
     PRIVATE METHOD ListsForm_Load( sender AS System.Object, e AS System.EventArgs ) AS System.Void
-		Self:ListsForm_OnLoad()
+		SELF:ListsForm_OnLoad()
         RETURN
     
     PRIVATE METHOD ListsForm_FormClosing( sender AS System.Object, e AS System.Windows.Forms.FormClosingEventArgs ) AS System.Void
@@ -414,42 +414,42 @@ PARTIAL CLASS ListsForm INHERIT DevExpress.XtraEditors.XtraForm
 
 // FlowControls events
     PRIVATE METHOD gridviewlists_BeforeLeaveRow( sender AS System.Object, e AS DevExpress.XtraGrid.Views.Base.RowAllowEventArgs ) AS System.Void
-		Self:BeforeLeaveRow_Flows(e)
+		SELF:BeforeLeaveRow_Flows(e)
         RETURN
     
     PRIVATE METHOD gridviewlists_CellValueChanged( sender AS System.Object, e AS DevExpress.XtraGrid.Views.Base.CellValueChangedEventArgs ) AS System.Void
-		Self:SetEditModeOff_Flows()
-		Self:Flows_Save(e)
+		SELF:SetEditModeOff_Flows()
+		SELF:Flows_Save(e)
         RETURN
     
     PRIVATE METHOD gridviewlists_DoubleClick( sender AS System.Object, e AS System.EventArgs ) AS System.Void
-		Local oPoint := Self:gridviewlists:GridControl:PointToClient(Control.MousePosition) as Point
-		Local info := Self:gridviewlists:CalcHitInfo(oPoint) as DevExpress.XtraGrid.Views.Grid.ViewInfo.GridHitInfo
-		if info:InRow .or. info:InRowCell
-			if Self:gridviewlists:IsGroupRow(info:RowHandle)
-				Return
-			endif
+		LOCAL oPoint := SELF:gridviewlists:GridControl:PointToClient(Control.MousePosition) AS Point
+		LOCAL info := SELF:gridviewlists:CalcHitInfo(oPoint) AS DevExpress.XtraGrid.Views.Grid.ViewInfo.GridHitInfo
+		IF info:InRow .OR. info:InRowCell
+			IF SELF:gridviewlists:IsGroupRow(info:RowHandle)
+				RETURN
+			ENDIF
 
 			// Get GridRow data into a DataRowView object
-			Local oRow as DataRowView
-			oRow:=(DataRowView)Self:gridviewlists:GetRow(info:RowHandle)
+			LOCAL oRow AS DataRowView
+			oRow:=(DataRowView)SELF:gridviewlists:GetRow(info:RowHandle)
 
-			if info:Column <> NULL
+			IF info:Column <> NULL
 				// Set focused Row/Column (for DoubleClick event)
 				//SELF:gridviewlists:FocusedRowHandle := info:RowHandle
 				//SELF:gridviewlists:FocusedColumn := info:Column
 
-				Self:Flows_Edit(oRow, info:Column)
-			endif
-		endif
+				SELF:Flows_Edit(oRow, info:Column)
+			ENDIF
+		ENDIF
         RETURN
     
     PRIVATE METHOD gridviewlists_FocusedColumnChanged( sender AS System.Object, e AS DevExpress.XtraGrid.Views.Base.FocusedColumnChangedEventArgs ) AS System.Void
-		Self:SetEditModeOff_Flows()
+		SELF:SetEditModeOff_Flows()
         RETURN
     
     PRIVATE METHOD gridviewlists_FocusedRowChanged( sender AS System.Object, e AS DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventArgs ) AS System.Void
-		Self:FocusedRowChanged_Flows(e)
+		SELF:FocusedRowChanged_Flows(e)
         RETURN
 
   //  PRIVATE METHOD gridviewlists_CustomUnboundColumnData( sender AS System.Object, e AS DevExpress.XtraGrid.Views.Base.CustomColumnDataEventArgs ) AS System.Void
@@ -457,70 +457,70 @@ PARTIAL CLASS ListsForm INHERIT DevExpress.XtraEditors.XtraForm
   //      RETURN
 
     PRIVATE METHOD BBINew_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
-		if QuestionBox("Do you want to create a new Document Flow ?", ;
+		IF QuestionBox("Do you want to create a new Document Flow ?", ;
 						"Add new") <> System.Windows.Forms.DialogResult.Yes
-			Return
-		endif
-		Self:Flows_Add()
+			RETURN
+		ENDIF
+		SELF:Flows_Add()
         RETURN
     
     PRIVATE METHOD BBIEdit_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
 		// Get GridRow data into a DataRowView object
-		Local oRow as DataRowView
-		oRow := (DataRowView)Self:gridviewlists:GetFocusedRow()
-		Self:Flows_Edit(oRow, Self:gridviewlists:FocusedColumn)
+		LOCAL oRow AS DataRowView
+		oRow := (DataRowView)SELF:gridviewlists:GetFocusedRow()
+		SELF:Flows_Edit(oRow, SELF:gridviewlists:FocusedColumn)
         RETURN
     
     PRIVATE METHOD BBIDelete_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
-		Self:Flows_Delete()
+		SELF:Flows_Delete()
         RETURN
     
     PRIVATE METHOD BBIRefresh_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
-		Self:Flows_Refresh()
+		SELF:Flows_Refresh()
         RETURN
     
     PRIVATE METHOD BBIPrint_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
-		Self:Flows_Print()
+		SELF:Flows_Print()
         RETURN
     
 // States events
     PRIVATE METHOD gridviewlistitems_BeforeLeaveRow( sender AS System.Object, e AS DevExpress.XtraGrid.Views.Base.RowAllowEventArgs ) AS System.Void
-		Self:BeforeLeaveRow_States(e)
+		SELF:BeforeLeaveRow_States(e)
         RETURN
     
     PRIVATE METHOD gridviewlistitems_CellValueChanged( sender AS System.Object, e AS DevExpress.XtraGrid.Views.Base.CellValueChangedEventArgs ) AS System.Void
-		Self:SetEditModeOff_States()
-		Self:States_Save(e)
+		SELF:SetEditModeOff_States()
+		SELF:States_Save(e)
         RETURN
     
     PRIVATE METHOD gridviewlistitems_DoubleClick( sender AS System.Object, e AS System.EventArgs ) AS System.Void
-		Local oPoint := Self:gridviewlistitems:GridControl:PointToClient(Control.MousePosition) as Point
-		Local info := Self:gridviewlistitems:CalcHitInfo(oPoint) as DevExpress.XtraGrid.Views.Grid.ViewInfo.GridHitInfo
-		if info:InRow .or. info:InRowCell
-			if Self:gridviewlistitems:IsGroupRow(info:RowHandle)
-				Return
-			endif
+		LOCAL oPoint := SELF:gridviewlistitems:GridControl:PointToClient(Control.MousePosition) AS Point
+		LOCAL info := SELF:gridviewlistitems:CalcHitInfo(oPoint) AS DevExpress.XtraGrid.Views.Grid.ViewInfo.GridHitInfo
+		IF info:InRow .OR. info:InRowCell
+			IF SELF:gridviewlistitems:IsGroupRow(info:RowHandle)
+				RETURN
+			ENDIF
 
 			// Get GridRow data into a DataRowView object
-			Local oRow as DataRowView
-			oRow:=(DataRowView)Self:gridviewlistitems:GetRow(info:RowHandle)
+			LOCAL oRow AS DataRowView
+			oRow:=(DataRowView)SELF:gridviewlistitems:GetRow(info:RowHandle)
 
-			if info:Column <> NULL
+			IF info:Column <> NULL
 				// Set focused Row/Column (for DoubleClick event)
 				//SELF:gridviewlistitems:FocusedRowHandle := info:RowHandle
 				//SELF:gridviewlistitems:FocusedColumn := info:Column
 
-				Self:States_Edit(oRow, info:Column)
-			endif
-		endif
+				SELF:States_Edit(oRow, info:Column)
+			ENDIF
+		ENDIF
         RETURN
     
     PRIVATE METHOD gridviewlistitems_FocusedColumnChanged( sender AS System.Object, e AS DevExpress.XtraGrid.Views.Base.FocusedColumnChangedEventArgs ) AS System.Void
-		Self:SetEditModeOff_States()
+		SELF:SetEditModeOff_States()
         RETURN
     
     PRIVATE METHOD gridviewlistitems_FocusedRowChanged( sender AS System.Object, e AS DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventArgs ) AS System.Void
-		Self:FocusedRowChanged_States(e)
+		SELF:FocusedRowChanged_States(e)
         RETURN
 
   //  PRIVATE METHOD gridviewlistitems_CustomUnboundColumnData( sender AS System.Object, e AS DevExpress.XtraGrid.Views.Base.CustomColumnDataEventArgs ) AS System.Void
@@ -529,52 +529,52 @@ PARTIAL CLASS ListsForm INHERIT DevExpress.XtraEditors.XtraForm
 
     PRIVATE METHOD BBINew_States_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
 		// Check if StateNo=0 has a DMF Folder
-		Local oRow as DataRowView
-		oRow:=(DataRowView)Self:gridviewlistitems:GetRow(0)
-		if oRow <> NULL .and. ! Self:ValidateStates(oRow)
-			Return
-		endif
+		LOCAL oRow AS DataRowView
+		oRow:=(DataRowView)SELF:gridviewlistitems:GetRow(0)
+		IF oRow <> NULL .AND. ! SELF:ValidateStates(oRow)
+			RETURN
+		ENDIF
 
-		if QuestionBox("Do you want to create a new List Item ?", ;
+		IF QuestionBox("Do you want to create a new List Item ?", ;
 						"Add new") <> System.Windows.Forms.DialogResult.Yes
-			Return
-		endif
-		Self:States_Add()
+			RETURN
+		ENDIF
+		SELF:States_Add()
         RETURN
     
     PRIVATE METHOD BBIEdit_States_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
 		// Get GridRow data into a DataRowView object
-		Local oRow as DataRowView
-		oRow := (DataRowView)Self:gridviewlistitems:GetFocusedRow()
-		Self:States_Edit(oRow, Self:gridviewlistitems:FocusedColumn)
+		LOCAL oRow AS DataRowView
+		oRow := (DataRowView)SELF:gridviewlistitems:GetFocusedRow()
+		SELF:States_Edit(oRow, SELF:gridviewlistitems:FocusedColumn)
         RETURN
     
     PRIVATE METHOD BBIDelete_States_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
-		Self:States_Delete()
+		SELF:States_Delete()
         RETURN
     
     PRIVATE METHOD BBIRefresh_States_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
-		Self:States_Refresh()
+		SELF:States_Refresh()
         RETURN
     
     PRIVATE METHOD BBIPrint_States_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
-		Self:States_Print()
+		SELF:States_Print()
         RETURN
     
     PRIVATE METHOD BBIHelp_States_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
-		Self:States_Help()
+		SELF:States_Help()
         RETURN
     
     PRIVATE METHOD BBIClose_States_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
-		Self:Close()
+		SELF:Close()
         RETURN
 
     PRIVATE METHOD ListsForm_Activated( sender AS System.Object, e AS System.EventArgs ) AS System.Void
-		Self:gridviewlistitems:Focus()
+		SELF:gridviewlistitems:Focus()
         RETURN
 
     PRIVATE METHOD ButtonSelectFolder_Click( sender AS System.Object, e AS System.EventArgs ) AS System.Void
-		Self:SelectFolder()
+		SELF:SelectFolder()
         RETURN
 
     PRIVATE METHOD Description_Leave( sender AS System.Object, e AS System.EventArgs ) AS System.Void
@@ -609,15 +609,15 @@ PARTIAL CLASS ListsForm INHERIT DevExpress.XtraEditors.XtraForm
         RETURN
 
     PRIVATE METHOD GridLists_KeyPress( sender AS System.Object, e AS System.Windows.Forms.KeyPressEventArgs ) AS System.Void
-		if e:KeyChar == Keys.Escape
-			Self:Close()
-		endif
+		IF e:KeyChar == Keys.Escape
+			SELF:Close()
+		ENDIF
         RETURN
 
     PRIVATE METHOD GridStates_KeyPress( sender AS System.Object, e AS System.Windows.Forms.KeyPressEventArgs ) AS System.Void
-		if e:KeyChar == Keys.Escape
-			Self:Close()
-		endif
+		IF e:KeyChar == Keys.Escape
+			SELF:Close()
+		ENDIF
         RETURN
 
     PRIVATE METHOD gridviewlistitems_RowStyle( sender AS System.Object, e AS DevExpress.XtraGrid.Views.Grid.RowStyleEventArgs ) AS System.Void

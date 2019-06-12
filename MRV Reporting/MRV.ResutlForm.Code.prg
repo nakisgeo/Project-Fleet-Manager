@@ -50,28 +50,28 @@ PARTIAL CLASS MRVResultForm INHERIT System.Windows.Forms.Form
 		//
 		//	General
 		//
-		gridView1:Columns["VoyageNo"]:OwnerBand := self:gridBandGeneral
-		gridView1:Columns["Condition"]:OwnerBand := self:gridBandGeneral
-		gridView1:Columns["PortOfDeparture"]:OwnerBand := self:gridBandGeneral
-		gridView1:Columns["DepartingFromEuPort"]:OwnerBand := self:gridBandGeneral
-		gridView1:Columns["PortOfArrival"]:OwnerBand := self:gridBandGeneral
-		gridView1:Columns["ArrivalToEuPort"]:OwnerBand := self:gridBandGeneral
-		gridView1:Columns["VoyageStartDate"]:OwnerBand := self:gridBandGeneral
-		gridView1:Columns["VoyageEndDate"]:OwnerBand := self:gridBandGeneral
-		gridView1:Columns["TimeSpentAtSea"]:OwnerBand := self:gridBandGeneral
-		gridView1:Columns["TimeSpentForEUVoyages"]:OwnerBand := self:gridBandGeneral
-		gridView1:Columns["Distance"]:OwnerBand := self:gridBandGeneral
-		gridView1:Columns["DistanceForEUVoyages"]:OwnerBand := self:gridBandGeneral
+		gridView1:Columns["VoyageNo"]:OwnerBand := SELF:gridBandGeneral
+		gridView1:Columns["Condition"]:OwnerBand := SELF:gridBandGeneral
+		gridView1:Columns["PortOfDeparture"]:OwnerBand := SELF:gridBandGeneral
+		gridView1:Columns["DepartingFromEuPort"]:OwnerBand := SELF:gridBandGeneral
+		gridView1:Columns["PortOfArrival"]:OwnerBand := SELF:gridBandGeneral
+		gridView1:Columns["ArrivalToEuPort"]:OwnerBand := SELF:gridBandGeneral
+		gridView1:Columns["VoyageStartDate"]:OwnerBand := SELF:gridBandGeneral
+		gridView1:Columns["VoyageEndDate"]:OwnerBand := SELF:gridBandGeneral
+		gridView1:Columns["TimeSpentAtSea"]:OwnerBand := SELF:gridBandGeneral
+		gridView1:Columns["TimeSpentForEUVoyages"]:OwnerBand := SELF:gridBandGeneral
+		gridView1:Columns["Distance"]:OwnerBand := SELF:gridBandGeneral
+		gridView1:Columns["DistanceForEUVoyages"]:OwnerBand := SELF:gridBandGeneral
 		//
 		//	Cargo
 		//
-		gridView1:Columns["CargoCarried"]:OwnerBand := self:gridBandCargo
+		gridView1:Columns["CargoCarried"]:OwnerBand := SELF:gridBandCargo
         gridView1:Columns["CargoCarried"]:AppearanceCell:BackColor := Color.Beige
 
 		gridView1:Columns["TransportWork"]:OwnerBand := SELF:gridBandCargo
         gridView1:Columns["TransportWork"]:AppearanceCell:BackColor := Color.Beige
 
-		gridView1:Columns["TransportWorkForEU"]:OwnerBand := self:gridBandCargo
+		gridView1:Columns["TransportWorkForEU"]:OwnerBand := SELF:gridBandCargo
         gridView1:Columns["TransportWorkForEU"]:AppearanceCell:BackColor := Color.Beige
 		//
 		//	HFO
@@ -79,34 +79,34 @@ PARTIAL CLASS MRVResultForm INHERIT System.Windows.Forms.Form
 		gridView1:Columns["DepartureHFO"]:OwnerBand := SELF:gridBandHFP
         gridView1:Columns["DepartureHFO"]:AppearanceCell:BackColor := Color.LightSkyBlue
 
-		gridView1:Columns["ArrivalHFO"]:OwnerBand := self:gridBandHFP
+		gridView1:Columns["ArrivalHFO"]:OwnerBand := SELF:gridBandHFP
         gridView1:Columns["ArrivalHFO"]:AppearanceCell:BackColor := Color.LightSkyBlue
 
-		gridView1:Columns["VoyageHFOCons"]:OwnerBand := self:gridBandHFP
+		gridView1:Columns["VoyageHFOCons"]:OwnerBand := SELF:gridBandHFP
         gridView1:Columns["VoyageHFOCons"]:AppearanceCell:BackColor := Color.LightSkyBlue
 
-		gridView1:Columns["EUVoyageHFOCons"]:OwnerBand := self:gridBandHFP
+		gridView1:Columns["EUVoyageHFOCons"]:OwnerBand := SELF:gridBandHFP
         gridView1:Columns["EUVoyageHFOCons"]:AppearanceCell:BackColor := Color.LightSkyBlue
 
-		gridView1:Columns["BerthHFO"]:OwnerBand := self:gridBandHFP
+		gridView1:Columns["BerthHFO"]:OwnerBand := SELF:gridBandHFP
         gridView1:Columns["BerthHFO"]:AppearanceCell:BackColor := Color.LightSkyBlue
 
-		gridView1:Columns["EUBerthHFO"]:OwnerBand := self:gridBandHFP
+		gridView1:Columns["EUBerthHFO"]:OwnerBand := SELF:gridBandHFP
         gridView1:Columns["EUBerthHFO"]:AppearanceCell:BackColor := Color.LightSkyBlue
 
-		gridView1:Columns["ReceivedHFO"]:OwnerBand := self:gridBandHFP
+		gridView1:Columns["ReceivedHFO"]:OwnerBand := SELF:gridBandHFP
         gridView1:Columns["ReceivedHFO"]:AppearanceCell:BackColor := Color.LightSkyBlue
 
-		gridView1:Columns["ReceivedOnPortOfArrivalHFO"]:OwnerBand := self:gridBandHFP
+		gridView1:Columns["ReceivedOnPortOfArrivalHFO"]:OwnerBand := SELF:gridBandHFP
         gridView1:Columns["ReceivedOnPortOfArrivalHFO"]:AppearanceCell:BackColor := Color.LightSkyBlue
 		//
 		//	MDO
 		//
-		gridView1:Columns["DepartureMDO"]:OwnerBand := self:gridBandMDOMGO
+		gridView1:Columns["DepartureMDO"]:OwnerBand := SELF:gridBandMDOMGO
 		gridView1:Columns["DepartureMDO"]:Caption := "Departure ROB"
         gridView1:Columns["DepartureMDO"]:AppearanceCell:BackColor := Color.Beige
 
-		gridView1:Columns["ArrivalMDO"]:OwnerBand := self:gridBandMDOMGO
+		gridView1:Columns["ArrivalMDO"]:OwnerBand := SELF:gridBandMDOMGO
 		gridView1:Columns["ArrivalMDO"]:Caption := "Arrival ROB"
         gridView1:Columns["ArrivalMDO"]:AppearanceCell:BackColor := Color.Beige
 
@@ -130,7 +130,7 @@ PARTIAL CLASS MRVResultForm INHERIT System.Windows.Forms.Form
 		gridView1:Columns["ReceivedMDO"]:Caption := "Received"
         gridView1:Columns["ReceivedMDO"]:AppearanceCell:BackColor := Color.Beige
 
-		gridView1:Columns["ReceivedOnPortOfArrivalMDO"]:OwnerBand := self:gridBandMDOMGO
+		gridView1:Columns["ReceivedOnPortOfArrivalMDO"]:OwnerBand := SELF:gridBandMDOMGO
         gridView1:Columns["ReceivedOnPortOfArrivalMDO"]:AppearanceCell:BackColor := Color.Beige
 		//
 		//	CO2
@@ -138,26 +138,26 @@ PARTIAL CLASS MRVResultForm INHERIT System.Windows.Forms.Form
 		gridView1:Columns["TotalCO2Emitted"]:OwnerBand := SELF:gridBandCO2
         gridView1:Columns["TotalCO2Emitted"]:AppearanceCell:BackColor := Color.LightSkyBlue
 
-		gridView1:Columns["CO2EmittedOnEUVoyage"]:OwnerBand := self:gridBandCO2
+		gridView1:Columns["CO2EmittedOnEUVoyage"]:OwnerBand := SELF:gridBandCO2
 		gridView1:Columns["CO2EmittedOnEUVoyage"]:Caption := "EmittedOnEUVoyage"
         gridView1:Columns["CO2EmittedOnEUVoyage"]:AppearanceCell:BackColor := Color.LightSkyBlue
 
-		gridView1:Columns["CO2EmittedOnVoyageDepartedFromEUPort"]:OwnerBand := self:gridBandCO2
+		gridView1:Columns["CO2EmittedOnVoyageDepartedFromEUPort"]:OwnerBand := SELF:gridBandCO2
         gridView1:Columns["CO2EmittedOnVoyageDepartedFromEUPort"]:AppearanceCell:BackColor := Color.LightSkyBlue
 
-		gridView1:Columns["CO2EmittedOnVoyageArrivedToEUPort"]:OwnerBand := self:gridBandCO2
+		gridView1:Columns["CO2EmittedOnVoyageArrivedToEUPort"]:OwnerBand := SELF:gridBandCO2
         gridView1:Columns["CO2EmittedOnVoyageArrivedToEUPort"]:AppearanceCell:BackColor := Color.LightSkyBlue
 
-		gridView1:Columns["CO2EmittedAtBerth"]:OwnerBand := self:gridBandCO2
+		gridView1:Columns["CO2EmittedAtBerth"]:OwnerBand := SELF:gridBandCO2
         gridView1:Columns["CO2EmittedAtBerth"]:AppearanceCell:BackColor := Color.LightSkyBlue
 
-		gridView1:Columns["CO2EmittedAtEuPort"]:OwnerBand := self:gridBandCO2
+		gridView1:Columns["CO2EmittedAtEuPort"]:OwnerBand := SELF:gridBandCO2
         gridView1:Columns["CO2EmittedAtEuPort"]:AppearanceCell:BackColor := Color.LightSkyBlue
 
-		gridView1:Columns["TotalCO2VoyageAndBerth"]:OwnerBand := self:gridBandCO2
+		gridView1:Columns["TotalCO2VoyageAndBerth"]:OwnerBand := SELF:gridBandCO2
         gridView1:Columns["TotalCO2VoyageAndBerth"]:AppearanceCell:BackColor := Color.LightSkyBlue
 
-		gridView1:Columns["EEOI"]:OwnerBand := self:gridBandCO2
+		gridView1:Columns["EEOI"]:OwnerBand := SELF:gridBandCO2
         gridView1:Columns["EEOI"]:AppearanceCell:BackColor := Color.LightSkyBlue
 
 
@@ -181,7 +181,7 @@ PRIVATE METHOD buttonPrintGridClick() AS VOID
                 link:PaperKind := PaperKind.A4
                 link:Margins :=  Margins{30, 30, 30, 30}
             // Show the report. 
-			local lookAndFeel AS UserLookAndFeel 
+			LOCAL lookAndFeel AS UserLookAndFeel 
             link:ShowRibbonPreview(lookAndFeel)
 RETURN
 
@@ -194,13 +194,13 @@ PRIVATE METHOD getTheData() AS VOID
          " WHEN 4 THEN 'Discharging'  "+;
          " WHEN 5 THEN 'Idle'  "+;
          " ELSE 'Unknown'   "+;
-		 " END"
+		 " END" AS STRING
 
 	LOCAL cYearLocal := SELF:comboBoxYear:Text:Trim() AS STRING
 	LOCAL cLegStartLocal := cYearLocal+"0101 00:00:00" AS STRING
 	LOCAL cLegEndLocal := cYearLocal+"1231 23:59:59" AS STRING
 
-	Local cStatement := "" As String
+	LOCAL cStatement := "" AS STRING
 	//Παίρνω όλα τα routing του voyage
 	cStatement:=" SELECT DISTINCT EconVoyages.VoyageNo, "+cConditionCaseSql+" , EconRoutings.*, "+;
 				" RTrim(VEPortsFrom.Port) AS PortFrom, VEPortsFrom.EUPORT AS DepartingFromEuPort, "+;
@@ -215,7 +215,7 @@ PRIVATE METHOD getTheData() AS VOID
 				" LEFT OUTER JOIN VEPorts AS VEPortsTo ON EconRoutings.PortTo_UID=VEPortsTo.PORT_UID"+;
 				" LEFT OUTER JOIN FMRoutingAdditionalData ON FMRoutingAdditionalData.Routing_UID = EconRoutings.ROUTING_UID"+;
 				" WHERE EconRoutings.CommencedGMT >= '"+ cLegStartLocal+"' "+;
-				" AND EconVoyages.VESSEL_UNIQUEID = "+ self:cMyVesselUID+;
+				" AND EconVoyages.VESSEL_UNIQUEID = "+ SELF:cMyVesselUID+;
 				" ORDER BY EconRoutings.CommencedGMT ASC "
 				//" OR    ( EconRoutings.CompletedGMT >=  '"+cLegStartLocal+"' AND EconRoutings.CompletedGMT <= '"+cLegEndLocal+"' ))"+;
 				//" AND EconVoyages.VESSEL_UNIQUEID = "+ self:cMyVesselUID+;
@@ -285,17 +285,17 @@ PRIVATE METHOD getTheData() AS VOID
 	LOCAL cStartDate:="", cEndDate:="", cDistance:="" AS STRING
 	LOCAL dStartDate, dEndDate AS DateTime
 	LOCAL oTimeSpan AS TimeSpan
-	LOCAL lDepartingFromEU, lArrivingAtEU as LOGIC
-	LOCAL cDepartureHFO:="", cArrivalHFO:="", cVoyageConsHFO:="" AS String
+	LOCAL lDepartingFromEU, lArrivingAtEU AS LOGIC
+	LOCAL cDepartureHFO:="", cArrivalHFO:="", cVoyageConsHFO:="" AS STRING
 	LOCAL dDepartureHFO:=0, dArrivalHFO:=0, dVoyageConsHFO:=0 AS double
-	LOCAL cDepartureLFO:="", cArrivalHLO:="", cVoyageConsHLO:="" AS String
+	LOCAL cDepartureLFO:="", cArrivalHLO:="", cVoyageConsHLO:="" AS STRING
 	LOCAL dDepartureLFO:=0, dArrivalLFO:=0, dVoyageConsLFO:=0 AS double
-	LOCAL cDepartureMDO:="", cArrivalMDO:="", cVoyageConsMDO:="" AS String
+	LOCAL cDepartureMDO:="", cArrivalMDO:="", cVoyageConsMDO:="" AS STRING
 	LOCAL dDepartureMDO:=0, dArrivalMDO:=0, dVoyageConsMDO:=0 AS double
-	LOCAL cNextPortDepartureHFO := "" as String
-	Local dNextPortDepartureHFO := 0 As double
-	Local dBerthConsHFO :=0, dBerthConsMDO:=0 as double
-	local oDrNewResultRow as DataRow
+	LOCAL cNextPortDepartureHFO := "" AS STRING
+	LOCAL dNextPortDepartureHFO := 0 AS double
+	LOCAL dBerthConsHFO :=0, dBerthConsMDO:=0 AS double
+	LOCAL oDrNewResultRow AS DataRow
 
 	//iCountRows για το πόσες γραμμές έχει ο πίνακας
 	//iTerate για να τον διασχίσω
@@ -304,7 +304,7 @@ PRIVATE METHOD getTheData() AS VOID
 	LOCAL dCountDistance := 0 AS Double
 	LOCAL oDRFindRow AS DataRow	
 	LOCAL oRowEnd AS DataRow
-	LOCAL lInsertingRow := false as LOGIC
+	LOCAL lInsertingRow := FALSE AS LOGIC
 	LOCAL oRowLocal AS DataRow 
 	LOCAL cBunkeredQuantity := "" AS STRING
 	LOCAL dBunkeredHFOQuantity := 0 AS double
@@ -315,7 +315,7 @@ PRIVATE METHOD getTheData() AS VOID
 	LOCAL	dBunkeredMDOQuantityArrivalPort := 0 AS double
 	//LOCAL cBunkeredDate := "" AS STRING
 	//LOCAL dtBunkeredDate AS DateTime
-	LOCAL lStartFound := false, lStop as LOGIC
+	LOCAL lStartFound := FALSE, lStop AS LOGIC
 	FOR iIterate:=0 UPTO iCountRows
 		IF lStop
 			EXIT
@@ -332,7 +332,7 @@ PRIVATE METHOD getTheData() AS VOID
 		dCountDistance := 0
 		oRowLocal := oDTRoutingsLocal:Rows[iIterate] 
 		LOCAL dtCompletedDateTime := (DateTime)oRowLocal["CompletedGMT"] AS DateTime
-		LOCAL dtEndOfYear := DateTime.ParseExact(cLegEndLocal, "yyyyMMdd HH:mm:ss",null) AS DateTime
+		LOCAL dtEndOfYear := DateTime.ParseExact(cLegEndLocal, "yyyyMMdd HH:mm:ss",NULL) AS DateTime
 		IF dtCompletedDateTime >= dtEndOfYear
 			RETURN
 		ENDIF
@@ -565,7 +565,7 @@ PRIVATE METHOD getTheData() AS VOID
 				//iIterate++
 				oDTResults:Rows:Add(oDrNewResultRow)
 				dtCompletedDateTime := (DateTime)oRowEnd["CompletedGMT"] 
-				IF dtCompletedDateTime >= DateTime.ParseExact(cLegEndLocal, "yyyyMMdd HH:mm:ss",null) 
+				IF dtCompletedDateTime >= DateTime.ParseExact(cLegEndLocal, "yyyyMMdd HH:mm:ss",NULL) 
 					lStop := TRUE
 				ENDIF
 				EXIT		
@@ -575,7 +575,7 @@ PRIVATE METHOD getTheData() AS VOID
 	
 	iCountRows := oDTResults:Rows:Count-1
 	LOCAL odtPreviousRow AS DataRow	
-	LOCAL dReceivedOnPort := 0 as double
+	LOCAL dReceivedOnPort := 0 AS double
 	
 	//
 	//	Berth
@@ -622,7 +622,7 @@ PRIVATE METHOD getTheData() AS VOID
 		//
 		//
 		//
-		IF (logic)oRowLocal["DepartingFromEuPort"]
+		IF (LOGIC)oRowLocal["DepartingFromEuPort"]
 			oRowLocal["EUBerthHFO"] := oRowLocal["BerthHFO"]
 			oRowLocal["EUBerthMDO"] := oRowLocal["BerthMDO"]
 		ENDIF
@@ -632,8 +632,8 @@ PRIVATE METHOD getTheData() AS VOID
 	//	Compute CO2
 	//
 
-	Local dTotalCO2Emitted, dCO2EmittedOnEUVoyage, dCO2EmittedOnVoyageDepartedFromEUPort as double	
-	Local dCO2EmittedOnVoyageArrivedToEUPort, dCO2EmittedAtBerth, dCO2EmittedAtEuPort, dTotalCO2VoyageAndBerth as double	
+	LOCAL dTotalCO2Emitted, dCO2EmittedOnEUVoyage, dCO2EmittedOnVoyageDepartedFromEUPort AS double	
+	LOCAL dCO2EmittedOnVoyageArrivedToEUPort, dCO2EmittedAtBerth, dCO2EmittedAtEuPort, dTotalCO2VoyageAndBerth AS double	
 	FOR iIterate:=0 UPTO iCountRows
 		dTotalCO2Emitted:=0
 		dCO2EmittedOnEUVoyage := 0
@@ -644,13 +644,13 @@ PRIVATE METHOD getTheData() AS VOID
 		dTotalCO2VoyageAndBerth := 0
 		oRowLocal := oDTResults:Rows[iIterate] 
 	
-		IF oRowLocal["VoyageHFOCons"] != null
+		IF oRowLocal["VoyageHFOCons"] != NULL
 			dVoyageConsHFO := Convert.ToDouble(oRowLocal["VoyageHFOCons"])
 		ELSE
 			dVoyageConsHFO := 0 
 		ENDIF
 		
-		IF oRowLocal["VoyageMDOCons"] != null
+		IF oRowLocal["VoyageMDOCons"] != NULL
 			dVoyageConsMDO := Convert.ToDouble(oRowLocal["VoyageMDOCons"])
 		ELSE
 			dVoyageConsMDO := 0 
@@ -668,13 +668,13 @@ PRIVATE METHOD getTheData() AS VOID
 			dCO2EmittedOnVoyageArrivedToEUPort := dTotalCO2Emitted
 		ENDIF
 		
-		IF oRowLocal["BerthHFO"] != null
+		IF oRowLocal["BerthHFO"] != NULL
 			dVoyageConsHFO := Convert.ToDouble(oRowLocal["BerthHFO"])
 		ELSE
 			dVoyageConsHFO := 0 
 		ENDIF
 	
-		IF oRowLocal["BerthMDO"] != null
+		IF oRowLocal["BerthMDO"] != NULL
 			dVoyageConsMDO := Convert.ToDouble(oRowLocal["BerthMDO"])
 		ELSE
 			dVoyageConsMDO := 0 
@@ -703,11 +703,11 @@ PRIVATE METHOD getTheData() AS VOID
 RETURN
 
 PRIVATE METHOD gridView1CellValueChanged( sender AS System.Object, e AS DevExpress.XtraGrid.Views.Base.CellValueChangedEventArgs) AS VOID
-	local oTempRow := gridView1:GetFocusedDataRow() as DataRow
+	LOCAL oTempRow := gridView1:GetFocusedDataRow() AS DataRow
     IF e:Column:FieldName == "CargoCarried" || e:Column:FieldName == "colTotalValue"
-		local dDistance := Convert.ToDouble(oTempRow["Distance"]) as double
-		LOCAL dCargoCarried := Convert.ToDouble(oTempRow["CargoCarried"]) as double
-		LOCAL dTransportWork := Math.Round(dDistance * dCargoCarried,3)
+		LOCAL dDistance := Convert.ToDouble(oTempRow["Distance"]) AS double
+		LOCAL dCargoCarried := Convert.ToDouble(oTempRow["CargoCarried"]) AS double
+		LOCAL dTransportWork := Math.Round(dDistance * dCargoCarried,3) AS double
 		oTempRow["TransportWork"] := dTransportWork
 
 		IF (LOGIC)oTempRow["DepartingFromEuPort"] && (LOGIC)oTempRow["ArrivalToEuPort"]
@@ -717,7 +717,7 @@ PRIVATE METHOD gridView1CellValueChanged( sender AS System.Object, e AS DevExpre
 		ENDIF
 
 		IF dTransportWork > 0
-			local dTotalCO2VoyageAndBerth := Convert.ToDouble(oTempRow["TotalCO2VoyageAndBerth"]) as double
+			LOCAL dTotalCO2VoyageAndBerth := Convert.ToDouble(oTempRow["TotalCO2VoyageAndBerth"]) AS double
 			oTempRow["EEOI"] := Math.Round((double)(dTotalCO2VoyageAndBerth*1000000/dTransportWork),3)
 		ENDIF
 
@@ -725,4 +725,4 @@ PRIVATE METHOD gridView1CellValueChanged( sender AS System.Object, e AS DevExpre
     ENDIF
 RETURN
 
-End CLASS
+END CLASS

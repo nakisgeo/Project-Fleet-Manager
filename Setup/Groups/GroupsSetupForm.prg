@@ -231,13 +231,13 @@ PARTIAL CLASS GroupsSetupForm INHERIT DevExpress.XtraEditors.XtraForm
 		SELF:LBCGroups:DataSource := SELF:oDTGroups
 		SELF:LBCGroups:DisplayMember := "GroupName"
 		SELF:LBCGroups:ValueMember := "GROUP_UID"
-		lSuspendNotification := true
+		lSuspendNotification := TRUE
 		//LOCAL cReportName := oMainForm:LBCReports:GetDisplayItemValue(oMainForm:LBCReports:SelectedIndex):ToString() AS STRING
 	RETURN TRUE
 	
     PRIVATE METHOD LBCGroups_SelectedIndexChanged( sender AS System.Object, e AS System.EventArgs ) AS System.Void
 	TRY
-		IF SELF:LBCGroups:SelectedValue <> NULL .AND.  self:lSuspendNotification
+		IF SELF:LBCGroups:SelectedValue <> NULL .AND.  SELF:lSuspendNotification
 			LOCAL cGroupName := SELF:LBCGroups:GetDisplayItemValue(SELF:LBCGroups:SelectedIndex):ToString() AS STRING
 			LOCAL cGroupUID := SELF:LBCGroups:SelectedValue:ToString() AS STRING
 			SELF:GroupLabel:Text := cGroupName + " / " + cGroupUID

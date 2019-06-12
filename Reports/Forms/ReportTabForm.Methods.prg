@@ -20,8 +20,8 @@ PARTIAL CLASS ReportTabForm INHERIT System.Windows.Forms.Form
 	//PRIVATE aFocusControls AS ArrayList
 	EXPORT lEnableControls AS LOGIC
 	EXPORT lisInEditMode AS LOGIC
-	EXPORT lisOfficeForm As LOGIC
-	EXPORT lisNewReport As LOGIC
+	EXPORT lisOfficeForm AS LOGIC
+	EXPORT lisNewReport AS LOGIC
 	
 	PRIVATE decimalSeparator AS STRING
 	PRIVATE groupSeparator AS STRING
@@ -36,11 +36,11 @@ PARTIAL CLASS ReportTabForm INHERIT System.Windows.Forms.Form
 	EXPORT oDTFMData AS DataTable
 	
 	PRIVATE cPreviousData := "" AS STRING
-	PRIVATE cTempDocsDir as String
-	PRIVATE oDTPreviousData as DataTable
+	PRIVATE cTempDocsDir AS STRING
+	PRIVATE oDTPreviousData AS DataTable
 	// Table
-	PRIVATE lTableMode := false AS LOGIC
-	PRIVATE iRowCount := 0, iColumnCount := 0 as INT
+	PRIVATE lTableMode := FALSE AS LOGIC
+	PRIVATE iRowCount := 0, iColumnCount := 0 AS INT
 	PRIVATE oMyTable AS DoubleBufferedTableLayoutPanel
 	
 	PRIVATE DateTime_ItemUID := "" AS STRING
@@ -50,7 +50,7 @@ PARTIAL CLASS ReportTabForm INHERIT System.Windows.Forms.Form
 	
 METHOD ReportTabForm_OnLoad() AS VOID
 	oSoftway:ReadFormSettings_DevExpress(SELF, NULL, oMainForm:alForms, oMainForm:alData)
-	IF SELF:Size:Height < 50 .or. SELF:Size:Width < 100
+	IF SELF:Size:Height < 50 .OR. SELF:Size:Width < 100
 		SELF:Size := System.Drawing.Size{950, 750}
 	END
 RETURN
@@ -58,7 +58,7 @@ RETURN
 
 
 
-METHOD createNewReportSave(cSubmit := "0" as String) AS VOID
+METHOD createNewReportSave(cSubmit := "0" AS STRING) AS VOID
 TRY
 	IF DateTime_ItemUID == ""
 		MessageBox.Show("Can not create a report with no Date Time element.")
@@ -67,7 +67,7 @@ TRY
 	LOCAL oControlDatePickerGMT := SELF:GetControl("DatePickerGMT", SELF:DateTime_ItemUID) AS Control
 	LOCAL oNumericTextBoxGMT := (TextBox)SELF:GetControl("NumericTextBoxGMT", SELF:DateTime_ItemUID) AS TextBox
 	
-	IF oControlDatePickerGMT == NULL .or. oNumericTextBoxGMT == null
+	IF oControlDatePickerGMT == NULL .OR. oNumericTextBoxGMT == NULL
 			MessageBox.Show("Can not create a report with no Date Time element.")
 			RETURN
 	ENDIF
@@ -89,7 +89,7 @@ RETURN
 
 METHOD ReadOnlyControls(isEditable AS LOGIC) AS VOID
 	lisInEditMode := isEditable
-	FOREACH oTabPage AS System.Windows.Forms.TabPage IN self:tabControl_Report:TabPages
+	FOREACH oTabPage AS System.Windows.Forms.TabPage IN SELF:tabControl_Report:TabPages
 		SELF:ReadOnlyTabPage(isEditable,oTabPage)
 	NEXT
 RETURN
@@ -177,7 +177,7 @@ METHOD ReadOnlyTabPage(isEditable AS LOGIC,oTabPageLocal AS TabPage) AS VOID
 				((System.Windows.Forms.ComboBox)oControl):Enabled := isEditable
 			ENDCASE
 			////////////////////////////////////////////////////////////////////////////
-			endif
+			ENDIF
 		NEXT
 RETURN
 
@@ -185,7 +185,7 @@ METHOD CategoryExists(cCatUID AS STRING) AS LOGIC
 	LOCAL oRows := SELF:oDTReportItems:Select("CATEGORY_UID="+cCatUID) AS DataRow[]
 RETURN (oRows:Length > 0)
 
-METHOD amItheOnlyMultilineInThisLine(iAmInColumn as INT) AS LOGIC
+METHOD amItheOnlyMultilineInThisLine(iAmInColumn AS INT) AS LOGIC
 	LOCAL /*iCountControlsAlreadyInLine,*/ iCount/*,iLocalCountRows*/ AS INT
 	LOCAL oControl AS TextBox
 	
@@ -199,12 +199,12 @@ METHOD amItheOnlyMultilineInThisLine(iAmInColumn as INT) AS LOGIC
 				oControl := (TextBox)oMyTable:GetControlFromPosition(iCount,iRowCount)
 				oControl:Multiline := TRUE
 				//MessageBox.Show("Found another multiline at:("+iRowCount:ToString()+","+iCount:ToString()+")",iAmInColumn:ToString())
-				RETURN false
+				RETURN FALSE
 			CATCH exException AS Exception
 				
 			END
 		NEXT		
-RETURN true
+RETURN TRUE
 
 
 
@@ -371,7 +371,7 @@ PRIVATE METHOD NumericControl_KeyDown( sender AS System.Object, e AS System.Wind
 		// Go on
 		RETURN
 
-	CASE  e:KeyData == Keys.OemMinus .or. e:KeyData == Keys.Subtract
+	CASE  e:KeyData == Keys.OemMinus .OR. e:KeyData == Keys.Subtract
 		// Allow '-' on empty NumericTextBox
 		LOCAL oControl := (TextBox)sender AS TextBox
 		LOCAL cText := oControl:Text:Trim() AS STRING
@@ -565,7 +565,7 @@ RETURN
 
 PRIVATE METHOD DueDate_Button_Clicked( sender AS System.Object, e AS System.EventArgs ) AS System.Void
 TRY
-		LOCAL oButton := (Button)sender as Button
+		LOCAL oButton := (Button)sender AS Button
 		LOCAL oDatePicker := System.Windows.Forms.DateTimePicker{} AS System.Windows.Forms.DateTimePicker
         // 
         // Due DatePicker
@@ -586,7 +586,7 @@ TRY
 		oDatePicker:ValueChanged += System.EventHandler{ SELF, @Control_ValueChanged() }
 		oDatePicker:Tag := oButton:Tag
 		oDatePicker:Enabled := oButton:Enabled
-		oButton:Visible := false
+		oButton:Visible := FALSE
 		oButton:Parent:Controls:Add(oDatePicker)
 CATCH exc AS Exception
 		MessageBox.Show(exc:ToString(),"Error on Creating the Date Picker")	
@@ -615,13 +615,13 @@ TRY
 		oDatePicker:ValueChanged += System.EventHandler{ SELF, @Control_ValueChanged() }
 		oDatePicker:Tag := oButton:Tag
 		oDatePicker:Enabled := oButton:Enabled
-		oButton:Visible := false
+		oButton:Visible := FALSE
 		oButton:Parent:Controls:Add(oDatePicker)
 		RETURN oDatePicker
 CATCH exc AS Exception
 		MessageBox.Show(exc:ToString(),"Error on Creating the Date Picker")	
 END					
-RETURN null
+RETURN NULL
 
 PRIVATE METHOD NumericTextBoxGMT_Validating( sender AS System.Object, e AS System.ComponentModel.CancelEventArgs ) AS System.Void
 	LOCAL oTextBox := (System.Windows.Forms.TextBox)sender AS System.Windows.Forms.TextBox
@@ -631,7 +631,7 @@ PRIVATE METHOD NumericTextBoxGMT_Validating( sender AS System.Object, e AS Syste
 
 	LOCAL cText := oTextBox:Text:Trim() AS STRING
 	LOCAL cMandatory := (STRING)oTextBox:Tag AS STRING
-	IF cMandatory == "0" .and. cText == ""
+	IF cMandatory == "0" .AND. cText == ""
 		RETURN
 	ENDIF
 
@@ -643,11 +643,11 @@ PRIVATE METHOD NumericTextBoxGMT_Validating( sender AS System.Object, e AS Syste
 		// Check Hours
 		LOCAL nHours := (INT)nValue AS INT
 		LOCAL nDec := Math.Abs(nValue - (Decimal)nHours) AS Decimal
-		IF nDec <> (Decimal)0 .and. nDec <> (Decimal)0.5
+		IF nDec <> (Decimal)0 .AND. nDec <> (Decimal)0.5
 			BREAK
 		ENDIF
 
-		IF nValue < (Decimal)-12 .or. nValue > (Decimal)12
+		IF nValue < (Decimal)-12 .OR. nValue > (Decimal)12
 			BREAK
 		ENDIF
 	CATCH
@@ -685,7 +685,7 @@ PRIVATE METHOD DatePicker_Validated( sender AS System.Object, e AS System.EventA
 
 	LOCAL oNumericTextBoxGMT := (TextBox)SELF:GetControl("NumericTextBoxGMT", cItemUID) AS TextBox
 
-	IF oNumericTextBoxGMT <> ""
+	IF oNumericTextBoxGMT:Text <> ""
 		LOCAL cText := oNumericTextBoxGMT:Text AS STRING
 		IF cText <> ""
 			LOCAL oDatePickerGMT := (DateTimePicker)SELF:GetControl("DatePickerGMT", cItemUID) AS DateTimePicker
@@ -761,13 +761,13 @@ PRIVATE METHOD CheckBox_CheckedChanged( sender AS System.Object, e AS System.Eve
 RETURN
 
 
-Public METHOD TabPage_Enter( sender AS System.Object, e AS System.EventArgs ) AS System.Void
+PUBLIC METHOD TabPage_Enter( sender AS System.Object, e AS System.EventArgs ) AS System.Void
 	LOCAL oTabPageLocal := (TabPage)sender AS System.Windows.Forms.TabPage
 	LOCAL dTabTag AS Dictionary<STRING, STRING>	
 	dTabTag := (Dictionary<STRING, STRING>)oTabPageLocal:Tag	
 
-	LOCAL cTagLocal := dTabTag["Status"]:ToString()
-	LOCAL cCatUIDLocal := dTabTag["TabId"]:ToString()
+	LOCAL cTagLocal := dTabTag["Status"]:ToString() AS STRING
+	LOCAL cCatUIDLocal := dTabTag["TabId"]:ToString() AS STRING
 		
 
 	IF cTagLocal == "NotAppeared"
@@ -789,7 +789,7 @@ Public METHOD TabPage_Enter( sender AS System.Object, e AS System.EventArgs ) AS
 			SELF:FillUsedInCalculationsArray(oRow)
 			Application.DoEvents()
 		NEXT
-		oTabPageLocal:ResumeLayout(true)
+		oTabPageLocal:ResumeLayout(TRUE)
 		memowrit(cTempDocDir+"\AddControlsEnded.txt", DateTime.Now:ToString())
 		IF SELF:cMyPackageUID:Trim() != "" && !lisNewReport
 			SELF:PutControlValues(cCatUIDLocal)
@@ -798,7 +798,7 @@ Public METHOD TabPage_Enter( sender AS System.Object, e AS System.EventArgs ) AS
 		oTabPageLocal:Tag := dTabTag
 		memowrit(cTempDocDir+"\MakingReadOnlyStarted.txt", DateTime.Now:ToString())
 		IF !SELF:lisInEditMode
-			SELF:ReadOnlyTabPage(false,oTabPageLocal)
+			SELF:ReadOnlyTabPage(FALSE,oTabPageLocal)
 		ENDIF
 		memowrit(cTempDocDir+"\MakingReadOnlyEnded.txt", DateTime.Now:ToString())
 	ENDIF
@@ -808,7 +808,7 @@ Public METHOD TabPage_Enter( sender AS System.Object, e AS System.EventArgs ) AS
 			oMyTable := NULL
 			iRowCount := 0 
 			iColumnCount := 0 
-			lTableMode := false 
+			lTableMode := FALSE 
 	ENDIF
 RETURN
 
@@ -829,7 +829,7 @@ RETURN cIteUID
 
 
 
-Public METHOD GetControl(cPrefix AS STRING, cItemUID AS STRING) AS Control
+PUBLIC METHOD GetControl(cPrefix AS STRING, cItemUID AS STRING) AS Control
 	LOCAL cName, cLocate := cPrefix+cItemUID AS STRING
 
 	FOREACH oTabPage AS System.Windows.Forms.TabPage IN SELF:tabControl_Report:TabPages
@@ -852,14 +852,14 @@ Public METHOD GetControl(cPrefix AS STRING, cItemUID AS STRING) AS Control
 	NEXT
 RETURN NULL
 
-Public METHOD GetControlofTabPage(cPrefix AS STRING, cItemUID AS STRING, cTabPageUID as String) AS Control
+PUBLIC METHOD GetControlofTabPage(cPrefix AS STRING, cItemUID AS STRING, cTabPageUID AS STRING) AS Control
 	LOCAL cName, cLocate := cPrefix+cItemUID AS STRING
 
 	FOREACH oTabPage AS System.Windows.Forms.TabPage IN SELF:tabControl_Report:TabPages
 			IF cTabPageUID!=NULL && cTabPageUID!=""
 				LOCAL dTabTag AS Dictionary<STRING, STRING>	
 				dTabTag := (Dictionary<STRING, STRING>)oTabPage:Tag	
-				LOCAL cTagLocal := dTabTag["TabId"]:ToString()
+				LOCAL cTagLocal := dTabTag["TabId"]:ToString() AS STRING
 				IF cTagLocal!=cTabPageUID
 					LOOP
 				ENDIF
@@ -1044,15 +1044,15 @@ METHOD ClearDirectory(cDir AS STRING, nKeepLastDays AS Double) AS VOID
 RETURN
 
 METHOD  GetBytes(str AS STRING) AS BYTE[]
-	local iLength := (int)(str:Length * sizeof(char))  as int 	
+	LOCAL iLength := (INT)(str:Length * sizeof(CHAR))  AS INT 	
     LOCAL  bytes := BYTE[]{iLength} AS BYTE[]
     System.Buffer.BlockCopy(str:ToCharArray(), 0, bytes, 0, bytes:Length)
 RETURN bytes
 
 
 METHOD GetString(bytes AS BYTE[]) AS STRING
-	local iLength  := (int)(bytes:Length / sizeof(char))  as int 
-    LOCAL chars := char[]{iLength} AS char[]
+	LOCAL iLength  := (INT)(bytes:Length / sizeof(CHAR))  AS INT 
+    LOCAL chars := CHAR[]{iLength} AS CHAR[]
     System.Buffer.BlockCopy(bytes, 0, chars, 0, bytes:Length)
     LOCAL final := STRING{chars}  AS STRING
 RETURN final
@@ -1092,11 +1092,11 @@ RETURN cIteUID
 
 
 EXPORT METHOD saveNormalValues(cNewPackageUID := "" AS STRING ) AS LOGIC
-    self:RefreshoDTFMData()
-	LOCAL lHasChanged := false AS LOGIC
+    SELF:RefreshoDTFMData()
+	LOCAL lHasChanged := FALSE AS LOGIC
 	TRY
 		LOCAL cData:="",cName,cItemUID,cPrevData AS STRING
-		LOCAL oRows as DataRow[]
+		LOCAL oRows AS DataRow[]
 		
 		FOREACH oTabPage AS System.Windows.Forms.TabPage IN SELF:tabControl_Report:TabPages
 			cData := ""
@@ -1162,14 +1162,14 @@ EXPORT METHOD saveNormalValues(cNewPackageUID := "" AS STRING ) AS LOGIC
 									LOOP
 								OTHERWISE
 									ErrorBox("Unhandled type found for Control: "+oSecControl:ToString())
-									Loop
+									LOOP
 								ENDCASE
 
 								LOCAL cPackageUIDLocal AS STRING
 								IF cNewPackageUID <> ""
 									cPackageUIDLocal := cNewPackageUID
 								ELSEIF SELF:oDTFMData:rows:Count == 0
-									cPackageUIDLocal  := self:cMyPackageUID //23.12
+									cPackageUIDLocal  := SELF:cMyPackageUID //23.12
 								ELSE
 									cPackageUIDLocal := SELF:oDTFMData:Rows[0]:Item["PACKAGE_UID"]:ToString()
 								ENDIF
@@ -1187,7 +1187,7 @@ EXPORT METHOD saveNormalValues(cNewPackageUID := "" AS STRING ) AS LOGIC
 										LOOP
 									ELSE // Eimai existing report
 										oRows := SELF:oDTFMData:Select("ITEM_UID="+cItemUID)
-										IF oRows == NULL .or. oRows:Length==0 // The data did not exist on vessel's/previous dataset insert it to FMdata.
+										IF oRows == NULL .OR. oRows:Length==0 // The data did not exist on vessel's/previous dataset insert it to FMdata.
 											IF cData<>""
 												SELF:insertIntoFMData(cPackageUIDLocal,cItemUID,cData)
 											ENDIF
@@ -1199,14 +1199,14 @@ EXPORT METHOD saveNormalValues(cNewPackageUID := "" AS STRING ) AS LOGIC
 									IF cData == cPrevData
 										LOOP
 									ELSE
-										self:updateFMDataForPackageUIDandItemUID(cPackageUIDLocal,cItemUID,cData,cPrevData)
+										SELF:updateFMDataForPackageUIDandItemUID(cPackageUIDLocal,cItemUID,cData,cPrevData)
 									ENDIF
 									// In order to check if Coordinates or DateTime is checked
 									IF cItemUID ==  DateTime_ItemUID
-										self:changeDateTime(cData,cItemUID,cPackageUIDLocal)
-									elseif 	cItemUID ==  Latitude_ItemUID
+										SELF:changeDateTime(cData,cItemUID,cPackageUIDLocal)
+									ELSEIF 	cItemUID ==  Latitude_ItemUID
 										SELF:changeLatitude(cData,cItemUID,cPackageUIDLocal)
-									elseif 	cItemUID ==  Longitude_ItemUID
+									ELSEIF 	cItemUID ==  Longitude_ItemUID
 										SELF:changeLongitude(cData,cItemUID,cPackageUIDLocal)
 									ENDIF
 								//ENDIF
@@ -1290,7 +1290,7 @@ EXPORT METHOD saveNormalValues(cNewPackageUID := "" AS STRING ) AS LOGIC
 							LOOP	
 						OTHERWISE
 							ErrorBox("Unhandled type found for Control: "+oControl:ToString())
-							Loop
+							LOOP
 						ENDCASE
 
 						//IF cData <> "" // If there are data available
@@ -1316,7 +1316,7 @@ EXPORT METHOD saveNormalValues(cNewPackageUID := "" AS STRING ) AS LOGIC
 								LOOP
 							ELSE
 								oRows := SELF:oDTFMData:Select("ITEM_UID="+cItemUID)
-								IF oRows == NULL .or. oRows:Length==0 // The data did not exist on vessel's/previous dataset insert it to FMdata.
+								IF oRows == NULL .OR. oRows:Length==0 // The data did not exist on vessel's/previous dataset insert it to FMdata.
 									IF cData<>""
 									SELF:insertIntoFMData(cPackageUIDLocal,cItemUID,cData)
 									ENDIF
@@ -1330,35 +1330,35 @@ EXPORT METHOD saveNormalValues(cNewPackageUID := "" AS STRING ) AS LOGIC
 								cPrevData := ""
 								LOOP
 							ELSE
-								self:updateFMDataForPackageUIDandItemUID(cPackageUIDLocal,cItemUID,cData,cPrevData)
+								SELF:updateFMDataForPackageUIDandItemUID(cPackageUIDLocal,cItemUID,cData,cPrevData)
 							ENDIF
 							// In order to check if Coordinates or DateTime is checked
 							IF cItemUID ==  DateTime_ItemUID
-								self:changeDateTime(cData,cItemUID,cPackageUIDLocal)
-							elseif 	cItemUID ==  Latitude_ItemUID
+								SELF:changeDateTime(cData,cItemUID,cPackageUIDLocal)
+							ELSEIF 	cItemUID ==  Latitude_ItemUID
 								SELF:changeLatitude(cData,cItemUID,cPackageUIDLocal)
-							elseif 	cItemUID ==  Longitude_ItemUID
+							ELSEIF 	cItemUID ==  Longitude_ItemUID
 								SELF:changeLongitude(cData,cItemUID,cPackageUIDLocal)
 							ENDIF
 						
 						//ENDIF
 						/////////////////////////////////////////////////////////////////////
 					ENDIF
-				CATCH exc as Exception
+				CATCH exc AS Exception
 					messagebox.Show(exc:tostring())
 					LOOP
 				END
 			NEXT
 		NEXT
-		self:RefreshoDTFMData()
+		SELF:RefreshoDTFMData()
 	CATCH exc AS Exception
-		self:RefreshoDTFMData()
+		SELF:RefreshoDTFMData()
 		messagebox.Show(exc:tostring())
 	END
 RETURN	lHasChanged
 
 EXPORT METHOD changeDateTime(cLatString AS STRING, cItemUID AS STRING, cPackageUID AS STRING) AS VOID
-	LOCAL cDateGMT := "" as String
+	LOCAL cDateGMT := "" AS STRING
 	LOCAL oControlDatePickerGMT := SELF:GetControl("DatePickerGMT", SELF:DateTime_ItemUID) AS Control
 		IF oControlDatePickerGMT <> NULL
 			cDateGMT :=((System.Windows.Forms.DateTimePicker)oControlDatePickerGMT):Value:ToString("yyyy-MM-dd HH:mm") 
@@ -1375,7 +1375,7 @@ EXPORT METHOD changeDateTime(cLatString AS STRING, cItemUID AS STRING, cPackageU
 	END
 RETURN
 
-EXPORT METHOD changeLatitude(cLatString as String, cItemUID as string, cPackageUID as STRING) as Void
+EXPORT METHOD changeLatitude(cLatString AS STRING, cItemUID AS STRING, cPackageUID AS STRING) AS VOID
 	LOCAL cDecimalCoordinates := "" AS STRING
 	cDecimalCoordinates := SELF:GetGeoCoordinate(cItemUID)
 	//MessageBox.Show(cDecimalCoordinates)
@@ -1389,7 +1389,7 @@ EXPORT METHOD changeLatitude(cLatString as String, cItemUID as string, cPackageU
 	END
 RETURN
 
-EXPORT METHOD changeLongitude(cLatString as String, cItemUID as string, cPackageUID as STRING) as Void
+EXPORT METHOD changeLongitude(cLatString AS STRING, cItemUID AS STRING, cPackageUID AS STRING) AS VOID
 	LOCAL cDecimalCoordinates := "" AS STRING
 	cDecimalCoordinates := SELF:GetGeoCoordinate(cItemUID)
 	//MessageBox.Show(cDecimalCoordinates)
@@ -1414,7 +1414,7 @@ EXPORT METHOD insertIntoFMData(cPackageUID AS STRING,cItemUID AS STRING,cData AS
 	END
 RETURN
 
-EXPORT METHOD updateFMDataForPackageUIDandItemUID(cPackageUID AS STRING,cItemUID AS STRING,cData AS STRING,cPreviousData as STRING) AS VOID
+EXPORT METHOD updateFMDataForPackageUIDandItemUID(cPackageUID AS STRING,cItemUID AS STRING,cData AS STRING,cPreviousData AS STRING) AS VOID
 	LOCAL cStatement AS STRING
 	TRY
 		cStatement :="INSERT INTO FMAlteredData (PACKAGE_UID, ITEM_UID, DATA, DateTime, USER_UNIQUEID)"+;
@@ -1457,9 +1457,9 @@ EXPORT METHOD updateMemoOnlyTo(cPackageUID AS STRING,cNewData AS STRING) AS VOID
 	END	
 RETURN
 
-EXPORT METHOD saveMultilineFields(cNewPackageUID := "" as String) AS VOID	
+EXPORT METHOD saveMultilineFields(cNewPackageUID := "" AS STRING) AS VOID	
 	TRY
-		LOCAL cAllMemos,cName,cNewData:="",cPrevData as String
+		LOCAL cAllMemos,cName,cNewData:="",cPrevData AS STRING
 		LOCAL cPackageUID AS STRING
 		IF cNewPackageUID == "" && (SELF:cMyPackageUID==NULL || SELF:cMyPackageUID:Length < 1)
 			cPackageUID := oMainForm:TreeListVesselsReports:FocusedNode:Tag:ToString()
@@ -1468,12 +1468,12 @@ EXPORT METHOD saveMultilineFields(cNewPackageUID := "" as String) AS VOID
 		ELSE
 			cPackageUID := cNewPackageUID	
 		ENDIF
-		local cStatement:="SELECT Memo FROM FMDataPackages"+oMainForm:cNoLockTerm+;
-					" WHERE PACKAGE_UID="+cPackageUID as String
+		LOCAL cStatement:="SELECT Memo FROM FMDataPackages"+oMainForm:cNoLockTerm+;
+					" WHERE PACKAGE_UID="+cPackageUID AS STRING
 		cAllMemos := oSoftway:RecordExists(oMainForm:oGFH, oMainForm:oConn, cStatement, "Memo")
 		//MessageBox.Show("Old value : '"+cAllMemos+"'")
-		IF cAllMemos <> "" .and. cAllMemos:Contains((char)168)	// New FM
-			local cNewAllMemos := SELF:GetAllMultilines(cAllMemos) as STRING
+		IF cAllMemos <> "" .AND. cAllMemos:Contains((CHAR)168)	// New FM
+			LOCAL cNewAllMemos := SELF:GetAllMultilines(cAllMemos) AS STRING
 			IF cAllMemos==cNewAllMemos
 				//Messagebox.Show("No changes made to multiline")
 				RETURN
@@ -1495,14 +1495,14 @@ EXPORT METHOD saveMultilineFields(cNewPackageUID := "" as String) AS VOID
 						RETURN
 					ELSE
 						LOOP
-					endif
+					ENDIF
 				CATCH
 					BREAK
 				END
 				NEXT
 			NEXT
 		ELSEIF cAllMemos == "" // Update Memo Field Here only do not insert 
-			SELF:updateMemoOnlyTo(cPackageUID,self:GetAllMultilines(""))
+			SELF:updateMemoOnlyTo(cPackageUID,SELF:GetAllMultilines(""))
 		ENDIF
 			
 	CATCH exc AS Exception
@@ -1511,13 +1511,13 @@ EXPORT METHOD saveMultilineFields(cNewPackageUID := "" as String) AS VOID
 RETURN	
 
 
-METHOD GetAllMultilines(cPreviousMemoLocal as String) AS STRING
+METHOD GetAllMultilines(cPreviousMemoLocal AS STRING) AS STRING
 	TRY
 	LOCAL cTempName := "",cReplace:="", cPrev:="",cValue:="" AS STRING
 	LOCAL cTempUid := "" AS STRING
 	LOCAL iFind:=0, iFindEnd:=0 AS INT	
-	LOCAL charSpl1 := (char)169 AS Char
-	LOCAL charSpl2 := (char)168 AS Char
+	LOCAL charSpl1 := (CHAR)169 AS CHAR
+	LOCAL charSpl2 := (CHAR)168 AS CHAR
 
 	FOREACH oTabPage AS System.Windows.Forms.TabPage IN SELF:tabControl_Report:TabPages
 		FOREACH oControl AS Control IN oTabPage:Controls
@@ -1576,11 +1576,11 @@ METHOD GetAllMultilines(cPreviousMemoLocal as String) AS STRING
 RETURN cPreviousMemoLocal
 
 
-METHOD checkMandatoryFields() AS logic
+METHOD checkMandatoryFields() AS LOGIC
 		IF !SELF:ValidateMandatoryFields()
-			RETURN false
+			RETURN FALSE
 		ENDIF
-RETURN true
+RETURN TRUE
 
 METHOD ValidateMandatoryFields() AS LOGIC
 	TRY
@@ -1588,8 +1588,8 @@ METHOD ValidateMandatoryFields() AS LOGIC
 	LOCAL cMandatory, cValue, cUID, cItemTypeValues := "",cUidToCheck, cData := "", cItemNo AS STRING
 	LOCAL oRows AS DataRow[]
 	//LOCAL oSecRows as DataRow[]
-	LOCAL oTempControl as Control
-	local lIsMandatoryOnCondition := false as logic	
+	LOCAL oTempControl AS Control
+	LOCAL lIsMandatoryOnCondition := FALSE AS LOGIC	
 	
 
 	FOREACH oTabPage AS System.Windows.Forms.TabPage IN SELF:tabControl_Report:TabPages
@@ -1630,7 +1630,7 @@ METHOD ValidateMandatoryFields() AS LOGIC
 			oRows := SELF:oDTReportItems:Select("REPORT_UID="+SELF:cReportUID+" AND ITEM_UID="+cUID, "ITEM_UID")
 			FOREACH oRow AS DataRow IN oRows
 				cItemNo := oRow["ItemNo"]:ToString()
-			next
+			NEXT
 			//Bring all comboz
 			oRows := SELF:oDTReportItems:Select("REPORT_UID="+SELF:cReportUID, "ITEM_UID") 
 			//Check if the ID of the control is inside
@@ -1665,7 +1665,7 @@ METHOD ValidateMandatoryFields() AS LOGIC
 				cUidToCheck :=  ""
 			NEXT
 			cMandatory := (STRING)oControl:Tag
-			IF (cMandatory == null || cMandatory == "0") .and. !lIsMandatoryOnCondition
+			IF (cMandatory == NULL || cMandatory == "0") .AND. !lIsMandatoryOnCondition
 				LOOP
 			ENDIF
 
@@ -1679,7 +1679,7 @@ METHOD ValidateMandatoryFields() AS LOGIC
 				LOCAL lExit := FALSE AS LOGIC
 				LOCAL oTabTester AS TabPage
 				LOCAL iTestTabs AS INT
-				LOCAL oControlToTest := oControl  as Control
+				LOCAL oControlToTest := oControl  AS Control
 				
 				WHILE !lExit
 					TRY 
@@ -1693,10 +1693,10 @@ METHOD ValidateMandatoryFields() AS LOGIC
 				ENDDO
 				//
 				oControl:Focus()
-				oMainForm:BBIEditReport_ItemClick(null,null)
+				oMainForm:BBIEditReport_ItemClick(NULL,NULL)
 				RETURN FALSE
 			ENDIF
-			lIsMandatoryOnCondition := false
+			lIsMandatoryOnCondition := FALSE
 		NEXT
 	NEXT
 	
@@ -1707,12 +1707,12 @@ METHOD ValidateMandatoryFields() AS LOGIC
 RETURN TRUE
 
 
-METHOD ValidateMandatoryFields(oParentControl as Control) AS LOGIC
+METHOD ValidateMandatoryFields(oParentControl AS Control) AS LOGIC
 	LOCAL cMandatory, cValue, cUID, cItemTypeValues := "",cUidToCheck, cData := "", cItemNo AS STRING
 	LOCAL oRows AS DataRow[]
 	//LOCAL oSecRows as DataRow[]
-	LOCAL oTempControl as Control
-	local lIsMandatoryOnCondition := false as logic	
+	LOCAL oTempControl AS Control
+	LOCAL lIsMandatoryOnCondition := FALSE AS LOGIC	
 	
 		FOREACH oControl AS Control IN oParentControl:Controls
 			LOCAL cName := oControl:Name AS STRING
@@ -1741,7 +1741,7 @@ METHOD ValidateMandatoryFields(oParentControl as Control) AS LOGIC
 			oRows := SELF:oDTReportItems:Select("REPORT_UID="+SELF:cReportUID+" AND ITEM_UID="+cUID, "ITEM_UID")
 			FOREACH oRow AS DataRow IN oRows
 				cItemNo := oRow["ItemNo"]:ToString()
-			next
+			NEXT
 			//Bring all comboz
 			oRows := SELF:oDTReportItems:Select("REPORT_UID="+SELF:cReportUID, "ITEM_UID") 
 			//Check if the ID of the control is inside
@@ -1771,7 +1771,7 @@ METHOD ValidateMandatoryFields(oParentControl as Control) AS LOGIC
 				cUidToCheck :=  ""
 			NEXT
 			cMandatory := (STRING)oControl:Tag
-			IF (cMandatory == "0" .or. cMandatory == null) .and. !lIsMandatoryOnCondition
+			IF (cMandatory == "0" .OR. cMandatory == NULL) .AND. !lIsMandatoryOnCondition
 				LOOP
 			ENDIF
 			cValue := oControl:Text:Trim()
@@ -1784,7 +1784,7 @@ METHOD ValidateMandatoryFields(oParentControl as Control) AS LOGIC
 				LOCAL lExit := FALSE AS LOGIC
 				LOCAL oTabTester AS TabPage
 				LOCAL iTestTabs AS INT
-				LOCAL oControlToTest := oControl as Control
+				LOCAL oControlToTest := oControl AS Control
 				
 				WHILE !lExit
 					TRY 
@@ -1798,10 +1798,10 @@ METHOD ValidateMandatoryFields(oParentControl as Control) AS LOGIC
 				ENDDO
 				//
 				oControl:Focus()
-				oMainForm:BBIEditReport_ItemClick(null,null)
+				oMainForm:BBIEditReport_ItemClick(NULL,NULL)
 				RETURN FALSE
 			ENDIF
-			lIsMandatoryOnCondition := false
+			lIsMandatoryOnCondition := FALSE
 	NEXT
 RETURN TRUE
 
@@ -1811,7 +1811,7 @@ METHOD GetLabel(cItemUID AS STRING, oTabPage AS System.Windows.Forms.TabPage) AS
 
 	FOREACH oControl AS Control IN oTabPage:Controls
 		cName := oControl:Name
-		IF cName == "Label" + cItemUID .or. cName == "CheckBox" + cItemUID .or. cName == "DatePicker" + cItemUID
+		IF cName == "Label" + cItemUID .OR. cName == "CheckBox" + cItemUID .OR. cName == "DatePicker" + cItemUID
 			cLabel := oControl:Text
 			EXIT
 		ENDIF
@@ -1826,7 +1826,7 @@ METHOD GetLabel(cItemUID AS STRING, oParentControl AS System.Windows.Forms.Contr
 
 	FOREACH oControl AS Control IN oParentControl:Controls
 		cName := oControl:Name
-		IF cName == "Label" + cItemUID .or. cName == "CheckBox" + cItemUID .or. cName == "DatePicker" + cItemUID
+		IF cName == "Label" + cItemUID .OR. cName == "CheckBox" + cItemUID .OR. cName == "DatePicker" + cItemUID
 			cLabel := oControl:Text
 			EXIT
 		ENDIF
@@ -1860,8 +1860,8 @@ METHOD GetLabel(cItemUID AS STRING) AS STRING
 	NEXT
 RETURN cLabel
 
-METHOD deleteNewlyCreatedReport() AS void
-		local cStatement :="Delete From FMDataPackages WHERE PACKAGE_UID ="+cMyPackageUID as String
+METHOD deleteNewlyCreatedReport() AS VOID
+		LOCAL cStatement :="Delete From FMDataPackages WHERE PACKAGE_UID ="+cMyPackageUID AS STRING
 		oSoftway:AdoCommand(oMainForm:oGFH, oMainForm:oConn, cStatement)
 		cStatement :="Delete From FMData WHERE PACKAGE_UID ="+cMyPackageUID 
 		oSoftway:AdoCommand(oMainForm:oGFH, oMainForm:oConn, cStatement)
@@ -1890,12 +1890,12 @@ METHOD loadFromExcelForNewReport() AS VOID
 	//LOCAL oSheet AS Microsoft.Office.Interop.Excel._WorkSheet
 
 	oXL := Microsoft.Office.Interop.Excel.Application{}
-    oWB := oXL:Workbooks:Open(cFile,Type.Missing,true,Type.Missing,Type.Missing,Type.Missing,Type.Missing,Type.Missing,Type.Missing,Type.Missing,Type.Missing,Type.Missing,Type.Missing,Type.Missing,Type.Missing)
+    oWB := oXL:Workbooks:Open(cFile,Type.Missing,TRUE,Type.Missing,Type.Missing,Type.Missing,Type.Missing,Type.Missing,Type.Missing,Type.Missing,Type.Missing,Type.Missing,Type.Missing,Type.Missing,Type.Missing)
     //oSheet := xlWorkbook:Sheets[1]
 	
 	LOCAL cNameName, cName1, cRangeValue AS STRING
-	LOCAL cReportUidLocal, cItemUIDLocal, cItemTypeLocal as String
-	local cMultiLineValues := "" as String
+	LOCAL cReportUidLocal, cItemUIDLocal, cItemTypeLocal AS STRING
+	LOCAL cMultiLineValues := "" AS STRING
 	
 	FOREACH name  AS Microsoft.Office.Interop.Excel.Name IN oWB:Names
 		cNameName := name:Value //Place in Excel
@@ -1910,17 +1910,17 @@ METHOD loadFromExcelForNewReport() AS VOID
 				MessageBox.Show("The report does not match")
 				RETURN
 			ENDIF
-		ELSEif cName1:Contains("_VesselUID")
+		ELSEIF cName1:Contains("_VesselUID")
 			LOOP
 		ELSEIF cName1:Contains("_UID")
 			IF name == NULL
-				loop			
+				LOOP			
 			ENDIF
 			TRY
 				oRange := name:RefersToRange
 			CATCH exc AS Exception
 				MessageBox.Show(exc:Message)	
-				loop		
+				LOOP		
 			END TRY
 
 			IF oRange:Value2 == NULL
@@ -1930,9 +1930,9 @@ METHOD loadFromExcelForNewReport() AS VOID
 			
 			IF oRange:NumberFormat:ToString():Contains("yy")
 				cRangeValue :=  oRange:Text:ToString()
-			endif 
+			ENDIF 
 
-			IF cRangeValue == NULL .or. cRangeValue:Trim()==""
+			IF cRangeValue == NULL .OR. cRangeValue:Trim()==""
 				LOOP
 			ENDIF
 			cName1 := cName1:Replace("_UID","")
@@ -1943,7 +1943,7 @@ METHOD loadFromExcelForNewReport() AS VOID
 			IF cItemTypeLocal == "M"
 					LOCAL mergeCells := oRange:MergeCells AS OBJECT
 					IF (LOGIC)mergeCells == TRUE
-						LOCAL oObjectArray AS object[,]
+						LOCAL oObjectArray AS OBJECT[,]
 						oObjectArray := (OBJECT[,])oRange:Value2
 
 						//Local oMyReader := CSharpDll.SoftwayReader{} as CSharpDll.SoftwayReader
@@ -1954,15 +1954,15 @@ METHOD loadFromExcelForNewReport() AS VOID
 						ENDIF						
 						cRangeValue := oObjectElement:ToString():Trim()
 
-						IF cRangeValue == NULL .or. cRangeValue:Trim()==""
+						IF cRangeValue == NULL .OR. cRangeValue:Trim()==""
 							LOOP
 						ENDIF
 
 					ENDIF
 					cMultiLineValues +=  cItemUIDLocal
-					cMultiLineValues +=  ((char)168):ToString()  
+					cMultiLineValues +=  ((CHAR)168):ToString()  
 					cMultiLineValues +=  cRangeValue
-					cMultiLineValues +=  ((char)169):ToString()
+					cMultiLineValues +=  ((CHAR)169):ToString()
 			ELSEIF cItemTypeLocal == "D"
 				 //MessageBox.Show(cRangeValue)
 				TRY
@@ -1971,7 +1971,7 @@ METHOD loadFromExcelForNewReport() AS VOID
 					LOCAL dDt := DateTime.Parse(cRangeValue) AS DateTime
 					// Αν η ημερομηνία είναι η ημερομηνία του report.
 					IF cItemUIDLocal == DateTime_ItemUID
-						local cDateGMT := dDt:ToString("yyyy-MM-dd HH:mm") as String
+						LOCAL cDateGMT := dDt:ToString("yyyy-MM-dd HH:mm") AS STRING
 						cStatement :="Update FMDataPackages SET DateTimeGMT ='"+;
 						oSoftway:ConvertWildcards(cDateGMT, FALSE)+"' WHERE Package_Uid ="+cMyPackageUID
 						oSoftway:AdoCommand(oMainForm:oGFH, oMainForm:oConn, cStatement)
@@ -1981,7 +1981,7 @@ METHOD loadFromExcelForNewReport() AS VOID
 					SELF:insertIntoFMData(cMyPackageUID,cItemUIDLocal,dDt:ToString())
 				CATCH exc AS Exception
 					MessageBox.Show(exc:Message,cName1)	
-					loop		
+					LOOP		
 				END TRY
 				 
 			ELSE
@@ -2019,7 +2019,7 @@ METHOD loadFromExcelForNewReport() AS VOID
 RETURN
 
 
-	METHOD GetMyDataForCombo(cFieldLocal AS STRING, cTableLocal as String,cWhereClause :="" as String) AS STRING
+	METHOD GetMyDataForCombo(cFieldLocal AS STRING, cTableLocal AS STRING,cWhereClause :="" AS STRING) AS STRING
 		LOCAL cToReturn := ""	AS STRING
 		LOCAL cStatement  AS STRING
 
@@ -2032,11 +2032,11 @@ RETURN
 		NEXT
 	RETURN cToReturn
 	
-class DoubleBufferedTableLayoutPanel  INHERIT System.Windows.Forms.TableLayoutPanel
+CLASS DoubleBufferedTableLayoutPanel  INHERIT System.Windows.Forms.TableLayoutPanel
 
 	CONSTRUCTOR()
 		SUPER()
-		DoubleBuffered := true
+		DoubleBuffered := TRUE
 	RETURN 
 END CLASS
 

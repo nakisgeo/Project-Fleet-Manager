@@ -16,7 +16,7 @@ FUNCTION Start(asCmdLine AS STRING[]) AS INT
     
 	DevExpress.Skins.SkinManager.EnableFormSkins()
 	Application.EnableVisualStyles()
-	Application.SetCompatibleTextRenderingDefault( false )
+	//Application.SetCompatibleTextRenderingDefault( FALSE )
 
 	// Skin registration.
 	DevExpress.UserSkins.BonusSkins.Register()
@@ -59,7 +59,7 @@ FUNCTION Start(asCmdLine AS STRING[]) AS INT
 			//oSoftway:GetHardwareID("")
 			Application.Exit()
 			RETURN -1
-		ENDcase
+		ENDCASE
 	ENDIF
 	//wb(cStartupPath+"\"+Application.ProductName+".license")
 
@@ -90,15 +90,15 @@ FUNCTION Start(asCmdLine AS STRING[]) AS INT
 		RETURN -1
 	ENDIF
 
-	//#ifndef __DEBUG__
+	#ifndef __DEBUG__
 		// Comment in order to Debug
-		//SplashScreen.ShowSplashScreen()
-	//#ENDIF
+		SplashScreen.ShowSplashScreen()
+	#ENDIF
 
    oSoftway:CreateSQLDefaults()
 
    cAppName:=cStartupPath+"\"+Application.ProductName
-	//wb(cAppName, cTempDocDir)
+	//wb(cTempDocDir,cAppName)
 
 	// Create TempDoc, Logs directories (if not exist)
 	oSoftway:CreateDirectory(cTempDocDir)
@@ -107,7 +107,7 @@ FUNCTION Start(asCmdLine AS STRING[]) AS INT
 	oSoftway:CreateDirectory(cFleetManagerVesselPath)
 
 	IF ! lCheckLocalLicense
-		IF lRemoteObjectService .and. symServer <> #SqlCe .and. symServer <> #SQLite
+		IF lRemoteObjectService .AND. symServer <> #SqlCe .AND. symServer <> #SQLite
 			// Create RemoteObject to RemoteObjectServer Service to checl the .license file
 			LOCAL oRemoteObjectClient := RemoteObjectClient{oSoftway, ms_frmSplash, lSplashScreenClosed} AS RemoteObjectClient   
 			IF ! oRemoteObjectClient:Main()

@@ -20,18 +20,18 @@
 PARTIAL CLASS TableReportsSelectionForm INHERIT System.Windows.Forms.Form
 
 
-PRIVATE METHOD btnReportPerCategoryVessel_Clicked(iChoose as INT) AS VOID
+PRIVATE METHOD btnReportPerCategoryVessel_Clicked(iChoose AS INT) AS VOID
 
 	txtProgress:Text :=""
 
-	LOCAL cFieldNameToCheckLocal := self:txtFieldNameToCheck:Text AS STRING
+	LOCAL cFieldNameToCheckLocal := SELF:txtFieldNameToCheck:Text AS STRING
 	
 	IF SELF:DateFrom:DateTime > SELF:DateTo:DateTime
 			wb("Invalid dates")
 			SELF:DateTo:Focus()
 			RETURN
 	ENDIF
-	local cStatement as String
+	LOCAL cStatement AS STRING
 	
 	
 
@@ -87,15 +87,15 @@ PRIVATE METHOD createExcelFindingsPerCategory(oDTReportItems AS DataTable, dStar
 	LOCAL lIncludeStatistics, lExcel AS LOGIC
 	LOCAL lExactMatch := TRUE AS LOGIC
 	LOCAL nDataStartOnColumn := 3 AS INT
-	LOCAL charSpl1 := (char)169 AS Char
-	LOCAL charSpl2 := (char)168 AS Char		
+	LOCAL charSpl1 := (CHAR)169 AS CHAR
+	LOCAL charSpl2 := (CHAR)168 AS CHAR		
 
-	IF SELf:ckbExcel:Checked
+	IF SELF:ckbExcel:Checked
 		lExcel := TRUE
 	ENDIF
 
 	IF SELF:ckbIncludeStatistics:Checked
-		lIncludeStatistics := true
+		lIncludeStatistics := TRUE
 	ENDIF
 
 	LOCAL cExtraStatusStatement := "" AS STRING
@@ -108,7 +108,7 @@ PRIVATE METHOD createExcelFindingsPerCategory(oDTReportItems AS DataTable, dStar
 
 	LOCAL cStatement AS STRING
 
-	LOCAL cVesselsSQL := "" as String
+	LOCAL cVesselsSQL := "" AS STRING
 	IF(!lAllVessels)
 		cVesselsSQL := " AND FMDataPackages.VESSEL_UNIQUEID In ("+SELF:cVesselUID+") "
 	ENDIF
@@ -202,7 +202,7 @@ PRIVATE METHOD createExcelFindingsPerCategory(oDTReportItems AS DataTable, dStar
     oDTFMDataLocal:Columns:Add("Category", typeof(STRING))
     oDTFMDataLocal:Columns:Add("Average Findings", typeof(Double))
 
-	FOREACH cTempVesselName AS String IN oALVessels
+	FOREACH cTempVesselName AS STRING IN oALVessels
 		oDTFMDataLocal:Columns:Add(cTempVesselName, typeof(Double))
 	NEXT
 	
@@ -253,9 +253,9 @@ PRIVATE METHOD createExcelFindingsPerCategory(oDTReportItems AS DataTable, dStar
 		//Ftiaxno thn proth kolona me ta Description ton kathgorion
 		//kai vazo tis seires ston pinaka ton apotelesmaton
 		FOREACH cCategoryItem AS STRING IN oALCategories
-			LOCAL newCustomersRow := oDTFMDataLocal:NewRow() AS DataRow
-			newCustomersRow[0] := cCategoryItem:Substring(cCategoryItem:LastIndexOf(charSpl1)+1)		
-			oDTFMDataLocal:Rows:Add(newCustomersRow)
+			LOCAL newCustomersRow1 := oDTFMDataLocal:NewRow() AS DataRow
+			newCustomersRow1[0] := cCategoryItem:Substring(cCategoryItem:LastIndexOf(charSpl1)+1)		
+			oDTFMDataLocal:Rows:Add(newCustomersRow1)
 		NEXT	
 		//Vazo th seira gia ta totals
 		LOCAL newCustomersRow := oDTFMDataLocal:NewRow() AS DataRow
@@ -269,7 +269,7 @@ PRIVATE METHOD createExcelFindingsPerCategory(oDTReportItems AS DataTable, dStar
 
 		//Tha parw ena mia mia tis katigories kai tha ypologiso ta findings ana karavi, dhladh tha ftiaxo tis grammes tou grid mia mia 
 		FOREACH cCategoryItem AS STRING IN oALCategories
-			LOCAL cCategoryUIDTemp := cCategoryItem:Substring(0,cCategoryItem:LastIndexOf(charSpl1))
+			LOCAL cCategoryUIDTemp := cCategoryItem:Substring(0,cCategoryItem:LastIndexOf(charSpl1)) AS STRING
 
 			
 			txtProgress:Text := Datetime.Now:ToString("HH:mm:ss")+ ": Started Checking for "+cCategoryItem:Substring(cCategoryItem:LastIndexOf(charSpl1)+1)+ CRLF + txtProgress:Text
@@ -314,7 +314,7 @@ PRIVATE METHOD createExcelFindingsPerCategory(oDTReportItems AS DataTable, dStar
 					oDTFMData:Clear()	
 					oDTFMData := oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement)
 					oDTFMData:TableName := "FMData"
-					LOCAL lCompare as LOGIC
+					LOCAL lCompare AS LOGIC
 					FOREACH oRowDataTemp AS DataRow IN oDTFMData:Rows
 							IF lExactMatch
 								IF oRowDataTemp["Data"]:ToString():Trim():Equals(cmbStatus:Text:Trim())
@@ -369,28 +369,30 @@ PRIVATE METHOD createExcelFindingsPerCategory(oDTReportItems AS DataTable, dStar
 		oDTFMDataLocal:Rows[iCountCategories+1]:Item[1] := iCountTotalInspections//:ToString()
 		//Set the Vessel Totals		
 		FOREACH cTempVesselName AS STRING IN oALVessels
-			LOCAL iMakeLoops := 0 AS INT
+			LOCAL iMakeLoops1 := 0 AS INT
 			iVesselFindings := 0
-			WHILE iMakeLoops< oALCategories:Count
-				iVesselFindings += Convert.ToDouble(oDTFMDataLocal:Rows[iMakeLoops]:Item[cTempVesselName]:ToString())
-				iMakeLoops++
+			WHILE iMakeLoops1< oALCategories:Count
+				iVesselFindings += Convert.ToDouble(oDTFMDataLocal:Rows[iMakeLoops1]:Item[cTempVesselName]:ToString())
+				iMakeLoops1++
 			ENDDO
-			oDTFMDataLocal:Rows[iMakeLoops]:Item[cTempVesselName] := iVesselFindings//:ToString()
+			oDTFMDataLocal:Rows[iMakeLoops1]:Item[cTempVesselName] := iVesselFindings//:ToString()
 		NEXT
 		//Make tha averages on all vessels
+		LOCAL iMakeLoops := 0 AS INT
+		LOCAL fCategoryFindings:=0 AS Double
 		FOREACH cTempVesselName AS STRING IN oALVessels
-			LOCAL iMakeLoops := 0 AS INT
-			LOCAL fVesselFindings := Convert.ToDouble(oDTFMDataLocal:Rows[oALCategories:Count]:Item[cTempVesselName]), fCategoryFindings:=0 AS Double
+			LOCAL fVesselFindings := Convert.ToDouble(oDTFMDataLocal:Rows[oALCategories:Count]:Item[cTempVesselName]) AS Double
 			LOCAL fVesselInspections := Convert.ToDouble(oDTFMDataLocal:Rows[oALCategories:Count+1]:Item[cTempVesselName]) AS Double
-			WHILE iMakeLoops< oALCategories:Count+1
+			WHILE iMakeLoops < oALCategories:Count+1
 				fCategoryFindings := Convert.ToDouble(oDTFMDataLocal:Rows[iMakeLoops]:Item[cTempVesselName])/fVesselInspections
 				oDTFMDataLocal:Rows[iMakeLoops]:Item[cTempVesselName] := fCategoryFindings:ToString()
 				iMakeLoops++
 			ENDDO
 		NEXT
 		//Make the averages on the totals
-		LOCAL iMakeLoops := 0 AS INT
-		LOCAL fTotalFindings := Convert.ToDouble(iTotalFindings), fCategoryFindings:=0 AS Double
+		iMakeLoops := 0
+		LOCAL fTotalFindings := Convert.ToDouble(iTotalFindings) AS Double
+		fCategoryFindings:=0
 		LOCAL fTotalInspections := Convert.ToDouble(iCountTotalInspections) AS Double
 		WHILE iMakeLoops< oALCategories:Count+1
 				fCategoryFindings := Convert.ToDouble(oDTFMDataLocal:Rows[iMakeLoops]:Item[1])/fTotalInspections
@@ -449,12 +451,12 @@ PRIVATE METHOD createExcelFindingsPerCategory(oDTReportItems AS DataTable, dStar
 
 RETURN
 
-private method printableComponentLink1_CreateReportHeaderArea(sender as object,e as DevExpress.XtraPrinting.CreateAreaEventArgs) as void
-            local brick as DevExpress.XtraPrinting.TextBrick
+PRIVATE METHOD printableComponentLink1_CreateReportHeaderArea(sender AS OBJECT,e AS DevExpress.XtraPrinting.CreateAreaEventArgs) AS VOID
+            LOCAL brick AS DevExpress.XtraPrinting.TextBrick
             brick := e:Graph:DrawString("My Report", Color.Navy, RectangleF{0, 0, 500, 40}, DevExpress.XtraPrinting.BorderSide.None)
             brick:Font := System.Drawing.Font{"Tahoma", 16}
             brick:StringFormat := DevExpress.XtraPrinting.BrickStringFormat{StringAlignment.Center}
-return
+RETURN
 
 
 END CLASS

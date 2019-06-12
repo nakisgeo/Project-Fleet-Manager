@@ -27,7 +27,7 @@ METHOD PrintFormToExcelFile(cReportUID AS STRING, cReportName AS STRING, lEmpty 
 	IF(!lEmpty)
 		cMyPackageUID := SELF:TreeListVesselsReports:FocusedNode:Tag:ToString()
 		cMyPackageName := SELF:TreeListVesselsReports:FocusedNode:GetValue(0):ToString() 
-		IF cReportUID:Trim() == "7" .and.  SELF:TreeListVesselsReports:Visible == TRUE
+		IF cReportUID:Trim() == "7" .AND.  SELF:TreeListVesselsReports:Visible == TRUE
 			//Find cReportUID by the selected Report
 			cReportUID := SELF:getReportIUDfromPackage(cMyPackageUID)
 		ENDIF
@@ -54,7 +54,6 @@ TRY
 		oXL:Visible := FALSE
 		oXL:DisplayAlerts := FALSE
 		oWB := oXL:Workbooks:Add(Missing.Value)
-		
 		LOCAL cData, cMemo :="" AS STRING
 		cStatement := "Select * from FMItemCategories Where CATEGORY_UID=0"
 		LOCAL oTempDataTable := oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement) AS DataTable
@@ -84,7 +83,7 @@ TRY
 					"ORDER BY LogDateTime DESC"
 		LOCAL oDTVersion := oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement) AS DataTable
 
-		LOCAL oDRVersion := NULL as DataRow
+		LOCAL oDRVersion := NULL AS DataRow
 		IF oDTVersion:Rows:Count > 0
 			oDRVersion := oDTVersion:Rows[0]
 		ENDIF
@@ -95,7 +94,7 @@ TRY
 		LOCAL oDTComboColors := oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement) AS DataTable
 
 		LOCAL oDTFMData AS DataTable
-		LOCAL oDMLE as DataTable
+		LOCAL oDMLE AS DataTable
 		
 		IF(!lEmpty) // If it is not a printout of an empty form, get the data
 			cStatement:="SELECT FMDataPackages.PACKAGE_UID, FMDataPackages.Status, FMData.ITEM_UID, FMData.Data FROM FMData"+oMainForm:cNoLockTerm+;
@@ -122,7 +121,7 @@ TRY
 			END
 		ENDIF
 		//Initialize variables 
-	LOCAL nRow := 11, nCol := 2, iCountSheets:=0 AS INT
+	LOCAL nRow := 11, nCol := 2, iCountSheets:=0, iCurrentSheetsCount:=0 AS INT
 	LOCAL oRange AS Microsoft.Office.Interop.Excel.Range
 	LOCAL cCategoryUID AS STRING
 	
@@ -135,10 +134,12 @@ FOREACH oSheetRow AS DataRow IN oDTItemCategories:Rows
 	LOCAL iMaxColumns :=1 AS INT
 	LOCAL cItemTypeValues := "" AS STRING
 	//
-try
+TRY
 		iCountSheets++
+		iCurrentSheetsCount := oWB:Worksheets:Count
+		
 		cCategoryUID := oSheetRow["CATEGORY_UID"]:ToString()
-		IF iCountSheets>3
+		IF iCountSheets>iCurrentSheetsCount
 			oWB:Worksheets:Add(Type.Missing, (_WorkSheet)oWB:Worksheets[iCountSheets - 1], Type.Missing, XlSheetType.xlWorksheet) //(object)(nSheets - 1), (object)nSheets, (object)1, Type.Missing)
 		ENDIF
 		oSheet:=(_WorkSheet)oWB:Worksheets[iCountSheets]
@@ -161,10 +162,10 @@ try
 				IF exc:Message:Contains("invalid")
 					oSheet:Name := "Invalid Name"
 				ENDIF
-			end try
+			END TRY
 		ENDIF
 		
-		lTableMode := false
+		lTableMode := FALSE
 		nRow := 11 
 		nCol := 2 
 		
@@ -172,27 +173,27 @@ try
 		// Set first column width
 		oRange:EntireColumn:ColumnWidth := 5
 		//Compute Optimum Column Width
-		oRowsLocal := null
+		oRowsLocal := NULL
 			oRowsLocal := oDTReportItems:Select("REPORT_UID="+cReportUID+" AND CATEGORY_UID="+cCategoryUID+" AND ItemType='A'" , "ItemNo")
 			iMaxColumns :=1 
 			FOREACH oRow AS DataRow IN oRowsLocal
 				cItemTypeValues := oRow["ItemTypeValues"]:ToString() 
-				local cOccurs as String[]
-				LOCAL iCountColumns   AS INT
+				LOCAL cOccurs AS STRING[]
+				LOCAL iCountColumns1   AS INT
 				cOccurs := cItemTypeValues:Split(';') 
-				iCountColumns := cOccurs:Length
-				IF iCountColumns>iMaxColumns
-					iMaxColumns:=iCountColumns
+				iCountColumns1 := cOccurs:Length
+				IF iCountColumns1 > iMaxColumns
+					iMaxColumns := iCountColumns1
 				ENDIF
 			NEXT
 			IF iMaxColumns>1
-				local n as INT
+				LOCAL n AS INT
 				FOR n := 1 UPTO iMaxColumns
 					oRange := oSheet:Range[oSheet:Cells[1, n+1], oSheet:Cells[2, n+1]]
 					oRange:EntireColumn:ColumnWidth := 190/iMaxColumns
 				NEXT
 			ELSE
-				local n as INT
+				LOCAL n AS INT
 				FOR n := 1 UPTO 4
 					oRange := oSheet:Range[oSheet:Cells[1, n+1], oSheet:Cells[2, n+1]]
 					oRange:EntireColumn:ColumnWidth := 190/4
@@ -251,7 +252,7 @@ try
 			ELSE
 				nRow--
 			ENDIF*/
-			LOCAL cApprovedDate, cDateActed:="" as String
+			LOCAL cApprovedDate, cDateActed:="" AS STRING
 			cStatement :=  " SELECT ApprovalData.*, UsersApproval.UserName AS Approver, UsersRequesting.UserName AS Requesting "+;
 								 " FROM ApprovalData "+;
 								 " Inner Join Users As UsersApproval On UsersApproval.User_Uniqueid=ApprovalData.Receiver_UID "+;
@@ -260,14 +261,14 @@ try
 								 " Program_UID=2 AND Foreing_UID="+cMyPackageUID + " Order By ApprovalData.Appoval_UID Desc "
 			LOCAL oDTLocal := oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement) AS DataTable
 			IF oDTLocal != NULL && oDTLocal:Rows:Count > 0
-				LOCAL cApprovedUserName := oDTLocal:Rows[0]:Item["Approver"]:ToString():Trim()
+				LOCAL cApprovedUserName := oDTLocal:Rows[0]:Item["Approver"]:ToString():Trim() AS STRING
 				cDateActed := oDTLocal:Rows[0]:Item["Date_Acted"]:ToString():Trim()
-				LOCAL cFrom_State := oDTLocal:Rows[0]:Item["From_State"]:ToString():Trim()
-				LOCAL cTo_State := oDTLocal:Rows[0]:Item["To_State"]:ToString():Trim()
-				IF oDTLocal:Rows:Count == 1 .and. cFrom_State == "0" .and. cTo_State == "1" //Exei ginei request gia approval alla den exei egkrithei
+				LOCAL cFrom_State := oDTLocal:Rows[0]:Item["From_State"]:ToString():Trim() AS STRING
+				LOCAL cTo_State := oDTLocal:Rows[0]:Item["To_State"]:ToString():Trim() AS STRING
+				IF oDTLocal:Rows:Count == 1 .AND. cFrom_State == "0" .AND. cTo_State == "1" //Exei ginei request gia approval alla den exei egkrithei
 					nRow--
 				ELSE
-					IF oDTLocal:Rows:Count == 1 .and. cFrom_State == "0" .and. cTo_State == "2" .and. cDateActed =="" 
+					IF oDTLocal:Rows:Count == 1 .AND. cFrom_State == "0" .AND. cTo_State == "2" .AND. cDateActed =="" 
 					//Exei ginei request gia approval kateutheian apo dep manager se general
 					//alla den exei egkrithei
 					cApprovedUserName := oDTLocal:Rows[0]:Item["Requesting"]:ToString():Trim()
@@ -336,12 +337,12 @@ try
 				//STATIC LOCAL cPreviousItemType AS STRING
 				//STATIC LOCAL cPreviousLabelSize as int
 				LOCAL lSameSerieItem AS LOGIC
-				local cOccurs as String[]
+				LOCAL cOccurs AS STRING[]
 				
 				IF cItemType == "A"
 					IF lTableMode // sunexomenoi pinakes vale ston prohgoumeno to plaisio tou
 						oRange := oSheet:Range[oSheet:Cells[iTableStart+1, 2], oSheet:Cells[nRow-1, 1+iCountColumns]]
-						oRange:WrapText := true
+						oRange:WrapText := TRUE
 						oRange:EntireRow:AutoFit()
 						oRange:BorderAround( XlLineStyle.xlDouble,XlBorderWeight.xlThick,XlColorIndex.xlColorIndexAutomatic,Color.Black)
 						oRange:Borders:LineStyle := XlLineStyle.xlDouble
@@ -375,13 +376,13 @@ try
 						iTableFinish := nRow
 						lTableMode := FALSE
 						oRange := oSheet:Range[oSheet:Cells[iTableStart+1, 2], oSheet:Cells[iTableFinish-1, 1+iCountColumns]]
-						oRange:WrapText := true
+						oRange:WrapText := TRUE
 						oRange:EntireRow:AutoFit()
 						oRange:BorderAround( XlLineStyle.xlDouble,XlBorderWeight.xlThick,XlColorIndex.xlColorIndexAutomatic,Color.Black)
 						oRange:Borders:LineStyle := XlLineStyle.xlDouble
 						nRow := nRow + 2
 						nCol := 2
-						self:addControlToExcel(oSheet,oRow, nRow, nCol, cData, cMemo, false, cMyPackageUID,oDTComboColors)
+						SELF:addControlToExcel(oSheet,oRow, nRow, nCol, cData, cMemo, FALSE, cMyPackageUID,oDTComboColors)
 					ENDIF
 				ELSE	
 					nCol := 2
@@ -391,7 +392,7 @@ try
 			NEXT
 			IF lTableMode
 				oRange := oSheet:Range[oSheet:Cells[iTableStart+1, 2], oSheet:Cells[nRow-1, 1+iCountColumns]]
-				oRange:WrapText := true
+				oRange:WrapText := TRUE
 				oRange:EntireRow:AutoFit()
 				oRange:BorderAround( XlLineStyle.xlDouble,XlBorderWeight.xlThick,XlColorIndex.xlColorIndexAutomatic,Color.Black)
 				oRange:Borders:LineStyle := XlLineStyle.xlDouble
@@ -413,7 +414,7 @@ try
 		lTableMode := FALSE
 		oSheet:PageSetup:Zoom := FALSE
 		oSheet:PageSetup:FitToPagesWide := 1
-		oSheet:PageSetup:FitToPagesTall := false
+		oSheet:PageSetup:FitToPagesTall := FALSE
 		//oSheet:PageSetup.FitToPagesTall = 1;
 		//oSheet:PageSetup.Orientation = Microsoft.Office.Interop.Excel.XlPageOrientation.xlLandscape;
 		oSheet:PageSetup:PaperSize := Microsoft.Office.Interop.Excel.XlPaperSize.xlPaperA4
@@ -451,7 +452,7 @@ try
 CATCH exc AS Exception
 	MessageBox.Show(exc:StackTrace,exc:Message)
 	LOOP
-end try
+END TRY
 		
 NEXT
 		oSheet := (Microsoft.Office.Interop.Excel._WorkSheet)oWB:Sheets[1]
@@ -498,17 +499,17 @@ METHOD addControlToExcel(oSheet AS Microsoft.Office.Interop.Excel._WorkSheet ,oR
 						 cMemo AS STRING, lTable AS LOGIC, cPackageUIDLocal AS STRING, oDTComboColors AS  DataTable) AS VOID
 		TRY 
 
-		LOCAL charSpl1 := (char)169 AS Char
-		LOCAL charSpl2 := (char)168 AS Char
+		LOCAL charSpl1 := (CHAR)169 AS CHAR
+		LOCAL charSpl2 := (CHAR)168 AS CHAR
 		LOCAL oRange AS Microsoft.Office.Interop.Excel.Range
-		LOCAL cTextToWrite := ""
+		LOCAL cTextToWrite := "" AS STRING
 		LOCAL cItemTypeValues := oRowItem["ItemTypeValues"]:ToString() AS STRING
 		LOCAL lEmpty := cPackageUIDLocal=="" AS LOGIC
 		LOCAL cMyNameLocal := oRowItem["ItemName"]:ToString() AS STRING
-		LOCAL cMyUidLocal := oRowItem["ITEM_UID"]:ToString() as String
-		LOCAL cMyItemTypeLocal := oRowItem["ItemType"]:ToString() as String
+		LOCAL cMyUidLocal := oRowItem["ITEM_UID"]:ToString() AS STRING
+		LOCAL cMyItemTypeLocal := oRowItem["ItemType"]:ToString() AS STRING
 		LOCAL dDateFrom := DATE{2000,1,1} AS DATE
-		LOCAL cStringToCompareComboValue := "", cComboColor:="" AS String
+		LOCAL cStringToCompareComboValue := "", cComboColor:="" AS STRING
 		LOCAL iExpandOnColumns := Convert.ToInt32(oRowItem["ExpandOnColumns"]:ToString()) AS INT
 		
 		IF cMyItemTypeLocal == "L"		//label
@@ -528,7 +529,7 @@ METHOD addControlToExcel(oSheet AS Microsoft.Office.Interop.Excel._WorkSheet ,oR
 					oRange:Validation:Delete()
 					oRange:Validation:Add(XlDVType.xlValidateCustom,XlDVAlertStyle.xlValidAlertStop,XlFormatConditionOperator.xlEqual,cMyNameLocal,Type.Missing)
 				ENDIF*/
-				local cOccurs := cItemTypeValues:Split(';') as String[]
+				LOCAL cOccurs := cItemTypeValues:Split(';') AS STRING[]
 				LOCAL iCountColumns := cOccurs:Length-1  AS INT
 				oRange := oSheet:Range[oSheet:Cells[nRow, nCol], oSheet:Cells[nRow, nCol+iCountColumns]]
 				oRange:Merge(NULL)
@@ -536,13 +537,13 @@ METHOD addControlToExcel(oSheet AS Microsoft.Office.Interop.Excel._WorkSheet ,oR
 				oRange:VerticalAlignment := Microsoft.Office.Interop.Excel.XlVAlign.xlVAlignCenter
 				oRange:EntireRow:RowHeight := 30
 				oRange:Font:Size := 14
-				oRange:Font:Bold := True
+				oRange:Font:Bold := TRUE
 				//oSheet:Range{oSheet:Cells[nRow, nCol], oSheet:Cells][nRow, nCol+4]}
 				RETURN
-		ELSEIF cMyItemTypeLocal == "F" .and. !lEmpty	//File Uploader
+		ELSEIF cMyItemTypeLocal == "F" .AND. !lEmpty	//File Uploader
 				LOCAL cStatement := ""  AS STRING
 				cStatement :=  "SELECT count(*) as NumberOfAtts FROM FMBlobData Where ITEM_UID="+cMyUidLocal+" AND Package_UID="+cPackageUIDLocal
-				local cNumber := oSoftway:RecordExists(oMainForm:oGFHBlob, oMainForm:oConnBlob, cStatement, "NumberOfAtts") as String
+				LOCAL cNumber := oSoftway:RecordExists(oMainForm:oGFHBlob, oMainForm:oConnBlob, cStatement, "NumberOfAtts") AS STRING
 				cData := cNumber + " file(s)"
 		ELSEIF cMyItemTypeLocal == "M" 
 			IF lEmpty
@@ -570,11 +571,11 @@ METHOD addControlToExcel(oSheet AS Microsoft.Office.Interop.Excel._WorkSheet ,oR
 				oRange:Name := cRangeName
 				RETURN
 			ELSE
-				IF cMemo <> "" .and. cMemo:Contains((char)168)
+				IF cMemo <> "" .AND. cMemo:Contains(CHR(168))
 					LOCAL cItems := cMemo:Split(charSpl1) AS STRING[]
 					FOREACH cItem AS STRING IN cItems
 						TRY
-							IF cItem <> NULL .and. cItem <> ""
+							IF cItem <> NULL .AND. cItem <> ""
 									LOCAL cItemsTemp := cItem:Split(charSpl2) AS STRING[]
 									IF  cItemsTemp[1] == cMyUidLocal
 										 IF !lTable
@@ -666,7 +667,7 @@ METHOD addControlToExcel(oSheet AS Microsoft.Office.Interop.Excel._WorkSheet ,oR
 				cItemTypeValues := SELF:getMyList(cItemTypeValues,oSheet)
 				IF cItemTypeValues:Trim():Length>0
 					oRange:Validation:Delete()
-					oRange:Validation:Add(XlDVType.xlValidateList,XlDVAlertStyle.xlValidAlertStop,XlFormatConditionOperator.xlBetween,self:cleanseItemTypeValues(cItemTypeValues),Type.Missing)
+					oRange:Validation:Add(XlDVType.xlValidateList,XlDVAlertStyle.xlValidAlertStop,XlFormatConditionOperator.xlBetween,SELF:cleanseItemTypeValues(cItemTypeValues),Type.Missing)
 					oRange:Validation:IgnoreBlank := TRUE
 					oRange:Validation:InCellDropdown := TRUE
 				ENDIF
@@ -686,11 +687,11 @@ METHOD addControlToExcel(oSheet AS Microsoft.Office.Interop.Excel._WorkSheet ,oR
 
 CATCH exc AS Exception
 	MessageBox.Show(exc:StackTrace,exc:Message)
-end try
+END TRY
 			
 RETURN
 
-METHOD getMyList(cItemTypeValues AS STRING, oSheet AS Microsoft.Office.Interop.Excel._WorkSheet)
+METHOD getMyList(cItemTypeValues AS STRING, oSheet AS Microsoft.Office.Interop.Excel._WorkSheet) AS STRING
 
 	LOCAL cToReturn := cItemTypeValues AS STRING
 	IF cItemTypeValues == "Users"
@@ -705,7 +706,7 @@ METHOD getMyList(cItemTypeValues AS STRING, oSheet AS Microsoft.Office.Interop.E
 
 RETURN cToReturn
 
-METHOD GetMyDataForCombo(cFieldLocal AS STRING, cTableLocal as String,cWhereClause :="" as String) AS STRING
+METHOD GetMyDataForCombo(cFieldLocal AS STRING, cTableLocal AS STRING,cWhereClause :="" AS STRING) AS STRING
 		LOCAL cToReturn := ""	AS STRING
 		LOCAL cStatement  AS STRING
 
@@ -720,11 +721,11 @@ RETURN cToReturn
 
 METHOD cleanseItemTypeValues(cPreviousValues AS STRING) AS STRING
 	cPreviousValues := cPreviousValues:Replace("<D>","") // strip the default value
-	Local cToReturnLocal := "" as String
+	LOCAL cToReturnLocal := "" AS STRING
 	LOCAL cItems := cPreviousValues:Split(';') AS STRING[]
 	FOREACH cItem AS STRING IN cItems
 		TRY
-			IF cItem <> NULL .and. cItem <> ""
+			IF cItem <> NULL .AND. cItem <> ""
 				LOCAL iIndex := cItem:IndexOf('<') AS INT
 				IF iIndex>0
 					cItem := cItem:Substring(0,iIndex)
@@ -743,7 +744,7 @@ METHOD cleanseItemTypeValues(cPreviousValues AS STRING) AS STRING
 		
 RETURN cToReturnLocal
 
-METHOD CategoryExists(cCatUID AS STRING, oDTReportItems as system.data.DataTable) AS LOGIC
+METHOD CategoryExists(cCatUID AS STRING, oDTReportItems AS system.data.DataTable) AS LOGIC
 	LOCAL oRows := oDTReportItems:Select("CATEGORY_UID="+cCatUID) AS DataRow[]
 RETURN (oRows:Length > 0)
 

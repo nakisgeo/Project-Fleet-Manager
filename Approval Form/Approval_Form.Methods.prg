@@ -21,7 +21,7 @@ PARTIAL EXPORT CLASS Approval_Form INHERIT System.Windows.Forms.Form
 	EXPORT  oGFH AS GenericFactoryHelper
 	EXPORT  oConn AS DBConnection
 	EXPORT  iAmProgram := -1 AS INT
-	EXPORT  cMyReport := "" as STRING
+	EXPORT  cMyReport := "" AS STRING
 	PRIVATE oSoftway AS Softway
 
 	METHOD CustomUnboundColumnData_Companies(e AS DevExpress.XtraGrid.Views.Base.CustomColumnDataEventArgs) AS VOID
@@ -40,7 +40,7 @@ PARTIAL EXPORT CLASS Approval_Form INHERIT System.Windows.Forms.Form
 	RETURN
 
 
-EXPORT METHOD getApprovalsForProgram(iProgramUID := 0 AS INT, lShowApprovalHistory := false as LOGIC) AS VOID
+EXPORT METHOD getApprovalsForProgram(iProgramUID := 0 AS INT, lShowApprovalHistory := FALSE AS LOGIC) AS VOID
 		iAmProgram := iProgramUID
 		IF cMyUser == "-1"
 			RETURN
@@ -74,13 +74,13 @@ EXPORT METHOD getApprovalsForProgram(iProgramUID := 0 AS INT, lShowApprovalHisto
 					"ELSE 'Unknown State'"+;
 					"END as [To State], "*/
 					
-		local cCasePackageStatus := "CASE FMDataPackages.Status "+;
+		LOCAL cCasePackageStatus := "CASE FMDataPackages.Status "+;
 					"WHEN '0' THEN 'Pending'"+;
 					"WHEN '1' THEN 'Submitted to Dep Manager'"+;
 					"WHEN '2' THEN 'Dep Manager Approved'"+;
 					"WHEN '3' THEN 'GM Acknowledged'"+;
 					"ELSE 'Unknown Status'"+;
-					"END as [Current Report Status] "	as String
+					"END as [Current Report Status] "	AS STRING
 		
 		cCaseStatus := "CASE ApprovalData.Status "+;
 					"WHEN '0' THEN 'Not Seen'"+;
@@ -102,8 +102,8 @@ EXPORT METHOD getApprovalsForProgram(iProgramUID := 0 AS INT, lShowApprovalHisto
 		SELF:oDTApprovals:TableName:="Approvals"
 		oSoftway:CreatePK(SELF:oDTApprovals, "Appoval_UID")
 		SELF:oDS:Clear()
-		self:oDS := null
-		self:oDS := DataSet{}
+		SELF:oDS := NULL
+		SELF:oDS := DataSet{}
 		SELF:oDS:Tables:Add(SELF:oDTApprovals)
 		SELF:gridControl1:DataSource := SELF:oDS:Tables["Approvals"]
 RETURN
@@ -112,7 +112,7 @@ EXPORT METHOD CreateGridApprovals_Columns() AS VOID
 	IF cMyUser == "-1"
 		RETURN
 	ENDIF
-	LOCAL cColumnName as String
+	LOCAL cColumnName AS STRING
 	//LOCAL oColumn AS GridColumn
 	//LOCAL nVisible:=0/*, nAbsIndex:=0*/ AS INT
 	SELF:gridView1:Columns:Clear()
@@ -129,7 +129,7 @@ EXPORT METHOD CreateGridApprovals_Columns() AS VOID
 		ELSE
 			gridView1:Columns[iColumnCount]:Visible := TRUE
 		ENDIF
-		IF cColumnName == "Date Received" .or. cColumnName == "Date Acted" 
+		IF cColumnName == "Date Received" .OR. cColumnName == "Date Acted" 
 			gridView1:Columns[iColumnCount]:DisplayFormat:FormatType := DevExpress.Utils.FormatType.DateTime
 			gridView1:Columns[iColumnCount]:DisplayFormat:FormatString := "dd/MM/yyyy HH:mm"
 		ENDIF
@@ -138,7 +138,7 @@ EXPORT METHOD CreateGridApprovals_Columns() AS VOID
 			gridView1:Columns[iColumnCount]:SortMode := DevExpress.XtraGrid.ColumnSortMode.Custom
 		ENDIF
 		
-		gridView1:Columns[iColumnCount]:OptionsColumn:AllowEdit := false
+		gridView1:Columns[iColumnCount]:OptionsColumn:AllowEdit := FALSE
 	NEXT
 										
 RETURN
@@ -148,7 +148,7 @@ EXPORT METHOD gridViewRefresh() AS VOID
 		SELF:gridControl1:Refresh()	
 RETURN
 
-	EXPORT METHOD DoubleClickOnView( sender AS System.Object, e AS System.EventArgs ) AS VOID
+EXPORT METHOD DoubleClickOnView( sender AS System.Object, e AS System.EventArgs ) AS VOID
 		LOCAL oPoint := SELF:gridView1:GridControl:PointToClient(Control.MousePosition) AS Point
 		LOCAL info := SELF:gridView1:CalcHitInfo(oPoint) AS DevExpress.XtraGrid.Views.Grid.ViewInfo.GridHitInfo
 		
@@ -161,9 +161,9 @@ RETURN
 				ENDIF
 			ENDIF
 		ENDIF
-	RETURN
+RETURN
 
-	METHOD myRowStyle( sender AS System.Object, e AS DevExpress.XtraGrid.Views.Grid.RowCellStyleEventArgs ) AS VOID
+METHOD myRowStyle( sender AS System.Object, e AS DevExpress.XtraGrid.Views.Grid.RowCellStyleEventArgs ) AS VOID
         IF e:RowHandle >= 0
 			LOCAL view := (GridView)sender AS GridView
             
@@ -178,12 +178,12 @@ RETURN
             ENDIF
         ENDIF
   
-	RETURN
+RETURN
 
 PRIVATE METHOD customColumnSort( sender AS System.Object, e AS DevExpress.XtraGrid.Views.Base.CustomColumnSortEventArgs ) AS System.Void
-			 try
+			 TRY
                 IF e:Column:FieldName == "Description"
-                    Local oRow1, oRow2 as DataRowView
+                    LOCAL oRow1, oRow2 AS DataRowView
 					oRow1 := (DataRowView)e:RowObject1
 					oRow2 := (DataRowView)e:RowObject2
                     e:Handled := TRUE
@@ -191,9 +191,9 @@ PRIVATE METHOD customColumnSort( sender AS System.Object, e AS DevExpress.XtraGr
                     //e.Result = System.Collections.Comparer.Default.Compare(dr1["Ticker"], dr2["Ticker"]);
                 ENDIF
             
-            CATCH exc as Exception 
+            CATCH exc AS Exception 
             
-			 END try
+			 END TRY
 RETURN
 
 

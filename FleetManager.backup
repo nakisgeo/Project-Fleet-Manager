@@ -1,58 +1,54 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\XSharp\XSharp.Default.props" />
   <PropertyGroup>
+    <Dialect>Vulcan</Dialect>
+    <PlatformTarget>x86</PlatformTarget>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Name>FleetManager</Name>
-    <ProjectGuid>{70e5ec7d-6276-4981-8fcb-c04d0a3600e8}</ProjectGuid>
-    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{50419638-9E6C-446D-91D1-930A742A6361}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <Nologo>true</Nologo>
-    <VOFloatLiterals>false</VOFloatLiterals>
+    <VO14>false</VO14>
     <GenerateFullPaths>false</GenerateFullPaths>
     <RootNamespace>FleetManager</RootNamespace>
     <AssemblyName>FleetManager</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <ProjectName>$(MSBuildProjectName)</ProjectName>
-    <ProjectExt>$(MSBuildProjectExtension)</ProjectExt>
-    <ProjectDir>$(MSBuildProjectDirectory)</ProjectDir>
-    <ProjectFileName>$(MSBuildProjectFile)</ProjectFileName>
-    <ProjectPath>$(ProjectDir)$(ProjectFileName)</ProjectPath>
     <SccProjectName>SAK</SccProjectName>
     <SccProvider>SAK</SccProvider>
     <SccAuxPath>SAK</SccAuxPath>
     <SccLocalPath>SAK</SccLocalPath>
-    <AllowUnsafeCode>false</AllowUnsafeCode>
-    <CaseSensitiveIdentifiers>false</CaseSensitiveIdentifiers>
-    <ZeroBasedArrays>false</ZeroBasedArrays>
-    <AllMethodsVirtual>false</AllMethodsVirtual>
-    <VOCompatibleStringComparisons>false</VOCompatibleStringComparisons>
-    <VOCompatibleCallingConventions>false</VOCompatibleCallingConventions>
-    <VOCompatibleImplicitRetvals>false</VOCompatibleImplicitRetvals>
-    <AllowLateBinding>false</AllowLateBinding>
-    <ImplicitSignConversions>false</ImplicitSignConversions>
-    <VOCompatibleStringInit>false</VOCompatibleStringInit>
-    <VOResolveFunctionPointers>false</VOResolveFunctionPointers>
-    <VOCompatibleImplicitConversions>false</VOCompatibleImplicitConversions>
-    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
-    <CheckFloatOverflows>false</CheckFloatOverflows>
-    <IntegerDivisionsReturnFloat>false</IntegerDivisionsReturnFloat>
-    <VOCompatiblePreprocessor>false</VOCompatiblePreprocessor>
-    <VOCompatibleIIF>false</VOCompatibleIIF>
-    <VOCompatibleArithmeticConversions>false</VOCompatibleArithmeticConversions>
-    <ImplicitNamespaceLookup>true</ImplicitNamespaceLookup>
-    <UseDefaultNamespace>false</UseDefaultNamespace>
+    <UnSafe>false</UnSafe>
+    <CS>false</CS>
+    <AZ>false</AZ>
+    <VO3>false</VO3>
+    <VO13>false</VO13>
+    <VO5>false</VO5>
+    <VO9>false</VO9>
+    <LB>false</LB>
+    <VO4>false</VO4>
+    <VO2>false</VO2>
+    <VO6>false</VO6>
+    <VO7>false</VO7>
+    <OVF>false</OVF>
+    <FOVF>false</FOVF>
+    <VO12>false</VO12>
+    <VO8>false</VO8>
+    <VO10>false</VO10>
+    <VO11>false</VO11>
+    <INS>true</INS>
+    <NS>false</NS>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <EmitDebugInformation>true</EmitDebugInformation>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <DisabledWarnings>3009</DisabledWarnings>
     <OutputPath>$(SolutionDir)\Debug\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <AdditionalOptions />
+    <CommandLineOption />
     <AdditionalLibPaths />
     <IncludePaths />
-    <GeneratePreprocessorOutput>false</GeneratePreprocessorOutput>
+    <PPO>false</PPO>
     <NoStandardDefs>false</NoStandardDefs>
     <AssemblyOriginatorKeyFile />
     <SignAssembly>false</SignAssembly>
@@ -60,11 +56,10 @@
     <Nologo>true</Nologo>
     <DocumentationFile />
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <EmitDebugInformation>false</EmitDebugInformation>
     <DefineConstants>NDEBUG;TRACE</DefineConstants>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DisabledWarnings>3009</DisabledWarnings>
     <OutputPath>$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
@@ -257,6 +252,14 @@
       <AssemblyName>_CompanyLicenses.dll</AssemblyName>
       <HintPath>..\SoftwayDlls\_CompanyLicenses.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="VulcanRT">
+      <Name>VulcanRT</Name>
+      <AssemblyName>VulcanRT.DLL</AssemblyName>
+    </Reference>
+    <Reference Include="VulcanRTFuncs">
+      <Name>VulcanRTFuncs</Name>
+      <AssemblyName>VulcanRTFuncs.DLL</AssemblyName>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -681,26 +684,30 @@
     <NativeResource Include="Properties\version.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Project MapUserControl\WpfMapUserControl.vnproj">
+    <ProjectReference Include="..\Project MapUserControl\WpfMapUserControl.xsproj">
       <Name>WpfMapUserControl</Name>
-      <Project>{18175e59-0ad0-46f5-8b79-575ed27e1b47}</Project>
+      <Project>{D7B63DA0-55B1-4427-B1A6-83D205B5E2AC}</Project>
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath)\Vulcan.NET\v4.0\Vulcan.v4.5.targets" />
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+  <Import Project="$(MSBuildExtensionsPath)\XSharp\XSharp.targets" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <PreBuildEvent>
     </PreBuildEvent>
     <PostBuildEvent>
     </PostBuildEvent>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <PreBuildEvent>
     </PreBuildEvent>
     <PostBuildEvent>
     </PostBuildEvent>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
-  <ProjectExtensions />
+  <ProjectExtensions>
+    <ProjectCapabilities>
+      <ProjectConfigurationsDeclaredAsItems />
+    </ProjectCapabilities>
+  </ProjectExtensions>
 </Project>

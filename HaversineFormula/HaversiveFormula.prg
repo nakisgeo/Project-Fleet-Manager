@@ -3,7 +3,7 @@
 
 // Calculate the distance between 2 geographical coordinations in nautical miles
 FUNCTION HaversineFormula(cLat1 AS STRING, cLong1 AS STRING, cLat2 AS STRING, cLong2 AS STRING) AS Double
-	IF cLat1 == cLat2 .and. cLong1 == cLong2
+	IF cLat1 == cLat2 .AND. cLong1 == cLong2
 		RETURN 0
 	ENDIF
 
@@ -20,7 +20,7 @@ FUNCTION HaversineFormula(cLat1 AS STRING, cLong1 AS STRING, cLat2 AS STRING, cL
 	nLat2:=GPSCoordinate_To_DecDegrees(cLat2)
 	nLong2:=GPSCoordinate_To_DecDegrees(cLong2)
 
-	IF nLat1 == 0 .or. nLat2 == 0
+	IF nLat1 == 0 .OR. nLat2 == 0
 		// No data
 		RETURN 0
 	ENDIF

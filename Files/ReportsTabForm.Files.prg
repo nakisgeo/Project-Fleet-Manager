@@ -13,7 +13,7 @@ PRIVATE iCountSize := 0 AS INT
 
 PRIVATE METHOD File_Button_Clicked( sender AS System.Object, e AS System.EventArgs ) AS System.Void
 	TRY
-		LOCAL oButton := (Button)sender as Button
+		LOCAL oButton := (Button)sender AS Button
 		IF oButton:Text:Contains("File")
 			//MessageBox.Show("File")
 			/////////////////////////////////////////////////////////////////////////////////////////////////////////////05.01.17
@@ -24,22 +24,22 @@ PRIVATE METHOD File_Button_Clicked( sender AS System.Object, e AS System.EventAr
 			cButtonName := cButtonName:Replace("FileUploader","")
 			LOCAL oFilesTempDT, oFileTempDT AS DataTable
 			LOCAL cStatement:=" SELECT ITEM_UID,FileName FROM FMBlobData "+oMainForm:cNoLockTerm+;
-							  " WHERE PACKAGE_UID="+self:cMyPackageUID+" AND ITEM_UID="+cButtonName AS STRING
+							  " WHERE PACKAGE_UID="+SELF:cMyPackageUID+" AND ITEM_UID="+cButtonName AS STRING
 			oFilesTempDT := oSoftway:ResultTable(oMainForm:oGFHBlob, oMainForm:oConnBlob, cStatement)
 		
-			IF oFilesTempDT != null .and. oFilesTempDT:Rows:Count > 0
-				local iCountRows := oFilesTempDT:Rows:Count, i as INT
+			IF oFilesTempDT != NULL .AND. oFilesTempDT:Rows:Count > 0
+				LOCAL iCountRows := oFilesTempDT:Rows:Count, i AS INT
 				FOR i := 0 UPTO iCountRows-1 STEP 1
 					cStatement:=" SELECT  BlobData FROM FMBlobData "+oMainForm:cNoLockTerm+;
-								" WHERE PACKAGE_UID="+self:cMyPackageUID+" AND Item_UID="+cButtonName+;
+								" WHERE PACKAGE_UID="+SELF:cMyPackageUID+" AND Item_UID="+cButtonName+;
 								" AND  FileName='"+oFilesTempDT:Rows[i]:Item["FileName"]:ToString()+"'"
 					oFileTempDT := oSoftway:ResultTable(oMainForm:oGFHBlob, oMainForm:oConnBlob, cStatement) 
-					local oData := (BYTE[]) oFileTempDT:Rows[0]:Item["BlobData"]  as  BYTE[]
-					IF oData <> NULL .and. oData:Length>0 
-						local cFileName := oFilesTempDT:Rows[i]:Item["FileName"]:ToString() as String
-						local cButtonId := oFilesTempDT:Rows[i]:Item["ITEM_UID"]:ToString() as String
+					LOCAL oData := (BYTE[]) oFileTempDT:Rows[0]:Item["BlobData"]  AS  BYTE[]
+					IF oData <> NULL .AND. oData:Length>0 
+						LOCAL cFileName := oFilesTempDT:Rows[i]:Item["FileName"]:ToString() AS STRING
+						LOCAL cButtonId := oFilesTempDT:Rows[i]:Item["ITEM_UID"]:ToString() AS STRING
 						LOCAL oFS AS FileStream
-						LOCAL oBinaryWriter as BinaryWriter
+						LOCAL oBinaryWriter AS BinaryWriter
 						TRY
 							IF File.Exists(SELF:cTempDocsDir+"\"+cFileName)
 								File.Delete(SELF:cTempDocsDir+"\"+cFileName)
@@ -54,13 +54,13 @@ PRIVATE METHOD File_Button_Clicked( sender AS System.Object, e AS System.EventAr
 						//oFS:Write(oData, 0, oData:Length)
 						oBinaryWriter:Close()
 						oFS:Close()
-						oData := null
+						oData := NULL
 					ENDIF	
 					oFileTempDT:Clear()
-					oFileTempDT:=null	
+					oFileTempDT:=NULL	
 				NEXT
 				oFilesTempDT:Clear()
-				oFilesTempDT:=null
+				oFilesTempDT:=NULL
 			ENDIF
 			oMainForm:oConnBlob:Close() 
 			///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,13 +71,13 @@ PRIVATE METHOD File_Button_Clicked( sender AS System.Object, e AS System.EventAr
 			oFiles_Form:oReportForm := SELF
 			LOCAL oRowLocal := oMainForm:returnUserSetting(oUser:USER_UNIQUEID) AS DataRow
 			IF (oRowLocal == NULL || oRowLocal["CanEditReportData"]:ToString() == "False") 
-				IF (oMainForm:checkIFUserIsCreatorOfThePachage(self:cMyPackageUID) && oMainForm:LBCReportsOffice:Visible == TRUE)
+				IF (oMainForm:checkIFUserIsCreatorOfThePachage(SELF:cMyPackageUID) && oMainForm:LBCReportsOffice:Visible == TRUE)
 					oFiles_Form:lCanEdit := TRUE
-				else
+				ELSE
 					oFiles_Form:lCanEdit := FALSE
-				endif
+				ENDIF
 			ELSE
-				oFiles_Form:lCanEdit := true
+				oFiles_Form:lCanEdit := TRUE
 			ENDIF
 		
 			IF !SELF:lisInEditMode 
@@ -92,7 +92,7 @@ PRIVATE METHOD File_Button_Clicked( sender AS System.Object, e AS System.EventAr
 			ENDIF
 			//MessageBox.Show("Else")
 			LOCAL iCountFiles := 0 AS INT
-			LOCAL cItemUID := SELF:GetFileUID(oButton:name) as String
+			LOCAL cItemUID := SELF:GetFileUID(oButton:name) AS STRING
 	
 			LOCAL oOpenFileDialog:=  System.Windows.Forms.OpenFileDialog{} AS System.Windows.Forms.OpenFileDialog
 			oOpenFileDialog:Filter:="All Files|*.*"
@@ -112,8 +112,8 @@ PRIVATE METHOD File_Button_Clicked( sender AS System.Object, e AS System.EventAr
 						EXIT
 					ENDIF
 					SELF:iCountSize += iCountSizeLocal
-					System.Io.File.Copy(file,System.IO.Directory.GetCurrentDirectory()+"\TempDocs\"+ file:Substring(file:LastIndexOf('\\'))+"."+ cItemUID)
-					oMainForm:addFileToDatabase(file,cItemUID,self:cMyPackageUID)	
+					System.Io.File.Copy(file,SELF:cTempDocsDir+"\"+ file:Substring(file:LastIndexOf('\\'))+"."+ cItemUID)
+					oMainForm:addFileToDatabase(file,cItemUID,SELF:cMyPackageUID)	
 					iCountFiles++
 				CATCH ex AS Exception
 					// Could not load the image - probably related to Windows file system permissions.

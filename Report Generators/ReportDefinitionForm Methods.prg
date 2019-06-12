@@ -450,7 +450,7 @@ RETURN
 
 METHOD SetEditModeOff_Common(oGridView AS GridView) AS VOID
 	TRY
-		IF oGridView:FocusedColumn <> NULL .and. oGridView:FocusedColumn:UnboundType == DevExpress.Data.UnboundColumnType.Boolean
+		IF oGridView:FocusedColumn <> NULL .AND. oGridView:FocusedColumn:UnboundType == DevExpress.Data.UnboundColumnType.Boolean
 			IF ! oGridView:OptionsSelection:EnableAppearanceFocusedCell
 				oGridView:OptionsSelection:EnableAppearanceFocusedCell := TRUE
 			ENDIF
@@ -506,7 +506,7 @@ LOCAL oRow AS DataRow
 		oRow:=SELF:oDTFormulas:Rows[e:ListSourceRowIndex]
 		LOCAL cID := oRow["ID"]:ToString() AS STRING
 		LOCAL cDescription := oRow["ItemDescription"]:ToString() AS STRING
-		e:Value := IIf(cID == "0" .or. cDescription <> "", cDescription, oRow["CustomItemDescription"]:ToString())
+		e:Value := IIF(cID == "0" .OR. cDescription <> "", cDescription, oRow["CustomItemDescription"]:ToString())
 	ENDCASE
 RETURN
 
@@ -547,7 +547,7 @@ METHOD GridViewFormulas_Add() AS VOID
 				" WHERE REPORT_UID="+SELF:GetSelectedReportDefinition("cUID")
 	cNum:=oSoftway:RecordExists(oMainForm:oGFH, oMainForm:oConn, cStatement, "nLineNum")
 	//wb("|"+cNum+"|")
-	IF cNum == "" .or. cNum == "0"
+	IF cNum == "" .OR. cNum == "0"
 		cNum:="1"
 	//	ErrorBox("Cannot get new LineNum", ;
 	//				"Append aborded")
@@ -579,7 +579,7 @@ METHOD GridViewFormulas_Add() AS VOID
 	SELF:oDTFormulas:AcceptChanges()
 
 	// Select the New Formula
-	Local nFocusedHandle as int
+	LOCAL nFocusedHandle AS INT
 	nFocusedHandle:=SELF:GridViewFormulas:LocateByValue(0, SELF:GridViewFormulas:Columns["FORMULA_UID"], Convert.ToInt32(cUID))
 	IF nFocusedHandle == DevExpress.XtraGrid.GridControl.InvalidRowHandle
 		RETURN
@@ -602,7 +602,7 @@ METHOD GridViewFormulas_Delete() AS VOID
 	ENDIF
 
 	// Delete Formula record
-	LOCAL cUID := oRow["FORMULA_UID"]:ToString() as String
+	LOCAL cUID := oRow["FORMULA_UID"]:ToString() AS STRING
 	cStatement:="DELETE FROM FMReportFormulas"+;
 				" WHERE FORMULA_UID="+cUID
 	oSoftway:AdoCommand(oMainForm:oGFH, oMainForm:oConn, cStatement)
@@ -682,7 +682,7 @@ LOCAL cStatement, cUID, cField, cValue, cNum AS STRING
 	//	cReplace := Iif(SELF:lChecked, "1", "0")
 
 	CASE cField == "LineNum"
-		IF cValue == "" .or. cValue == "0" .or. Convert.Toint64(cValue) > 16000
+		IF cValue == "" .OR. cValue == "0" .OR. Convert.Toint64(cValue) > 16000
 			ErrorBox("Please specify a valid Line (1 - 16000)")
 			SELF:GridViewFormulas_Refresh()
 			RETURN
@@ -751,14 +751,14 @@ LOCAL cStatement, cUID, cField, cValue, cNum AS STRING
 	SELF:GridViewFormulas:Invalidate()
 
 	DO CASE
-	CASE cField == "ID" .or. cField == "LineNum"
+	CASE cField == "ID" .OR. cField == "LineNum"
 		SELF:GridViewFormulas_Refresh()
 
-		IF cField == "ID" .and. oRow["Description"]:ToString():Trim() == ""
+		IF cField == "ID" .AND. oRow["Description"]:ToString():Trim() == ""
 			oDataRow := SELF:oDTFormulas:Rows:Find(cUID)
 			IF oDataRow <> NULL
 				// Update Description if empty
-				LOCAL cDescription := Iif(oDataRow["ItemDescription"]:ToString() == "", oDataRow["CustomItemDescription"]:ToString(), oDataRow["ItemDescription"]:ToString()) AS STRING
+				LOCAL cDescription := IIF(oDataRow["ItemDescription"]:ToString() == "", oDataRow["CustomItemDescription"]:ToString(), oDataRow["ItemDescription"]:ToString()) AS STRING
 				cStatement:="UPDATE FMReportFormulas SET"+;
 							" Description='"+oSoftway:ConvertWildCards(cDescription, FALSE)+"'"+;
 							" WHERE FORMULA_UID="+cUID
@@ -771,7 +771,7 @@ LOCAL cStatement, cUID, cField, cValue, cNum AS STRING
 			ENDIF
 		ENDIF
 
-	CASE cField == "Formula" .and. oRow["Description"]:ToString():Trim() == ""
+	CASE cField == "Formula" .AND. oRow["Description"]:ToString():Trim() == ""
 		oDataRow := SELF:oDTFormulas:Rows:Find(cUID)
 		IF oDataRow <> NULL
 			// Update Description if empty

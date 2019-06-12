@@ -164,7 +164,7 @@ RETURN
 		LOCAL oListViewItem AS 	System.Windows.Forms.ListViewItem
 		TRY
 			LOCAL caFiles := System.IO.Directory.GetFiles(SELF:cTempDir) AS STRING[]
-			LOCAL iCountSizeLocal as INT
+			LOCAL iCountSizeLocal AS INT
 			FOREACH file AS STRING IN caFiles
 				IF !SELF:IfEndsWithNumberDelete(file)
 					LOOP
@@ -174,7 +174,7 @@ RETURN
 					LOOP
 				ENDIF
 				iCountSizeLocal := Convert.ToInt32(System.IO.FileInfo{file}:Length)
-				self:iCountSize += iCountSizeLocal 
+				SELF:iCountSize += iCountSizeLocal 
 				cFileName := file:Substring(file:LastIndexOf('\\')+1)
 				cFileName := cFileName:Substring(0,cFileName:LastIndexOf("."))
 				//MessageBox.Show(file)
@@ -199,7 +199,7 @@ RETURN
 			System.Windows.Forms.MessageBox.Show(exc:Message+CRLF+CRLF+exc:Source)
 		END		
 RETURN
-    PUBLIC METHOD  SizeSuffix( value as Int64,  decimalPlaces := 2 as INT) as String
+    PUBLIC METHOD  SizeSuffix( VALUE AS INT64,  decimalPlaces := 2 AS INT) AS STRING
 
 LOCAL SizeSuffixes := STRING[]{4} AS STRING[]
 SizeSuffixes[1]:= "bytes"
@@ -207,23 +207,23 @@ SizeSuffixes[2]:= "KB"
 SizeSuffixes[3]:= "MB"
 SizeSuffixes[4]:= "GB"
 
-    IF (value < 0) 
-		 RETURN "-" + SizeSuffix(-value)
+    IF (VALUE < 0) 
+		 RETURN "-" + SizeSuffix(-VALUE)
 	ENDIF 
 
-    IF (value == 0)  
+    IF (VALUE == 0)  
 		RETURN "0.0 bytes"
 	ENDIF
     // mag is 0 for bytes, 1 for KB, 2, for MB, etc.
-    local mag := (int)Math.Log(value, 1024) as INT
+    LOCAL mag := (INT)Math.Log(VALUE, 1024) AS INT
 
     // 1L << (mag * 10) == 2 ^ (10 * mag) 
     // [i.e. the number of bytes in the unit corresponding to mag]
-    local adjustedSize := (decimal)value / (1 << (mag * 10)) as decimal
+    LOCAL adjustedSize := (decimal)VALUE / (1 << (mag * 10)) AS decimal
 
     // make adjustment when the value is large enough that
     // it would round up to 1000 or more
-    if (Math.Round(adjustedSize, decimalPlaces) >= 1000)
+    IF (Math.Round(adjustedSize, decimalPlaces) >= 1000)
         mag += 1
         adjustedSize := adjustedSize / 1024
     ENDIF
@@ -254,7 +254,7 @@ RETURN STRING.Format("{0:n" + decimalPlaces:ToString() + "} {1}", adjustedSize, 
 	END
 RETURN
 	
-    PRIVATE METHOD deleteBlobFromDB(file AS STRING, cItem_Uid as string, cPackage_Uid as string) as Void
+    PRIVATE METHOD deleteBlobFromDB(file AS STRING, cItem_Uid AS STRING, cPackage_Uid AS STRING) AS VOID
 	TRY
 		oMainForm:deleteBlobFromDB(file,cItem_Uid,cPackage_Uid)
 	CATCH exc AS Exception
@@ -262,9 +262,9 @@ RETURN
 	END
 RETURN 	
 	
-    export method deleteAllFiles(cItemUid AS STRING) AS VOID
+    EXPORT METHOD deleteAllFiles(cItemUid AS STRING) AS VOID
 	oMainForm:deleteBlobFromDB(cItemUid,oReportForm:cMyPackageUID)
-return
+RETURN
 		
     PRIVATE METHOD addFiles_Click( sender AS System.Object, e AS System.EventArgs ) AS System.Void
 	TRY
@@ -287,9 +287,11 @@ return
 					EXIT
 				ENDIF
 				SELF:iCountSize += iCountSizeLocal
-				LOCAL cItemUID := oReportForm:GetItemUID(oButton:name) as STRING
-				System.Io.File.Copy(file,System.IO.Directory.GetCurrentDirectory()+"\TempDocs\"+ file:Substring(file:LastIndexOf('\\'))+"."+ cItemUID)
-				System.Io.File.Copy(file,System.IO.Directory.GetCurrentDirectory()+"\TempDocs\Open\"+ file:Substring(file:LastIndexOf('\\')))
+				LOCAL cItemUID := oReportForm:GetItemUID(oButton:name) AS STRING
+				//System.Io.File.Copy(file,System.IO.Directory.GetCurrentDirectory()+"\TempDocs\"+ file:Substring(file:LastIndexOf('\\'))+"."+ cItemUID)
+				//System.Io.File.Copy(file,System.IO.Directory.GetCurrentDirectory()+"\TempDocs\Open\"+ file:Substring(file:LastIndexOf('\\')))
+				System.Io.File.Copy(file,SELF:cTempDir+"\"+ file:Substring(file:LastIndexOf('\\'))+"."+ cItemUID)
+				System.Io.File.Copy(file,SELF:cTempDir+"\Open\"+ file:Substring(file:LastIndexOf('\\')))
 				SELF:addFileToDatabase(file,cItemUID,oReportForm:cMyPackageUID)
 				iCountDocuments++
 				Application.DoEvents()
@@ -364,7 +366,7 @@ END
 RETURN cIteUID
     EXPORT METHOD IfEndsWithNumberDelete(cToTestString AS STRING) AS LOGIC
 TRY		
-		LOCAL chMyChar := cToTestString:Chars[cToTestString:Length-1] AS Char
+		LOCAL chMyChar := cToTestString:Chars[cToTestString:Length-1] AS CHAR
 				LOCAL iTestForInt AS INT
 				IF !int32.TryParse(chMyChar:ToString(),iTestForInt)
 					system.IO.File.Delete(cToTestString)
@@ -374,7 +376,7 @@ CATCH
 	RETURN FALSE
 END
 RETURN TRUE	
-    EXPORT METHOD addFileToDatabase(cFile AS STRING,cItemUid AS STRING,cPackageUIDLocal as String) AS VOID
+    EXPORT METHOD addFileToDatabase(cFile AS STRING,cItemUid AS STRING,cPackageUIDLocal AS STRING) AS VOID
 	oMainForm:addFileToDatabase(cFile,cItemUid,cPackageUIDLocal)		
 RETURN
 

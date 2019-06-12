@@ -44,7 +44,7 @@ METHOD XtraReportCustom_OnDataSourceRowChanged(e AS DevExpress.XtraReports.UI.Da
 	LOCAL oFontStyle AS System.Drawing.FontStyle
 
 	DO CASE
-	CASE lBold .and. lUnderLine
+	CASE lBold .AND. lUnderLine
 		oFontStyle := System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline
 
 	CASE lBold
