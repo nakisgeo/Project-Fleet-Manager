@@ -31,6 +31,7 @@ METHOD AddMissingColumns() AS VOID
 	oSoftway:AddColumnIfNotExists(oGFH, oConn, "EconRoutings", "Operation",  oSoftway:FieldVarChar+" (64)", "NULL", "")
 	oSoftway:AddColumnIfNotExists(oGFH, oConn, "EconRoutings", "ArrivalGMT",   "Datetime", "NULL", "")
 	oSoftway:AddColumnIfNotExists(oGFH, oConn, "EconRoutings", "DepartureGMT",   "Datetime", "NULL", "")
+	oSoftway:AddColumnIfNotExists(oGFH, oConn, "EconRoutings", "BunkeredQty",   " Decimal(18,3)", "NOT NULL", "Default 0")
 	//Samos
 	oSoftway:AddColumnIfNotExists(oGFH, oConn, "FMReportTypes", "ReportType",  oSoftway:FieldChar+" (1)", "NOT NULL", "Default 'V'")
 	

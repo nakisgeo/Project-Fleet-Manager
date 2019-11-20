@@ -1,4 +1,4 @@
-PUBLIC GLOBAL cProgramVersion:="1.2.1.08" AS STRING
+PUBLIC GLOBAL cProgramVersion:="1.2.1.09" AS STRING
 PUBLIC GLOBAL cMyDatabaseVersion := 1 AS INT
 
 PUBLIC GLOBAL oSoftway AS Softway

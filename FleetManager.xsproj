@@ -460,6 +460,7 @@
     <Compile Include="Tools\BodyISMForm.prg">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Tools\DataImporter.prg" />
     <Compile Include="Tools\Import ExcelNoonReport.prg" />
     <Compile Include="Tools\ImportFleetManagerData.prg" />
     <Compile Include="Tools\ToolsForm Methods.prg" />

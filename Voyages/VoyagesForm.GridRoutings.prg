@@ -202,11 +202,14 @@ LOCAL nVisible:=0, nAbsIndex:=0 AS INT
 																	nAbsIndex++, nVisible++, 50, SELF:GridViewRoutings)
 	oColumn:DisplayFormat:FormatType := DevExpress.Utils.FormatType.Numeric
 	oColumn:DisplayFormat:FormatString := "N2"
-	
+		
 	oColumn:=oMainForm:CreateDXColumn("BunkeredEye", "BunkeredQty",FALSE, DevExpress.Data.UnboundColumnType.Decimal, ;
 																	nAbsIndex++, nVisible++, 50, SELF:GridViewRoutings)
 	oColumn:DisplayFormat:FormatType := DevExpress.Utils.FormatType.Numeric
 	oColumn:DisplayFormat:FormatString := "N2"
+	IF !cLicensedCompany:ToUpper():Contains("LARUS")
+		oColumn:Visible := false
+	ENDIF
 
 	oColumn:=oMainForm:CreateDXColumn("BunkeredHFO", "BunkeredHFO",FALSE, DevExpress.Data.UnboundColumnType.Decimal, ;
 																	nAbsIndex++, nVisible++, 50, SELF:GridViewRoutings)

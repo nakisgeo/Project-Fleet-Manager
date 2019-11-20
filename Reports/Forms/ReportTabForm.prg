@@ -166,7 +166,7 @@ PARTIAL CLASS ReportTabForm INHERIT System.Windows.Forms.Form
         RETURN
 		
     PRIVATE METHOD loadFromExcelToolStripMenuItem_Click( sender AS System.Object, e AS System.EventArgs ) AS System.Void
-			self:loadFromExcelForNewReport()	
+			SELF:loadFromExcelForNewReport()	
         RETURN
     PRIVATE METHOD cancelToolStripMenuItem_Click_1( sender AS System.Object, e AS System.EventArgs ) AS System.Void
 			SELF:deleteNewlyCreatedReport()

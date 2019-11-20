@@ -29,16 +29,18 @@ METHOD ReportTabForm_OnShown() AS VOID
 	lisOfficeForm := isAnOfficeForm(SELF:cMyPackageUID)	
 
 	IF SELF:CategoryExists("0")
-		SELF:FillTab("0", "")
+		SELF:FillTab("0", "", FALSE)
 	ELSE
 		SELF:tabControl_Report:TabPages:RemoveAt(0)
 	ENDIF
+	
+	LOCAL lIsBigReport := (SELF:oDTReportItems:Rows:Count>300) AS LOGIC	
 	
 	FOREACH oRow AS DataRow IN SELF:oDTItemCategories:Rows
 		IF oRow["CATEGORY_UID"]:ToString() == "0"
 			LOOP
 		ENDIF
-		SELF:FillTab(oRow["CATEGORY_UID"]:ToString(), oRow["Description"]:ToString())
+		SELF:FillTab(oRow["CATEGORY_UID"]:ToString(), oRow["Description"]:ToString(),lIsBigReport)
 	NEXT
 
 	IF ! SELF:lEnableControls
@@ -51,7 +53,7 @@ METHOD ReportTabForm_OnShown() AS VOID
 RETURN
 
 
-METHOD FillTab(cCatUID AS STRING, cDescription AS STRING) AS VOID
+METHOD FillTab(cCatUID AS STRING, cDescription AS STRING, lIsBigReport := FALSE AS LOGIC) AS VOID
 	LOCAL oTabPage AS System.Windows.Forms.TabPage
 	LOCAL dTabTag := Dictionary<STRING, STRING>{} AS Dictionary<STRING, STRING>
 	dTabTag:Add("TabId", cCatUID)
@@ -76,8 +78,10 @@ METHOD FillTab(cCatUID AS STRING, cDescription AS STRING) AS VOID
 		oTabPage:Click += System.EventHandler{SELF,@Tab_must_focus()}
         oTabPage:UseVisualStyleBackColor := TRUE
 		dTabTag:Add("Status", "NotAppeared")
-		oTabPage:Enter += System.EventHandler{ SELF, @TabPage_Enter() }
-        SELF:tabControl_Report:Controls:Add(oTabPage)
+		IF lIsBigReport
+			oTabPage:Enter += System.EventHandler{ SELF, @TabPage_Enter() }
+        ENDIF
+		SELF:tabControl_Report:Controls:Add(oTabPage)
 	ENDIF
 	oTabPage:Tag := dTabTag
 
@@ -86,7 +90,7 @@ METHOD FillTab(cCatUID AS STRING, cDescription AS STRING) AS VOID
 	LOCAL TabIndex := 0 AS INT
 	//FOREACH oRow AS DataRow IN oDT:Rows
 
-	IF cCatUID == "0"
+	IF(cCatUID == "0" .OR. !lIsBigReport)
 		LOCAL oRows := SELF:oDTReportItems:Select("REPORT_UID="+SELF:cReportUID+" AND CATEGORY_UID="+cCatUID, "ItemNo") AS DataRow[]
 		FOREACH oRow AS DataRow IN oRows
 			SELF:AddTabControls(oTabPage, oRow, nX, nY, nLabelX, TabIndex)
@@ -790,10 +794,7 @@ METHOD addControlToTable(oRow AS DataRow,  nY REF INT, nTabIndex REF INT) AS VOI
 	LOCAL cCalculatedField := oRow["CalculatedField"]:ToString() AS STRING
 	LOCAL cIsDD := oSoftway:LogicToString(oRow["IsDD"]) AS STRING
 	LOCAL iExpandOnColumns := Convert.ToInt32(oRow["ExpandOnColumns"]:ToString()) AS INT
-	
-	//LOCAL cNotNumbered := oSoftway:LogicToString(oRow["NotNumbered"]) AS STRING
 	LOCAL Mandatory := oSoftway:LogicToString(oRow["Mandatory"]) AS STRING
-	//LOCAL iPrevCountRows := oMyTable:RowCount as INT
 	
 	DO CASE
 		CASE cItemType == "X"
@@ -1039,13 +1040,13 @@ METHOD addControlToTable(oRow AS DataRow,  nY REF INT, nTabIndex REF INT) AS VOI
 		//MessageBox.Show((SELF:amItheOnlyMultilineInThisLine(iColumnCount)):ToString(),iColumnCount:ToString())
 		
 		IF SELF:amItheOnlyMultilineInThisLine(iColumnCount)
-			iIncrement := 28
+			iIncrement := 30
 		ELSE
 			iIncrement := 0
 		ENDIF
 		
         IF SELF:addControlToTableLayout(oTextBoxMultiline)
-			nY += 60
+			nY += 62
 		ELSE
 			//MessageBox.Show(iIncrement:ToString(),(nY+iIncrement):tostring())
 			nY += iIncrement

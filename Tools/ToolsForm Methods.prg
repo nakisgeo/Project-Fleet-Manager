@@ -618,5 +618,46 @@ METHOD ExportTablesToAllVessels() AS VOID
 	//SELF:Close()
 RETURN
 
+METHOD ImportDataFromZip() AS VOID
+
+	TRY
+		LOCAL oOpenFileDialog:=  System.Windows.Forms.OpenFileDialog{} AS System.Windows.Forms.OpenFileDialog
+		oOpenFileDialog:Filter:="zip files|*.zip"
+		oOpenFileDialog:Multiselect := FALSE
+		LOCAL dr := oOpenFileDialog:ShowDialog() AS DialogResult
+		IF oOpenFileDialog:FileName == ""
+			RETURN
+		ENDIF
+		IF dr == System.Windows.Forms.DialogResult.OK
+			// Read the files 
+			FOREACH file AS STRING IN oOpenFileDialog:FileNames
+			// 
+			TRY
+				LOCAL oFleetManagerDataImporter := FleetManagerDataImporter{} AS FleetManagerDataImporter
+				
+				LOCAL cDocName := Path.GetFileName(file) AS STRING
+				LOCAL cDir := System.IO.Path.GetDirectoryName(file) AS STRING
+
+				IF ! (cDocName:StartsWith("FleetManagerData-") .AND. cDocName:ToUpper():EndsWith(".ZIP"))
+					ErrorBox("The file must start with: 'FleetManagerData-'", "Operation aborted")
+					RETURN
+				ENDIF
+				
+				LOCAL cBody := "" AS STRING
+				
+				oFleetManagerDataImporter:ReadDataSet(file, cDir , "0",cBody)
+				
+			CATCH ex AS Exception
+				LOCAL cDocName := Path.GetFileName(file) AS STRING
+				MessageBox.Show("Cannot import the file : " + cDocName +;
+				CRLF + CRLF + ex:Message)
+			END	
+			NEXT
+		ENDIF
+	CATCH exc AS Exception
+			System.Windows.Forms.MessageBox.Show(exc:StackTrace,"Error")	
+	END   
+
+RETURN
 
 END CLASS

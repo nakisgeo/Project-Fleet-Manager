@@ -197,9 +197,14 @@ METHOD amItheOnlyMultilineInThisLine(iAmInColumn AS INT) AS LOGIC
 						iLocalCountRows := iRowCount
 				ENDIF*/
 				oControl := (TextBox)oMyTable:GetControlFromPosition(iCount,iRowCount)
-				oControl:Multiline := TRUE
+				IF oControl IS TextBox
+					LOCAL lIsMultiline := (LOGIC)(((TextBox)oControl):Multiline) AS LOGIC
+					IF  lIsMultiline
+						RETURN FALSE	
+					ENDIF
+				ELSE
 				//MessageBox.Show("Found another multiline at:("+iRowCount:ToString()+","+iCount:ToString()+")",iAmInColumn:ToString())
-				RETURN FALSE
+				ENDIF
 			CATCH exException AS Exception
 				
 			END
@@ -1583,7 +1588,7 @@ METHOD checkMandatoryFields() AS LOGIC
 RETURN TRUE
 
 METHOD ValidateMandatoryFields() AS LOGIC
-	TRY
+//	TRY
 				
 	LOCAL cMandatory, cValue, cUID, cItemTypeValues := "",cUidToCheck, cData := "", cItemNo AS STRING
 	LOCAL oRows AS DataRow[]
@@ -1642,6 +1647,9 @@ METHOD ValidateMandatoryFields() AS LOGIC
 					IF cItemTypeValues:Contains("<ID"+cItemNo+">")
 						//MessageBox.Show("test")
 						oTempControl := GetControl("ComboBox", cUidToCheck)
+						IF oTempControl == NULL
+							LOOP
+						ENDIF
 						cData := ((System.Windows.Forms.ComboBox)oTempControl):Text
 						cItemTypeValues := cItemTypeValues:TrimEnd(';')
 						LOCAL cItems := cItemTypeValues:Split(';') AS STRING[]
@@ -1700,9 +1708,9 @@ METHOD ValidateMandatoryFields() AS LOGIC
 		NEXT
 	NEXT
 	
-	CATCH exc AS Exception
-		MessageBox.Show(exc:StackTrace:ToString())
-	END
+//	CATCH exc AS Exception
+//		MessageBox.Show(exc:StackTrace:ToString())
+//	END
 	
 RETURN TRUE
 
@@ -1751,6 +1759,9 @@ METHOD ValidateMandatoryFields(oParentControl AS Control) AS LOGIC
 				IF cItemTypeValues != ""
 					IF cItemTypeValues:Contains("<ID"+cItemNo+">")
 						oTempControl := GetControl("ComboBox", cUidToCheck)
+						IF oTempControl == NULL
+							LOOP
+						ENDIF
 						cData := ((System.Windows.Forms.ComboBox)oTempControl):Text
 						cItemTypeValues := cItemTypeValues:TrimEnd(';')
 						LOCAL cItems := cItemTypeValues:Split(';') AS STRING[]

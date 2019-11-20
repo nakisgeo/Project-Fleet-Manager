@@ -1,6 +1,6 @@
 1 VERSIONINFO
- FILEVERSION 		1,2,1,08
- PRODUCTVERSION 	1,2,1,08
+ FILEVERSION 		1,2,1,09
+ PRODUCTVERSION 	1,2,1,09
  FILEFLAGSMASK 		0x3F
  FILEFLAGS 			0x0
  FILESUBTYPE 		0x0
@@ -12,12 +12,12 @@ BEGIN
             VALUE "Comments", "Fleet Manager"
             VALUE "CompanyName", "Softway Ltd"
             VALUE "FileDescription", "Fleet Manager"
-            VALUE "FileVersion", "1, 2, 1, 08"
+            VALUE "FileVersion", "1, 2, 1, 09"
             VALUE "InternalName", "FleetManager"
             VALUE "LegalCopyright", "Copyright © 2019, Softway Ltd"
             VALUE "OriginalFilename", "FleetManager"
             VALUE "ProductName", "FleetManager"
-            VALUE "ProductVersion", "1.2.1.08"
+            VALUE "ProductVersion", "1.2.1.09"
         END
     END
     BLOCK "VarFileInfo"

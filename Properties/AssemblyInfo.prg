@@ -35,5 +35,5 @@
 //
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
-[ASSEMBLY: AssemblyVersionAttribute( "1.2.1.08" )]
-[ASSEMBLY: AssemblyFileVersionAttribute( "1.2.1.08" )]
+[ASSEMBLY: AssemblyVersionAttribute( "1.2.1.09" )]
+[ASSEMBLY: AssemblyFileVersionAttribute( "1.2.1.09" )]

@@ -187,6 +187,9 @@ FleetManager.EXE versions:
 1.2.1.08: 07.06.19
 	- Added : Check/Unchek all items when exporting to excel
 
+1.2.1.09: 11.09.19
+	- Corrected : Numbering on forms 
+
 Mode:
 - Use Common Items in Reports
 - Show all Items
