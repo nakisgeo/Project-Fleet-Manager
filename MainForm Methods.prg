@@ -2463,6 +2463,7 @@ METHOD ShowReportForm(modal AS LOGIC, createReport AS LOGIC, lPrintReport := FAL
 			ENDIF
 	
 			SELF:myReportTabForm := ReportTabForm{} 
+			SELF:myReportTabForm:AutoScaleMode := System.Windows.Forms.AutoScaleMode.Dpi
 			//SELF:splitMapForm:PanelVisibility := SplitPanelVisibility.Both
 			SELF:myReportTabForm:Text := cVesselName+ ": "+ cReportName			
 			SELF:myReportTabForm:cReportUID := cReportUID
@@ -2508,6 +2509,7 @@ METHOD ShowReportForm(modal AS LOGIC, createReport AS LOGIC, lPrintReport := FAL
 					oMyReportTabForm:Text := SELF:TreeListVesselsReports:FocusedNode:GetValue(0):ToString()+" for "+SELF:TreeListVessels:FocusedNode:GetValue(0):ToString()
 				ENDIF
 				
+				oMyReportTabForm:AutoScaleMode := System.Windows.Forms.AutoScaleMode.Dpi
 				oMyReportTabForm:cReportUID := cReportUID
 				oMyReportTabForm:cReportName := cReportName
 				oMyReportTabForm:cMyVesselName := SELF:GetVesselName
@@ -2546,6 +2548,7 @@ RETURN
 
 METHOD printOnBackground(cReportUID AS STRING,cReportName AS STRING,oDTItemCategories AS DataTable,oDTReportItems AS DataTable) AS VOID
 	LOCAL oMyReportTabForm := ReportTabForm{} AS ReportTabForm
+    oMyReportTabForm:AutoScaleMode := System.Windows.Forms.AutoScaleMode.Dpi
 	//SELF:splitMapForm:PanelVisibility := SplitPanelVisibility.Both
 	oMyReportTabForm:Text := SELF:TreeListVesselsReports:FocusedNode:GetValue(0):ToString()+" for "+SELF:TreeListVessels:FocusedNode:GetValue(0):ToString()
 	oMyReportTabForm:cReportUID := cReportUID

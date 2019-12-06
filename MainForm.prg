@@ -253,7 +253,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     // splitContainerControl_LBC
     // 
     SELF:splitContainerControl_LBC:Dock := System.Windows.Forms.DockStyle.Fill
-    SELF:splitContainerControl_LBC:Horizontal := FALSE
+    SELF:splitContainerControl_LBC:Horizontal := false
     SELF:splitContainerControl_LBC:Location := System.Drawing.Point{0, 0}
     SELF:splitContainerControl_LBC:Name := "splitContainerControl_LBC"
     SELF:splitContainerControl_LBC:Panel1:Controls:Add(SELF:TreeListVessels)
@@ -270,15 +270,15 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     // 
     SELF:TreeListVessels:Appearance:FocusedCell:BackColor := System.Drawing.Color.RoyalBlue
     SELF:TreeListVessels:Appearance:FocusedCell:ForeColor := System.Drawing.Color.White
-    SELF:TreeListVessels:Appearance:FocusedCell:Options:UseBackColor := TRUE
-    SELF:TreeListVessels:Appearance:FocusedCell:Options:UseForeColor := TRUE
+    SELF:TreeListVessels:Appearance:FocusedCell:Options:UseBackColor := true
+    SELF:TreeListVessels:Appearance:FocusedCell:Options:UseForeColor := true
     SELF:TreeListVessels:Dock := System.Windows.Forms.DockStyle.Fill
     SELF:TreeListVessels:Location := System.Drawing.Point{0, 26}
     SELF:TreeListVessels:Name := "TreeListVessels"
-    SELF:TreeListVessels:OptionsView:ShowCheckBoxes := TRUE
-    SELF:TreeListVessels:OptionsView:ShowColumns := FALSE
-    SELF:TreeListVessels:OptionsView:ShowHorzLines := FALSE
-    SELF:TreeListVessels:OptionsView:ShowIndicator := FALSE
+    SELF:TreeListVessels:OptionsView:ShowCheckBoxes := true
+    SELF:TreeListVessels:OptionsView:ShowColumns := false
+    SELF:TreeListVessels:OptionsView:ShowHorzLines := false
+    SELF:TreeListVessels:OptionsView:ShowIndicator := false
     SELF:TreeListVessels:Size := System.Drawing.Size{284, 152}
     SELF:TreeListVessels:TabIndex := 52
     SELF:TreeListVessels:BeforeCheckNode += DevExpress.XtraTreeList.CheckNodeEventHandler{ SELF, @TreeListVessels_BeforeCheckNode() }
@@ -288,7 +288,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     // 
     // standaloneBarDockControl_Vessels
     // 
-    SELF:standaloneBarDockControl_Vessels:CausesValidation := FALSE
+    SELF:standaloneBarDockControl_Vessels:CausesValidation := false
     SELF:standaloneBarDockControl_Vessels:Dock := System.Windows.Forms.DockStyle.Top
     SELF:standaloneBarDockControl_Vessels:Location := System.Drawing.Point{0, 0}
     SELF:standaloneBarDockControl_Vessels:Manager := SELF:barManager1
@@ -322,8 +322,8 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:BarVessels:DockStyle := DevExpress.XtraBars.BarDockStyle.Standalone
     SELF:BarVessels:FloatLocation := System.Drawing.Point{482, 366}
     SELF:BarVessels:LinksPersistInfo:AddRange(<DevExpress.XtraBars.LinkPersistInfo>{ DevExpress.XtraBars.LinkPersistInfo{SELF:BBICheckAll}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBIShowOnMap}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBIImportExcelData}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBIRefreshReports}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBIMyApprovals}, DevExpress.XtraBars.LinkPersistInfo{SELF:MainBBIGlobal}, DevExpress.XtraBars.LinkPersistInfo{SELF:barEditItemDisplayMap} })
-    SELF:BarVessels:OptionsBar:AllowQuickCustomization := FALSE
-    SELF:BarVessels:OptionsBar:UseWholeRow := TRUE
+    SELF:BarVessels:OptionsBar:AllowQuickCustomization := false
+    SELF:BarVessels:OptionsBar:UseWholeRow := true
     SELF:BarVessels:StandaloneBarDockControl := SELF:standaloneBarDockControl_Vessels
     SELF:BarVessels:Text := "Main menu"
     // 
@@ -393,7 +393,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:MainBBIGlobal:Caption := "Settings"
     SELF:MainBBIGlobal:Id := 20
     SELF:MainBBIGlobal:ItemAppearance:Normal:Font := System.Drawing.Font{"Tahoma", 8.25, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((BYTE)(161))}
-    SELF:MainBBIGlobal:ItemAppearance:Normal:Options:UseFont := TRUE
+    SELF:MainBBIGlobal:ItemAppearance:Normal:Options:UseFont := true
     SELF:MainBBIGlobal:Name := "MainBBIGlobal"
     SELF:MainBBIGlobal:ItemClick += DevExpress.XtraBars.ItemClickEventHandler{ SELF, @MainBBIGlobal_ItemClick() }
     // 
@@ -411,7 +411,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     // 
     // repositoryItemComboBox1
     // 
-    SELF:repositoryItemComboBox1:AutoHeight := FALSE
+    SELF:repositoryItemComboBox1:AutoHeight := false
     SELF:repositoryItemComboBox1:Buttons:AddRange(<DevExpress.XtraEditors.Controls.EditorButton>{ DevExpress.XtraEditors.Controls.EditorButton{DevExpress.XtraEditors.Controls.ButtonPredefines.Combo} })
     SELF:repositoryItemComboBox1:Items:AddRange(<OBJECT>{ "100%", "75%", "50%", "25%", "0%" })
     SELF:repositoryItemComboBox1:Name := "repositoryItemComboBox1"
@@ -424,9 +424,9 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:BarStatus:DockCol := 0
     SELF:BarStatus:DockRow := 0
     SELF:BarStatus:DockStyle := DevExpress.XtraBars.BarDockStyle.Bottom
-    SELF:BarStatus:OptionsBar:AllowQuickCustomization := FALSE
-    SELF:BarStatus:OptionsBar:DrawDragBorder := FALSE
-    SELF:BarStatus:OptionsBar:UseWholeRow := TRUE
+    SELF:BarStatus:OptionsBar:AllowQuickCustomization := false
+    SELF:BarStatus:OptionsBar:DrawDragBorder := false
+    SELF:BarStatus:OptionsBar:UseWholeRow := true
     SELF:BarStatus:Text := "Status bar"
     // 
     // BarVesselReports
@@ -438,15 +438,15 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:BarVesselReports:DockStyle := DevExpress.XtraBars.BarDockStyle.Standalone
     SELF:BarVesselReports:FloatLocation := System.Drawing.Point{681, 695}
     SELF:BarVesselReports:LinksPersistInfo:AddRange(<DevExpress.XtraBars.LinkPersistInfo>{ DevExpress.XtraBars.LinkPersistInfo{SELF:backBBI}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBIShowMessage}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBIShowTabForm}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBIIsmForm}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBICreateExcelReport}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBITableReports}, DevExpress.XtraBars.LinkPersistInfo{SELF:barEditItemPeriod} })
-    SELF:BarVesselReports:OptionsBar:AllowQuickCustomization := FALSE
-    SELF:BarVesselReports:OptionsBar:UseWholeRow := TRUE
+    SELF:BarVesselReports:OptionsBar:AllowQuickCustomization := false
+    SELF:BarVesselReports:OptionsBar:UseWholeRow := true
     SELF:BarVesselReports:StandaloneBarDockControl := SELF:standaloneBarDockControl_VesselReports
     SELF:BarVesselReports:Text := "Bar Vessel Reports"
     // 
     // backBBI
     // 
     SELF:backBBI:Caption := "Go Back"
-    SELF:backBBI:Enabled := FALSE
+    SELF:backBBI:Enabled := false
     SELF:backBBI:Id := 9
     SELF:backBBI:ImageOptions:Image := ((System.Drawing.Image)(resources:GetObject("backBBI.ImageOptions.Image")))
     SELF:backBBI:Name := "backBBI"
@@ -523,8 +523,8 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     // repositoryItemComboBox2
     // 
     SELF:repositoryItemComboBox2:Appearance:BackColor := System.Drawing.Color.FromArgb(((INT)(((BYTE)(192)))), ((INT)(((BYTE)(255)))), ((INT)(((BYTE)(255)))))
-    SELF:repositoryItemComboBox2:Appearance:Options:UseBackColor := TRUE
-    SELF:repositoryItemComboBox2:AutoHeight := FALSE
+    SELF:repositoryItemComboBox2:Appearance:Options:UseBackColor := true
+    SELF:repositoryItemComboBox2:AutoHeight := false
     SELF:repositoryItemComboBox2:Buttons:AddRange(<DevExpress.XtraEditors.Controls.EditorButton>{ DevExpress.XtraEditors.Controls.EditorButton{DevExpress.XtraEditors.Controls.ButtonPredefines.Combo} })
     SELF:repositoryItemComboBox2:Items:AddRange(<OBJECT>{ "Last 6 Months", "Voyage routing", "Specific date period" })
     SELF:repositoryItemComboBox2:Name := "repositoryItemComboBox2"
@@ -532,7 +532,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     // 
     // standaloneBarDockControl_VesselReports
     // 
-    SELF:standaloneBarDockControl_VesselReports:CausesValidation := FALSE
+    SELF:standaloneBarDockControl_VesselReports:CausesValidation := false
     SELF:standaloneBarDockControl_VesselReports:Dock := System.Windows.Forms.DockStyle.Top
     SELF:standaloneBarDockControl_VesselReports:Location := System.Drawing.Point{0, 0}
     SELF:standaloneBarDockControl_VesselReports:Manager := SELF:barManager1
@@ -548,11 +548,11 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:barMain:DockRow := 0
     SELF:barMain:DockStyle := DevExpress.XtraBars.BarDockStyle.Standalone
     SELF:barMain:FloatLocation := System.Drawing.Point{745, 197}
-    SELF:barMain:LinksPersistInfo:AddRange(<DevExpress.XtraBars.LinkPersistInfo>{ DevExpress.XtraBars.LinkPersistInfo{SELF:BBISamosReports, TRUE}, DevExpress.XtraBars.LinkPersistInfo{DevExpress.XtraBars.BarLinkUserDefines.PaintStyle, SELF:BBIReportDefinition, DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph}, DevExpress.XtraBars.LinkPersistInfo{DevExpress.XtraBars.BarLinkUserDefines.PaintStyle, SELF:BBIShowVoyageOnNewMap_Main, DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBICreateReport}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBIEditReport}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBICancel}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBISave}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBIFinalize}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBISubmit}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBIReturn}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBIAppove}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBIDelete}, DevExpress.XtraBars.LinkPersistInfo{SELF:printButton}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBSIStatus}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBIAppovalHistory} })
-    SELF:barMain:OptionsBar:AllowQuickCustomization := FALSE
-    SELF:barMain:OptionsBar:DisableClose := TRUE
-    SELF:barMain:OptionsBar:DisableCustomization := TRUE
-    SELF:barMain:OptionsBar:UseWholeRow := TRUE
+    SELF:barMain:LinksPersistInfo:AddRange(<DevExpress.XtraBars.LinkPersistInfo>{ DevExpress.XtraBars.LinkPersistInfo{SELF:BBISamosReports, true}, DevExpress.XtraBars.LinkPersistInfo{DevExpress.XtraBars.BarLinkUserDefines.PaintStyle, SELF:BBIReportDefinition, DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph}, DevExpress.XtraBars.LinkPersistInfo{DevExpress.XtraBars.BarLinkUserDefines.PaintStyle, SELF:BBIShowVoyageOnNewMap_Main, DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBICreateReport}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBIEditReport}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBICancel}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBISave}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBIFinalize}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBISubmit}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBIReturn}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBIAppove}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBIDelete}, DevExpress.XtraBars.LinkPersistInfo{SELF:printButton}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBSIStatus}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBIAppovalHistory} })
+    SELF:barMain:OptionsBar:AllowQuickCustomization := false
+    SELF:barMain:OptionsBar:DisableClose := true
+    SELF:barMain:OptionsBar:DisableCustomization := true
+    SELF:barMain:OptionsBar:UseWholeRow := true
     SELF:barMain:StandaloneBarDockControl := SELF:standaloneBarDockControl_Main
     SELF:barMain:Text := "Main Bar"
     // 
@@ -645,11 +645,11 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     // BBIEditReport
     // 
     SELF:BBIEditReport:Caption := "Edit Report"
-    SELF:BBIEditReport:Enabled := FALSE
+    SELF:BBIEditReport:Enabled := false
     SELF:BBIEditReport:Id := 10
     SELF:BBIEditReport:ImageOptions:Image := ((System.Drawing.Image)(resources:GetObject("BBIEditReport.ImageOptions.Image")))
     SELF:BBIEditReport:ItemAppearance:Normal:ForeColor := System.Drawing.Color.Black
-    SELF:BBIEditReport:ItemAppearance:Normal:Options:UseForeColor := TRUE
+    SELF:BBIEditReport:ItemAppearance:Normal:Options:UseForeColor := true
     SELF:BBIEditReport:Name := "BBIEditReport"
     SELF:BBIEditReport:PaintStyle := DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph
     SELF:BBIEditReport:Visibility := DevExpress.XtraBars.BarItemVisibility.Never
@@ -658,7 +658,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     // BBICancel
     // 
     SELF:BBICancel:Caption := "Cancel"
-    SELF:BBICancel:Enabled := FALSE
+    SELF:BBICancel:Enabled := false
     SELF:BBICancel:Id := 24
     SELF:BBICancel:ImageOptions:Image := ((System.Drawing.Image)(resources:GetObject("BBICancel.ImageOptions.Image")))
     SELF:BBICancel:Name := "BBICancel"
@@ -669,11 +669,11 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     // BBISave
     // 
     SELF:BBISave:Caption := "Save Report"
-    SELF:BBISave:Enabled := FALSE
+    SELF:BBISave:Enabled := false
     SELF:BBISave:Id := 11
     SELF:BBISave:ImageOptions:Image := ((System.Drawing.Image)(resources:GetObject("BBISave.ImageOptions.Image")))
     SELF:BBISave:ItemAppearance:Normal:ForeColor := System.Drawing.Color.Black
-    SELF:BBISave:ItemAppearance:Normal:Options:UseForeColor := TRUE
+    SELF:BBISave:ItemAppearance:Normal:Options:UseForeColor := true
     SELF:BBISave:Name := "BBISave"
     SELF:BBISave:PaintStyle := DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph
     SELF:BBISave:Visibility := DevExpress.XtraBars.BarItemVisibility.Never
@@ -682,7 +682,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     // BBIFinalize
     // 
     SELF:BBIFinalize:Caption := "Finalize"
-    SELF:BBIFinalize:Enabled := FALSE
+    SELF:BBIFinalize:Enabled := false
     SELF:BBIFinalize:Id := 22
     SELF:BBIFinalize:ImageOptions:Image := ((System.Drawing.Image)(resources:GetObject("BBIFinalize.ImageOptions.Image")))
     SELF:BBIFinalize:Name := "BBIFinalize"
@@ -723,7 +723,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     // BBIDelete
     // 
     SELF:BBIDelete:Caption := "Delete Report"
-    SELF:BBIDelete:Enabled := FALSE
+    SELF:BBIDelete:Enabled := false
     SELF:BBIDelete:Id := 12
     SELF:BBIDelete:ImageOptions:Image := ((System.Drawing.Image)(resources:GetObject("BBIDelete.ImageOptions.Image")))
     SELF:BBIDelete:Name := "BBIDelete"
@@ -733,7 +733,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     // 
     // printButton
     // 
-    SELF:printButton:ActAsDropDown := TRUE
+    SELF:printButton:ActAsDropDown := true
     SELF:printButton:ButtonStyle := DevExpress.XtraBars.BarButtonStyle.DropDown
     SELF:printButton:Caption := "Print Report"
     SELF:printButton:DropDownControl := SELF:popupMenu1
@@ -783,7 +783,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     // 
     // standaloneBarDockControl_Main
     // 
-    SELF:standaloneBarDockControl_Main:CausesValidation := FALSE
+    SELF:standaloneBarDockControl_Main:CausesValidation := false
     SELF:standaloneBarDockControl_Main:Dock := System.Windows.Forms.DockStyle.Top
     SELF:standaloneBarDockControl_Main:Location := System.Drawing.Point{0, 0}
     SELF:standaloneBarDockControl_Main:Manager := SELF:barManager1
@@ -793,7 +793,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     // 
     // barDockControlTop
     // 
-    SELF:barDockControlTop:CausesValidation := FALSE
+    SELF:barDockControlTop:CausesValidation := false
     SELF:barDockControlTop:Dock := System.Windows.Forms.DockStyle.Top
     SELF:barDockControlTop:Location := System.Drawing.Point{0, 0}
     SELF:barDockControlTop:Manager := SELF:barManager1
@@ -801,7 +801,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     // 
     // barDockControlBottom
     // 
-    SELF:barDockControlBottom:CausesValidation := FALSE
+    SELF:barDockControlBottom:CausesValidation := false
     SELF:barDockControlBottom:Dock := System.Windows.Forms.DockStyle.Bottom
     SELF:barDockControlBottom:Location := System.Drawing.Point{0, 641}
     SELF:barDockControlBottom:Manager := SELF:barManager1
@@ -809,7 +809,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     // 
     // barDockControlLeft
     // 
-    SELF:barDockControlLeft:CausesValidation := FALSE
+    SELF:barDockControlLeft:CausesValidation := false
     SELF:barDockControlLeft:Dock := System.Windows.Forms.DockStyle.Left
     SELF:barDockControlLeft:Location := System.Drawing.Point{0, 0}
     SELF:barDockControlLeft:Manager := SELF:barManager1
@@ -817,7 +817,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     // 
     // barDockControlRight
     // 
-    SELF:barDockControlRight:CausesValidation := FALSE
+    SELF:barDockControlRight:CausesValidation := false
     SELF:barDockControlRight:Dock := System.Windows.Forms.DockStyle.Right
     SELF:barDockControlRight:Location := System.Drawing.Point{1444, 0}
     SELF:barDockControlRight:Manager := SELF:barManager1
@@ -846,7 +846,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:DockPanelProgramsBar:ID := System.Guid{"6ac01ea9-b4f1-425c-a3f7-193bfb25a763"}
     SELF:DockPanelProgramsBar:Location := System.Drawing.Point{0, 0}
     SELF:DockPanelProgramsBar:Name := "DockPanelProgramsBar"
-    SELF:DockPanelProgramsBar:Options:ShowCloseButton := FALSE
+    SELF:DockPanelProgramsBar:Options:ShowCloseButton := false
     SELF:DockPanelProgramsBar:OriginalSize := System.Drawing.Size{159, 200}
     SELF:DockPanelProgramsBar:SavedDock := DevExpress.XtraBars.Docking.DockingStyle.Left
     SELF:DockPanelProgramsBar:SavedIndex := 0
@@ -864,7 +864,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     // splitContainerControl_CheckedLBC
     // 
     SELF:splitContainerControl_CheckedLBC:Dock := System.Windows.Forms.DockStyle.Fill
-    SELF:splitContainerControl_CheckedLBC:Horizontal := FALSE
+    SELF:splitContainerControl_CheckedLBC:Horizontal := false
     SELF:splitContainerControl_CheckedLBC:Location := System.Drawing.Point{0, 0}
     SELF:splitContainerControl_CheckedLBC:Name := "splitContainerControl_CheckedLBC"
     SELF:splitContainerControl_CheckedLBC:Panel1:Controls:Add(SELF:ReportsTabUserControl)
@@ -899,16 +899,16 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:tabPage1:Size := System.Drawing.Size{276, 107}
     SELF:tabPage1:TabIndex := 0
     SELF:tabPage1:Text := "Vessel Reports"
-    SELF:tabPage1:UseVisualStyleBackColor := TRUE
+    SELF:tabPage1:UseVisualStyleBackColor := true
     // 
     // LBCReportsVessel
     // 
     SELF:LBCReportsVessel:Appearance:Font := System.Drawing.Font{"Lucida Console", 8.25}
-    SELF:LBCReportsVessel:Appearance:Options:UseFont := TRUE
+    SELF:LBCReportsVessel:Appearance:Options:UseFont := true
     SELF:LBCReportsVessel:ContextMenuStrip := SELF:ContextMenuStripExportToExcel
     SELF:LBCReportsVessel:Cursor := System.Windows.Forms.Cursors.Default
     SELF:LBCReportsVessel:Dock := System.Windows.Forms.DockStyle.Fill
-    SELF:LBCReportsVessel:HorizontalScrollbar := TRUE
+    SELF:LBCReportsVessel:HorizontalScrollbar := true
     SELF:LBCReportsVessel:Location := System.Drawing.Point{3, 3}
     SELF:LBCReportsVessel:Name := "LBCReportsVessel"
     SELF:LBCReportsVessel:Size := System.Drawing.Size{270, 101}
@@ -938,15 +938,15 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:tabPage2:Size := System.Drawing.Size{276, 107}
     SELF:tabPage2:TabIndex := 1
     SELF:tabPage2:Text := "Office Reports"
-    SELF:tabPage2:UseVisualStyleBackColor := TRUE
+    SELF:tabPage2:UseVisualStyleBackColor := true
     // 
     // LBCReportsOffice
     // 
     SELF:LBCReportsOffice:Appearance:Font := System.Drawing.Font{"Lucida Console", 8.25}
-    SELF:LBCReportsOffice:Appearance:Options:UseFont := TRUE
+    SELF:LBCReportsOffice:Appearance:Options:UseFont := true
     SELF:LBCReportsOffice:ContextMenuStrip := SELF:ContextMenuStripExportToExcel
     SELF:LBCReportsOffice:Dock := System.Windows.Forms.DockStyle.Fill
-    SELF:LBCReportsOffice:HorizontalScrollbar := TRUE
+    SELF:LBCReportsOffice:HorizontalScrollbar := true
     SELF:LBCReportsOffice:Location := System.Drawing.Point{3, 3}
     SELF:LBCReportsOffice:Name := "LBCReportsOffice"
     SELF:LBCReportsOffice:Size := System.Drawing.Size{270, 101}
@@ -958,27 +958,27 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     // 
     SELF:TreeListVesselsReports:Appearance:FocusedCell:BackColor := System.Drawing.Color.RoyalBlue
     SELF:TreeListVesselsReports:Appearance:FocusedCell:ForeColor := System.Drawing.Color.White
-    SELF:TreeListVesselsReports:Appearance:FocusedCell:Options:UseBackColor := TRUE
-    SELF:TreeListVesselsReports:Appearance:FocusedCell:Options:UseForeColor := TRUE
+    SELF:TreeListVesselsReports:Appearance:FocusedCell:Options:UseBackColor := true
+    SELF:TreeListVesselsReports:Appearance:FocusedCell:Options:UseForeColor := true
     SELF:TreeListVesselsReports:Dock := System.Windows.Forms.DockStyle.Fill
     SELF:TreeListVesselsReports:Location := System.Drawing.Point{0, 26}
     SELF:TreeListVesselsReports:Name := "TreeListVesselsReports"
-    SELF:TreeListVesselsReports:OptionsView:ShowColumns := FALSE
-    SELF:TreeListVesselsReports:OptionsView:ShowHorzLines := FALSE
-    SELF:TreeListVesselsReports:OptionsView:ShowIndicator := FALSE
-    SELF:TreeListVesselsReports:OptionsView:ShowVertLines := FALSE
+    SELF:TreeListVesselsReports:OptionsView:ShowColumns := false
+    SELF:TreeListVesselsReports:OptionsView:ShowHorzLines := false
+    SELF:TreeListVesselsReports:OptionsView:ShowIndicator := false
+    SELF:TreeListVesselsReports:OptionsView:ShowVertLines := false
     SELF:TreeListVesselsReports:Size := System.Drawing.Size{284, 288}
     SELF:TreeListVesselsReports:TabIndex := 53
-    SELF:TreeListVesselsReports:Visible := FALSE
+    SELF:TreeListVesselsReports:Visible := false
     SELF:TreeListVesselsReports:FocusedNodeChanged += DevExpress.XtraTreeList.FocusedNodeChangedEventHandler{ SELF, @TreeListVesselsReports_FocusedNodeChanged() }
     SELF:TreeListVesselsReports:DoubleClick += System.EventHandler{ SELF, @TreeListVesselsReports_DoubleClick() }
     // 
     // LBCVesselReports
     // 
     SELF:LBCVesselReports:Appearance:Font := System.Drawing.Font{"Lucida Console", 8.25}
-    SELF:LBCVesselReports:Appearance:Options:UseFont := TRUE
+    SELF:LBCVesselReports:Appearance:Options:UseFont := true
     SELF:LBCVesselReports:Dock := System.Windows.Forms.DockStyle.Fill
-    SELF:LBCVesselReports:HorizontalScrollbar := TRUE
+    SELF:LBCVesselReports:HorizontalScrollbar := true
     SELF:LBCVesselReports:Location := System.Drawing.Point{0, 26}
     SELF:LBCVesselReports:Name := "LBCVesselReports"
     SELF:LBCVesselReports:Size := System.Drawing.Size{284, 288}
@@ -987,16 +987,16 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     // 
     // splitMapForm
     // 
-    SELF:splitMapForm:AlwaysScrollActiveControlIntoView := FALSE
+    SELF:splitMapForm:AlwaysScrollActiveControlIntoView := false
     SELF:splitMapForm:BorderStyle := DevExpress.XtraEditors.Controls.BorderStyles.Style3D
     SELF:splitMapForm:Dock := System.Windows.Forms.DockStyle.Fill
     SELF:splitMapForm:Location := System.Drawing.Point{0, 26}
     SELF:splitMapForm:Name := "splitMapForm"
-    SELF:splitMapForm:Panel1:AutoScroll := TRUE
+    SELF:splitMapForm:Panel1:AutoScroll := true
     SELF:splitMapForm:Panel1:Tag := "1"
     SELF:splitMapForm:Panel1:Text := "Panel1"
     SELF:splitMapForm:Panel1:VisibleChanged += System.EventHandler{ SELF, @splitMapForm_Panel1_VisibleChanged() }
-    SELF:splitMapForm:Panel2:AutoScroll := TRUE
+    SELF:splitMapForm:Panel2:AutoScroll := true
     SELF:splitMapForm:Panel2:BorderStyle := DevExpress.XtraEditors.Controls.BorderStyles.Style3D
     SELF:splitMapForm:Panel2:Controls:Add(SELF:panelControl_BingMaps)
     SELF:splitMapForm:Panel2:Tag := "2"
@@ -1046,7 +1046,8 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     // 
     // MainForm
     // 
-    SELF:AutoScaleMode := System.Windows.Forms.AutoScaleMode.None
+    SELF:AutoScaleDimensions := System.Drawing.SizeF{96, 96}
+    SELF:AutoScaleMode := System.Windows.Forms.AutoScaleMode.Dpi
     SELF:ClientSize := System.Drawing.Size{1444, 663}
     SELF:Controls:Add(SELF:splitContainerControl_Main)
     SELF:Controls:Add(SELF:hideContainerLeft)
@@ -1063,32 +1064,32 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:Load += System.EventHandler{ SELF, @MainForm_Load() }
     SELF:Shown += System.EventHandler{ SELF, @MainForm_Shown() }
     ((System.ComponentModel.ISupportInitialize)(SELF:splitContainerControl_Main)):EndInit()
-    SELF:splitContainerControl_Main:ResumeLayout(FALSE)
+    SELF:splitContainerControl_Main:ResumeLayout(false)
     ((System.ComponentModel.ISupportInitialize)(SELF:splitContainerControl_LBC)):EndInit()
-    SELF:splitContainerControl_LBC:ResumeLayout(FALSE)
+    SELF:splitContainerControl_LBC:ResumeLayout(false)
     ((System.ComponentModel.ISupportInitialize)(SELF:TreeListVessels)):EndInit()
     ((System.ComponentModel.ISupportInitialize)(SELF:barManager1)):EndInit()
     ((System.ComponentModel.ISupportInitialize)(SELF:repositoryItemComboBox1)):EndInit()
     ((System.ComponentModel.ISupportInitialize)(SELF:repositoryItemComboBox2)):EndInit()
     ((System.ComponentModel.ISupportInitialize)(SELF:popupMenu1)):EndInit()
     ((System.ComponentModel.ISupportInitialize)(SELF:dockManager1)):EndInit()
-    SELF:hideContainerLeft:ResumeLayout(FALSE)
-    SELF:DockPanelProgramsBar:ResumeLayout(FALSE)
+    SELF:hideContainerLeft:ResumeLayout(false)
+    SELF:DockPanelProgramsBar:ResumeLayout(false)
     ((System.ComponentModel.ISupportInitialize)(SELF:splitContainerControl_CheckedLBC)):EndInit()
-    SELF:splitContainerControl_CheckedLBC:ResumeLayout(FALSE)
-    SELF:ReportsTabUserControl:ResumeLayout(FALSE)
-    SELF:tabPage1:ResumeLayout(FALSE)
+    SELF:splitContainerControl_CheckedLBC:ResumeLayout(false)
+    SELF:ReportsTabUserControl:ResumeLayout(false)
+    SELF:tabPage1:ResumeLayout(false)
     ((System.ComponentModel.ISupportInitialize)(SELF:LBCReportsVessel)):EndInit()
-    SELF:ContextMenuStripExportToExcel:ResumeLayout(FALSE)
-    SELF:tabPage2:ResumeLayout(FALSE)
+    SELF:ContextMenuStripExportToExcel:ResumeLayout(false)
+    SELF:tabPage2:ResumeLayout(false)
     ((System.ComponentModel.ISupportInitialize)(SELF:LBCReportsOffice)):EndInit()
     ((System.ComponentModel.ISupportInitialize)(SELF:TreeListVesselsReports)):EndInit()
     ((System.ComponentModel.ISupportInitialize)(SELF:LBCVesselReports)):EndInit()
     ((System.ComponentModel.ISupportInitialize)(SELF:splitMapForm)):EndInit()
-    SELF:splitMapForm:ResumeLayout(FALSE)
+    SELF:splitMapForm:ResumeLayout(false)
     ((System.ComponentModel.ISupportInitialize)(SELF:panelControl_BingMaps)):EndInit()
     ((System.ComponentModel.ISupportInitialize)(SELF:galleryDropDown1)):EndInit()
-    SELF:ResumeLayout(FALSE)
+    SELF:ResumeLayout(false)
     SELF:PerformLayout()
 
 PRIVATE METHOD MainForm_Load( sender AS System.Object, e AS System.EventArgs ) AS System.Void
@@ -1170,12 +1171,12 @@ PRIVATE METHOD BBIRefresh_ItemClick( sender AS System.Object, e AS DevExpress.Xt
         RETURN
 
 // PRIVATE METHOD MainForm_PreviewKeyDown( sender AS System.Object, e AS System.Windows.Forms.PreviewKeyDownEventArgs ) AS System.Void
-//         wb(sender, e:KeyCode)
-//         RETURN
+// wb(sender, e:KeyCode)
+// RETURN
 // 
-//     PRIVATE METHOD splitContainerControl_Main_Panel2_PreviewKeyDown( sender AS System.Object, e AS System.Windows.Forms.PreviewKeyDownEventArgs ) AS System.Void
-//         wb(sender, e:KeyCode)
-//         RETURN
+// PRIVATE METHOD splitContainerControl_Main_Panel2_PreviewKeyDown( sender AS System.Object, e AS System.Windows.Forms.PreviewKeyDownEventArgs ) AS System.Void
+// wb(sender, e:KeyCode)
+// RETURN
 PRIVATE METHOD LBCReports_DrawItem( sender AS System.Object, e AS DevExpress.XtraEditors.ListBoxDrawItemEventArgs ) AS System.Void
         SELF:DrawLBCReportsItem(e)
         RETURN

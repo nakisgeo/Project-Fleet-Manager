@@ -1805,6 +1805,7 @@ METHOD PreviewForm() AS VOID
 	LOCAL oDTReportItems := oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement) AS DataTable
 
 	LOCAL oReportTabForm := ReportTabForm{} AS ReportTabForm
+    oReportTabForm:AutoScaleMode := System.Windows.Forms.AutoScaleMode.Dpi
 	oReportTabForm:Text := cVesselName + ": "+ cReportName
 	oReportTabForm:cMyVesselName := cVesselName
 	oReportTabForm:cVesselUID := cVesselUID
