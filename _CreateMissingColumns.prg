@@ -16,10 +16,13 @@ METHOD AddMissingColumns() AS VOID
 	oSoftway:AddColumnIfNotExists(oGFH, oConn, "FMReportItems", "ShowOnMap", "bit", "NOT NULL", "Default 0")
 	oSoftway:AddColumnIfNotExists(oGFH, oConn, "FMReportItems", "ItemTypeValues", oSoftway:FieldVarChar+" (1000)", "NULL", "")
 	oSoftway:AddColumnIfNotExists(oGFH, oConn, "FMReportItems", "ExpandOnColumns", "int", "NOT NULL", "Default 1")
+	oSoftway:AddColumnIfNotExists(oGFH, oConn, "FMReportItems", "ItemCaption", oSoftway:FieldnVarChar+" (200)", "NULL", "")
+	oSoftway:AddColumnIfNotExists(oGFH, oConn, "FMReportItems", "ColumnColor", "int", "NOT NULL", "Default 16777215") 
 	
 	oSoftway:AddColumnIfNotExists(oGFH, oConn, "EconVoyages", "Type", "int", "NULL", "Default 0")
 	oSoftway:AddColumnIfNotExists(oGFH, oConn, "EconVoyages", "LaytimeStartDate", "Datetime", "NULL", "")
 	oSoftway:AddColumnIfNotExists(oGFH, oConn, "EconVoyages", "LaytimeEndDate", "Datetime", "NULL", "")
+	oSoftway:AddColumnIfNotExists(oGFH, oConn, "EconVoyages", "FM_FolderId", "int", "NOT NULL", "Default 0") //Folder Structure
 	
 	oSoftway:AddColumnIfNotExists(oGFH, oConn, "FMDataPackages", "Visible", "smallint", "NOT NULL", "Default 1")
 	oSoftway:AddColumnIfNotExists(oGFH, oConn, "FMDataPackages", "Matched", "smallint", "NOT NULL", "Default 0")
@@ -34,7 +37,7 @@ METHOD AddMissingColumns() AS VOID
 	oSoftway:AddColumnIfNotExists(oGFH, oConn, "EconRoutings", "BunkeredQty",   " Decimal(18,3)", "NOT NULL", "Default 0")
 	//Samos
 	oSoftway:AddColumnIfNotExists(oGFH, oConn, "FMReportTypes", "ReportType",  oSoftway:FieldChar+" (1)", "NOT NULL", "Default 'V'")
-	
+	oSoftway:AddColumnIfNotExists(oGFH, oConn, "FMReportTypes", "FolderName", oSoftway:FieldnVarChar+" (50)", "NOT NULL", "Default ''") //Folder Structure
 
 	IF oSoftway:AddColumnIfNotExists(oGFH, oConn, "FMItemCategories", "SortOrder", "smallint", "NULL", "")
 		SELF:SetCategoriesSortOrder()
@@ -44,6 +47,8 @@ METHOD AddMissingColumns() AS VOID
 
 	oSoftway:AddColumnIfNotExists(oGFH, oConn, "SupVessels", "FLEET_UID", "int", "NOT NULL", "Default 0")
 	oSoftway:AddColumnIfNotExists(oGFH, oConn, "SupVessels", "PropellerPitch", "float", "NULL", "Default 0")
+	oSoftway:AddColumnIfNotExists(oGFH, oConn, "SupVessels", "FM_FolderId", "int", "NOT NULL", "Default 0") //Folder Structure
+    
 	oSoftway:AddColumnIfNotExists(oGFH, oConn, "Vessels", "Alias", oSoftway:FieldVarChar+" (256)", "NULL", "")
 	
 	oSoftway:AddColumnIfNotExists(oGFH, oConn, "FMUsers", "CanCreateReports", "bit", "NOT NULL", "Default 0")
@@ -68,6 +73,11 @@ METHOD AddMissingColumns() AS VOID
 	oSoftway:AddColumnIfNotExists(oGFH, oConn, "FMGlobalSettings", "DepartureBunkeredHFO_Item_UID", oSoftway:FieldVarChar+" (30)", "NOT NULL", "Default ''")
 	oSoftway:AddColumnIfNotExists(oGFH, oConn, "FMGlobalSettings", "DepartureBunkeredLFO_Item_UID", oSoftway:FieldVarChar+" (30)", "NOT NULL", "Default ''")
 	oSoftway:AddColumnIfNotExists(oGFH, oConn, "FMGlobalSettings", "DepartureBunkeredMDO_Item_UID", oSoftway:FieldVarChar+" (30)", "NOT NULL", "Default ''")
+	//FMTrueGlobalSettings
+	oSoftway:AddColumnIfNotExists(oGFH, oConn, "FMTrueGlobalSettings", "FolderStructureJSON", oSoftway:FieldnVarChar+" (1000)", "NOT NULL", "Default ''") //Folder Structure
+	oSoftway:AddColumnIfNotExists(oGFH, oConn, "FMTrueGlobalSettings", "VoyageFolderName", oSoftway:FieldnVarChar+" (50)", "NOT NULL", "Default ''") //Folder Structure
+	oSoftway:AddColumnIfNotExists(oGFH, oConn, "FMTrueGlobalSettings", "AutoCreateStructure", "smallint", "NOT NULL", "Default 0") //Folder Structure
+	oSoftway:AddColumnIfNotExists(oGFH, oConn, "FMTrueGlobalSettings", "ReportFolderColor", "int", "NOT NULL", "Default 0") //Folder Structure
 	//FM Routings Additional Data	
 	oSoftway:AddColumnIfNotExists(oGFH, oConn, "FMRoutingAdditionalData", "BunkeredHFO", "float", "NOT NULL", "Default 0")
 	oSoftway:AddColumnIfNotExists(oGFH, oConn, "FMRoutingAdditionalData", "BunkeredLFO", "float", "NOT NULL", "Default 0")

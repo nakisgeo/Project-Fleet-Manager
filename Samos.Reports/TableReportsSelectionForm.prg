@@ -8,7 +8,7 @@ PARTIAL CLASS TableReportsSelectionForm INHERIT System.Windows.Forms.Form
     EXPORT Item AS System.Windows.Forms.ColumnHeader
     EXPORT UID AS System.Windows.Forms.ColumnHeader
     PRIVATE button1 AS System.Windows.Forms.Button
-    PRIVATE Value AS System.Windows.Forms.ColumnHeader
+    PRIVATE oColHeaderValue AS System.Windows.Forms.ColumnHeader
     PRIVATE label3 AS System.Windows.Forms.Label
     PRIVATE txtValue AS System.Windows.Forms.TextBox
     PRIVATE ColumnInt AS System.Windows.Forms.ColumnHeader
@@ -77,7 +77,7 @@ PARTIAL CLASS TableReportsSelectionForm INHERIT System.Windows.Forms.Form
         SELF:ItemsListView := System.Windows.Forms.ListView{}
         SELF:Item := System.Windows.Forms.ColumnHeader{}
         SELF:UID := System.Windows.Forms.ColumnHeader{}
-        SELF:Value := System.Windows.Forms.ColumnHeader{}
+        SELF:oColHeaderValue := System.Windows.Forms.ColumnHeader{}
         SELF:ColumnInt := System.Windows.Forms.ColumnHeader{}
         SELF:button1 := System.Windows.Forms.Button{}
         SELF:txtValue := System.Windows.Forms.TextBox{}
@@ -188,7 +188,7 @@ PARTIAL CLASS TableReportsSelectionForm INHERIT System.Windows.Forms.Form
         SELF:ItemsListView:Anchor := ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) ;
                     | System.Windows.Forms.AnchorStyles.Left) ;
                     | System.Windows.Forms.AnchorStyles.Right)))
-        SELF:ItemsListView:Columns:AddRange(<System.Windows.Forms.ColumnHeader>{ SELF:Item, SELF:UID, SELF:Value, SELF:ColumnInt })
+        SELF:ItemsListView:Columns:AddRange(<System.Windows.Forms.ColumnHeader>{ SELF:Item, SELF:UID, SELF:oColHeaderValue, SELF:ColumnInt })
         SELF:ItemsListView:FullRowSelect := TRUE
         SELF:ItemsListView:GridLines := TRUE
         SELF:ItemsListView:HideSelection := FALSE
@@ -215,8 +215,8 @@ PARTIAL CLASS TableReportsSelectionForm INHERIT System.Windows.Forms.Form
         // 
         // Value
         // 
-        SELF:Value:Text := "Values"
-        SELF:Value:Width := 265
+        SELF:oColHeaderValue:Text := "Values"
+        SELF:oColHeaderValue:Width := 265
         // 
         // ColumnInt
         // 
@@ -652,14 +652,14 @@ PARTIAL CLASS TableReportsSelectionForm INHERIT System.Windows.Forms.Form
 			SELF:splitContainerControl1:PanelVisibility := DevExpress.XtraEditors.SplitPanelVisibility.Both
 			IF !lRegistered
 				SELF:gvResults:FocusedRowObjectChanged += DevExpress.XtraGrid.Views.Base.FocusedRowObjectChangedEventHandler{ SELF, @gvResults_FocusedRowObjectChanged() }		
-				lRegistered := true
+				lRegistered := TRUE
 			ENDIF
 
         RETURN
 
     PRIVATE METHOD txtReport_UID_Validated( sender AS System.Object, e AS System.EventArgs ) AS System.Void
 		cMyReportUID := txtReport_UID:Text    
-		self:LoadMyListView()
+		SELF:LoadMyListView()
 	RETURN
 
     PRIVATE METHOD bttnSEReport_Click( sender AS System.Object, e AS System.EventArgs ) AS System.Void
@@ -672,7 +672,7 @@ PARTIAL CLASS TableReportsSelectionForm INHERIT System.Windows.Forms.Form
 				RETURN
 			ENDIF
 			SELF:btnReportPerSE_Clicked()
-			SELF:createExcelSuperEng(cMyReportUID,SELF:DateFrom:DateTime,SELF:DateTo:DateTime,true)
+			SELF:createExcelSuperEng(cMyReportUID,SELF:DateFrom:DateTime,SELF:DateTo:DateTime,TRUE)
         RETURN
     PRIVATE METHOD gvResults_FocusedRowObjectChanged( sender AS System.Object, e AS DevExpress.XtraGrid.Views.Base.FocusedRowObjectChangedEventArgs ) AS System.Void
 		//self:gvResulsFocusedChanged(sender,e)    
@@ -690,7 +690,7 @@ PARTIAL CLASS TableReportsSelectionForm INHERIT System.Windows.Forms.Form
 				bttnCheckAllVessels:Text := "Uncheck All Vessels"
 			ELSE
 				FOREACH  item AS ListViewItem IN lvVessels:Items
-					item:Checked := false
+					item:Checked := FALSE
 				NEXT
 				bttnCheckAllVessels:Text := "Check All Vessels"
 			ENDIF
@@ -710,11 +710,11 @@ PARTIAL CLASS TableReportsSelectionForm INHERIT System.Windows.Forms.Form
         SELF:editResultsToolStripMenuItemClick(sender,e)
 	RETURN
     PRIVATE METHOD gvDetails_CellValueChanged( sender AS System.Object, e AS DevExpress.XtraGrid.Views.Base.CellValueChangedEventArgs ) AS System.Void
-		self:gvDetailsCellValueChanged(sender,e)    
+		SELF:gvDetailsCellValueChanged(sender,e)    
 	RETURN
 
     PRIVATE METHOD toolStripMenuItemLocateFinding_Click( sender AS System.Object, e AS System.EventArgs ) AS System.Void
-		self:LocateFinding()    
+		SELF:LocateFinding()    
 	RETURN
     PRIVATE METHOD bttnCategoriesVessels_Click( sender AS System.Object, e AS System.EventArgs ) AS System.Void
 		IF cmbStatus:Text == ""
@@ -732,7 +732,7 @@ PARTIAL CLASS TableReportsSelectionForm INHERIT System.Windows.Forms.Form
 
         RETURN
     PRIVATE METHOD bttnOverdue_Click( sender AS System.Object, e AS System.EventArgs ) AS System.Void
-		self:btnOverdueReport_Clicked()
+		SELF:btnOverdueReport_Clicked()
 	RETURN
 
     PRIVATE METHOD exportGridToExcelToolStripMenuItem_Click( sender AS System.Object, e AS System.EventArgs ) AS System.Void
@@ -741,7 +741,7 @@ PARTIAL CLASS TableReportsSelectionForm INHERIT System.Windows.Forms.Form
 
     PRIVATE METHOD gvResults_SelectionChanged( sender AS System.Object, e AS DevExpress.Data.SelectionChangedEventArgs ) AS System.Void
 
-			self:gvResultsSelectionChanged()
+			SELF:gvResultsSelectionChanged()
 			
 
         RETURN

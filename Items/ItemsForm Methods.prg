@@ -5,6 +5,7 @@
 #Using System.Windows.Forms
 #Using System.Drawing
 #Using System.Collections
+USING System.Linq
 #Using DevExpress.XtraGrid.Views.Grid
 #Using DevExpress.XtraGrid.Columns
 #Using DevExpress.Utils
@@ -33,6 +34,7 @@ PARTIAL CLASS ItemsForm INHERIT DevExpress.XtraEditors.XtraForm
 	EXPORT oDTReports, oDTReportsOffice AS DataTable
 	PRIVATE lChanged AS LOGIC
 	EXPORT cLogNotes := "" AS STRING
+	PRIVATE oChangedReportColor AS Color
 
 METHOD ItemsForm_OnLoad() AS VOID
 	oSoftway:ReadFormSettings_DevExpress(SELF, splitContainerControl_Items, oMainForm:alForms, oMainForm:alData)
@@ -223,7 +225,7 @@ METHOD CreateGridItems() AS VOID
 	cStatement:="SELECT FMReportItems.ITEM_UID as ITEM_UID, ItemNo, ItemName, ItemType, Mandatory, "+;
 				" SLAA, ShowOnlyOffice, NotNumbered, IsDD ,  CalculatedField, ExpDays, MinValue, MaxValue, ShowOnMap, Unit,"+;
 				" FMItemCategories.CATEGORY_UID, FMItemCategories.Description AS Category, ItemTypeValues, Groups_Owners,"+;
-				" ExpandOnColumns FROM FMReportItems"+oMainForm:cNoLockTerm+;
+				" ExpandOnColumns, ItemCaption, ColumnColor FROM FMReportItems"+oMainForm:cNoLockTerm+;
 				" INNER JOIN FMReportTypes ON FMReportTypes.REPORT_UID=FMReportItems.REPORT_UID"+;
 				" AND FMReportTypes.REPORT_UID="+cReportUID+;
 				" LEFT OUTER JOIN FMItemCategories ON FMReportItems.CATEGORY_UID=FMItemCategories.CATEGORY_UID"+;
@@ -386,6 +388,16 @@ METHOD CreateGridItems_Columns() AS VOID
 	oColumn:=oMainForm:CreateDXColumn("CATEGORY_UID","CATEGORY_UID",	FALSE, DevExpress.Data.UnboundColumnType.Integer, ;
 																		nAbsIndex++, -1, -1, SELF:GridViewItems)
 	oColumn:Visible:=FALSE
+	
+	oColumn:=oMainForm:CreateDXColumn("Item Caption", "ItemCaption",	FALSE, DevExpress.Data.UnboundColumnType.String, ;
+																		nAbsIndex++, nVisible++, 200, SELF:GridViewItems)
+																		
+	LOCAL repositoryItemColorEdit1 := DevExpress.XtraEditors.Repository.RepositoryItemColorEdit{} AS DevExpress.XtraEditors.Repository.RepositoryItemColorEdit
+	oColumn:=oMainForm:CreateDXColumn("Column Color", "uColumnColor",	FALSE,  DevExpress.Data.UnboundColumnType.Object, ;
+																		nAbsIndex++, nVisible++, 70, SELF:GridViewItems)
+	oColumn:ColumnEdit := repositoryItemColorEdit1
+	// ToolTip
+	oColumn:ToolTip := "Click the cell to change the Column Color"
 
 	SELF:lCategoryEditMode := FALSE
 RETURN
@@ -607,6 +619,14 @@ METHOD CustomUnboundColumnData_Items(e AS DevExpress.XtraGrid.Views.Base.CustomC
 			cValue := "0"
 		ENDIF
 		e:Value:=cValue
+	CASE e:Column:FieldName == "uColumnColor"
+		oRow:=SELF:oDTItems:Rows[e:ListSourceRowIndex]
+
+		LOCAL oColor AS System.Drawing.Color
+		VAR colorTxt := oRow:Item["ColumnColor"]:ToString()
+		oColor := oMainForm:AssignColor(colorTxt)
+		// The Color contains: <A, R, G, B>. The saved Table column has: <R, G, B>
+		e:Value := oColor:ToArgb()
 	ENDCASE
 RETURN
 
@@ -965,7 +985,7 @@ METHOD Items_Edit(oRow AS DataRowView, oColumn AS GridColumn) AS VOID
 	LOCAL cField := oColumn:FieldName AS STRING
 	IF ! InListExact(cField, "ItemNo", "ItemName", "uItemType", "Mandatory","SLAA", "IsDD" , "ExpDays",;
 		 "uCategory", "CalculatedField", "ItemTypeValues", "MinValue", "MaxValue", "ShowOnMap", "Unit",;
-		 "ShowOnlyOffice","NotNumbered","ExpandOnColumns")
+		 "ShowOnlyOffice","NotNumbered","ExpandOnColumns", "ItemCaption", "uColumnColor")
 		wb("The column '"+oColumn:Caption+"' is ReadOnly")
 		RETURN
 	ENDIF
@@ -1098,7 +1118,7 @@ METHOD Items_Delete(oRow AS DataRowView) AS VOID
 RETURN
 
 METHOD Items_Save(e AS DevExpress.XtraGrid.Views.Base.CellValueChangedEventArgs) AS VOID
-	LOCAL cStatement, cUID, cField, cValue, cDuplicate, cReplace AS STRING
+	LOCAL cStatement, cUID, cField, ucField, cValue, cDuplicate, cReplace AS STRING
 
 	LOCAL oRow AS DataRowView
 	oRow:=(DataRowView)SELF:GridViewItems:GetRow(e:RowHandle)
@@ -1153,7 +1173,6 @@ METHOD Items_Save(e AS DevExpress.XtraGrid.Views.Base.CellValueChangedEventArgs)
 			RETURN
 		ENDIF*/
 		cReplace := "'"+oSoftway:ConvertWildcards(cValue, FALSE)+"'"
-
 	CASE InListExact(cField, "ItemNo") .AND. cValue:Length > 5
 		ErrorBox("The field '"+cField+"' must contain up to 5 characters", "Editing aborted")
 		SELF:Items_Refresh()
@@ -1463,6 +1482,14 @@ METHOD Items_Save(e AS DevExpress.XtraGrid.Views.Base.CellValueChangedEventArgs)
 			ENDIF
 		ENDIF
 
+	CASE cField == "ItemCaption"
+		cReplace := "'"+oSoftway:ConvertWildcards(cValue, FALSE)+"'"
+	CASE cField == "uColumnColor"
+		ucField := cField
+		// Remove the leading 'u'
+		cField := cField:Substring(1)
+		// The Color contains: <A, R, G, B>. The saved Table column has: <R, G, B>
+		cReplace := RGB(SELF:oChangedReportColor:R, SELF:oChangedReportColor:G, SELF:oChangedReportColor:B):ToString()
 	OTHERWISE
 		cReplace := cValue
 	ENDCASE
@@ -1501,6 +1528,8 @@ METHOD Items_Save(e AS DevExpress.XtraGrid.Views.Base.CellValueChangedEventArgs)
 	// Update DataTable and Grid
 	IF cReplace == "NULL"
 		oDataRow:Item[cField] := System.DBNull.Value
+	ELSEIF cField == "ColumnColor"
+		SELF:Items_Refresh()
 	ELSE
 		oDataRow:Item[cField] := cValue
 	ENDIF
@@ -2464,6 +2493,66 @@ METHOD GetReportBaseNum(cReportUIDLocal AS STRING) AS STRING
 RETURN cReturnStringLocal
 
 #EndRegion
+
+
+#region Relateditems
+PRIVATE METHOD GetSelectedItemUID AS STRING
+	LOCAL cItemUID AS STRING
+	VAR iIndexes := GridViewItems:GetSelectedRows():ToList()
+	IF iIndexes:Count:Equals(1)
+		LOCAL oRow AS DataRowView
+		FOREACH i AS INT IN iIndexes
+			oRow := (DataRowView)SELF:GridViewItems:GetRow(i)
+			cItemUID := oRow:Item["ITEM_UID"]:ToString()
+		NEXT 
+	ENDIF
+	RETURN cItemUID
+
+	
+PUBLIC METHOD ShowRelatedItems() AS VOID
+	LBCRelated:Items:Clear()
+	VAR cItemUID := GetSelectedItemUID()
+	
+	IF string.IsNullOrEmpty(cItemUID)
+		RETURN
+	ENDIF
+	
+	VAR cStatement := "SELECT a.FMRD_UID, a.[Item2UID], c.ReportName + ', ' + b.ItemName RelatedItem " +;
+						"FROM [FMRelatedData] a " +;
+						"JOIN [FMReportItems] b ON a.Item2UID=b.ITEM_UID " +;
+						"JOIN [FMReportTypes] c ON b.REPORT_UID=c.REPORT_UID " +;
+						i"WHERE Item1UID={cItemUID} "
+	VAR DTRelatedItems := oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement)
+	
+	oSoftway:CreatePK(DTRelatedItems, "Item2UID")
+
+	SELF:LBCRelated:DataSource := DTRelatedItems
+	SELF:LBCRelated:DisplayMember := "RelatedItem"
+	SELF:LBCRelated:ValueMember := "FMRD_UID"
+	RETURN
+
+PRIVATE METHOD RemoveRelated() AS VOID
+	TRY
+		VAR cItemUID := SELF:GetSelectedItemUID()
+		IF string.IsNullOrEmpty(cItemUID)
+			RETURN
+		ENDIF		
+		LOCAL cRLTItemName := ((DataRowView)LBCRelated:SelectedItem):Item["RelatedItem"]:Tostring() AS STRING
+		IF QuestionBox(i"Do you want to delete '{cRLTItemName}'?", "") <> System.Windows.Forms.DialogResult.Yes
+			RETURN
+		ENDIF
+		VAR cFMRD_UID := LBCRelated:SelectedValue		
+		VAR cStatement := i"Delete from [FMRelatedData] where [FMRD_UID]={cFMRD_UID}"
+		oSoftway:AdoCommand(oMainForm:oGFH, oMainForm:oConn, cStatement)
+		SELF:ShowRelatedItems()
+	CATCH ex AS Exception
+		ErrorBox(ex:Message, "Exception")
+	END TRY
+	
+	return
+
+#endregion
+
 
 END CLASS
 

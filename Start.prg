@@ -85,7 +85,7 @@ FUNCTION Start(asCmdLine AS STRING[]) AS INT
 	//cReportFolder:=cStartupPath+"\Reports"
 	//MessageBox.Show(oSoftway:UserLogonInfoProvided:ToString())
     symServer:=ReadIniFile(cStartupPath+"\SOFTWAY.INI", oSoftway:UserLogonInfoProvided,cProvidedUserName, cProvidedPassword)
-	IF symServer == NULL_SYMBOL
+	IF symServer == NULL_SYMBOL || symServer == NULL_OBJECT
 		Application.Exit()
 		RETURN -1
 	ENDIF

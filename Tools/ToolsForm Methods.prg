@@ -4,6 +4,7 @@
 #Using System.Windows.Forms
 #Using System.Drawing
 #Using System.Collections
+USING System.Collections.Generic
 
 //ENUM ItemTypes
 //	RPM := 1
@@ -151,7 +152,8 @@ METHOD ExportTablesToVessel() AS VOID
 		RETURN
 	ENDIF
 
-	LOCAL aFiles := {} AS ARRAY
+	//LOCAL aFiles := {} AS ARRAY
+	var aFiles := List<STRING>{}
 
 	// BodyISMForm-ReportUID
 	LOCAL cBodyTextTerm := "" AS STRING
@@ -177,7 +179,8 @@ METHOD ExportTablesToVessel() AS VOID
 	oSoftway:CreatePK(oDTVessels, "VESSEL_UNIQUEID")
 	oDTVessels:TableName := "FMVessels"
 	cXMLFile := Application.StartupPath + "\FMVessels.XML"
-	AADD(aFiles, cXMLFile)
+//	AADD(aFiles, cXMLFile)
+	aFiles:Add(cXMLFile)
 	oDTVessels:WriteXml(cXMLFile, XmlWriteMode.WriteSchema, FALSE)
 
 	cStatement:="SELECT CATEGORY_UID, Description, SortOrder"+;
@@ -188,7 +191,8 @@ METHOD ExportTablesToVessel() AS VOID
 	oSoftway:CreatePK(oDTItemCategories, "CATEGORY_UID")
 	oDTItemCategories:TableName := "FMItemCategories"
 	cXMLFile := Application.StartupPath + "\FMItemCategories.XML"
-	AADD(aFiles, cXMLFile)
+//	AADD(aFiles, cXMLFile)
+	aFiles:Add(cXMLFile)
 	oDTItemCategories:WriteXml(cXMLFile, XmlWriteMode.WriteSchema, FALSE)
 
 	cStatement:="SELECT FMReportTypes.*"+;
@@ -201,7 +205,8 @@ METHOD ExportTablesToVessel() AS VOID
 	oSoftway:CreatePK(oDTReportTypes, "REPORT_UID")
 	oDTReportTypes:TableName := "FMReportTypes"
 	cXMLFile := Application.StartupPath + "\FMReportTypes.XML"
-	AADD(aFiles, cXMLFile)
+//	AADD(aFiles, cXMLFile)
+	aFiles:Add(cXMLFile)
 	oDTReportTypes:WriteXml(cXMLFile, XmlWriteMode.WriteSchema, FALSE)
 
 	cStatement:="SELECT FMReportItems.*"+;
@@ -216,7 +221,8 @@ METHOD ExportTablesToVessel() AS VOID
 	oSoftway:CreatePK(oDTReportItems, "ITEM_UID")
 	oDTReportItems:TableName := "FMReportItems"
 	cXMLFile := Application.StartupPath + "\FMReportItems.XML"
-	AADD(aFiles, cXMLFile)
+//	AADD(aFiles, cXMLFile)
+	aFiles:Add(cXMLFile)
 	oDTReportItems:WriteXml(cXMLFile, XmlWriteMode.WriteSchema, FALSE)
 
 	// Check if SupVessels.PropellerPitch is defined
@@ -224,11 +230,27 @@ METHOD ExportTablesToVessel() AS VOID
 		ErrorBox("You have to specify the PropellerPitch for the Vessel: "+SELF:cVesselName, "Export aborted")
 		RETURN
 	ENDIF
-
-	LOCAL cZipFile := cFleetManagerVesselPath + "\FMDataSet_"+oSoftway:FileNameValidate(SELF:cVesselName)+"_"+TimeZoneInfo.ConvertTime(Datetime.Now, TimeZoneInfo.UTC):ToString("yyyy-MM-dd_HH-mm-ss")+".ZIP" AS STRING
-	IF ! oSoftway:ZipFiles(aFiles, cZipFile)
-		RETURN
+	
+	LOCAL oSaveDialog := SaveFileDialog{} AS SaveFileDialog
+	VAR cFileName := "FMDataSet_"+oSoftway:FileNameValidate(SELF:cVesselName)+"_"+TimeZoneInfo.ConvertTime(Datetime.Now, TimeZoneInfo.UTC):ToString("yyyy-MM-dd_HH-mm-ss")+".ZIP"
+	LOCAL cZipFile AS STRING
+	oSaveDialog:InitialDirectory := cFleetManagerVesselPath
+	oSaveDialog:FileName :=  cFileName
+	oSaveDialog:Filter := "Zip Files|*.zip"
+	
+	IF oSaveDialog:ShowDialog() == DialogResult:OK
+		cZipFile := oSaveDialog:FileName
+		IF ! oSoftway:ZipFiles(aFiles, cZipFile)
+			RETURN
+		ENDIF
+		InfoBox("DataSet exported to:"+CRLF+cZipFile)
 	ENDIF
+	
+
+//	LOCAL cZipFile := cFleetManagerVesselPath + cFileName AS STRING
+//	IF ! oSoftway:ZipFiles(aFiles, cZipFile)
+//		RETURN
+//	ENDIF
 
 	/*// Delete the Local XML files
 	LOCAL n, nLen := ALen(aFiles) AS DWORD
@@ -236,9 +258,9 @@ METHOD ExportTablesToVessel() AS VOID
 		System.IO.File.Delete(aFiles[n])
 		Application.DoEvents()
 	NEXT*/
-	InfoBox("DataSet exported to:"+CRLF+cZipFile)
+	//InfoBox("DataSet exported to:"+CRLF+cZipFile)
 
-	SELF:Close()
+	//SELF:Close()
 RETURN
 
 
@@ -318,7 +340,8 @@ METHOD ExportOfficeTables() AS VOID
 		RETURN
 	ENDIF
 
-	LOCAL aFiles := {} AS ARRAY
+//	LOCAL aFiles := {} AS ARRAY
+	VAR aFiles := List<STRING>{}
 
 	// BodyISMForm-ReportUID
 	LOCAL cBodyTextTerm := "" AS STRING
@@ -344,7 +367,8 @@ METHOD ExportOfficeTables() AS VOID
 	oSoftway:CreatePK(oDTVessels, "VESSEL_UNIQUEID")
 	oDTVessels:TableName := "FMVessels"
 	cXMLFile := Application.StartupPath + "\FMVessels.XML"
-	AADD(aFiles, cXMLFile)
+//	AADD(aFiles, cXMLFile)
+	aFiles:Add(cXMLFile)
 	oDTVessels:WriteXml(cXMLFile, XmlWriteMode.WriteSchema, FALSE)
 
 	cStatement:="SELECT CATEGORY_UID, Description, SortOrder"+;
@@ -355,7 +379,8 @@ METHOD ExportOfficeTables() AS VOID
 	oSoftway:CreatePK(oDTItemCategories, "CATEGORY_UID")
 	oDTItemCategories:TableName := "FMItemCategories"
 	cXMLFile := Application.StartupPath + "\FMItemCategories.XML"
-	AADD(aFiles, cXMLFile)
+//	AADD(aFiles, cXMLFile)
+	aFiles:Add(cXMLFile)
 	oDTItemCategories:WriteXml(cXMLFile, XmlWriteMode.WriteSchema, FALSE)
 
 	cStatement:="SELECT FMReportTypes.*"+;
@@ -368,7 +393,8 @@ METHOD ExportOfficeTables() AS VOID
 	oSoftway:CreatePK(oDTReportTypes, "REPORT_UID")
 	oDTReportTypes:TableName := "FMReportTypes"
 	cXMLFile := Application.StartupPath + "\FMReportTypes.XML"
-	AADD(aFiles, cXMLFile)
+//	AADD(aFiles, cXMLFile)
+	aFiles:Add(cXMLFile)
 	oDTReportTypes:WriteXml(cXMLFile, XmlWriteMode.WriteSchema, FALSE)
 
 	cStatement:="SELECT FMReportItems.*"+;
@@ -383,7 +409,8 @@ METHOD ExportOfficeTables() AS VOID
 	oSoftway:CreatePK(oDTReportItems, "ITEM_UID")
 	oDTReportItems:TableName := "FMReportItems"
 	cXMLFile := Application.StartupPath + "\FMReportItems.XML"
-	AADD(aFiles, cXMLFile)
+//	AADD(aFiles, cXMLFile)
+	aFiles:Add(cXMLFile)
 	oDTReportItems:WriteXml(cXMLFile, XmlWriteMode.WriteSchema, FALSE)
 	
 	LOCAL oFolderBrowserDialog := FolderBrowserDialog{} AS 	FolderBrowserDialog
@@ -563,9 +590,11 @@ METHOD ExportTablesToAllVessels() AS VOID
 			LOOP
 		ENDIF
 
-		LOCAL aFiles := {} AS ARRAY
+//		LOCAL aFiles := {} AS ARRAY
+		VAR aFiles := List<STRING>{}
 		cXMLFile := Application.StartupPath + "\FMVessels.XML"
-		AADD(aFiles, cXMLFile)
+//		AADD(aFiles, cXMLFile)
+		aFiles:Add(cXMLFile)
 		oDTVessel:WriteXml(cXMLFile, XmlWriteMode.WriteSchema, FALSE)
 
 		cStatement:="SELECT CATEGORY_UID, Description, SortOrder"+;
@@ -576,7 +605,8 @@ METHOD ExportTablesToAllVessels() AS VOID
 		oSoftway:CreatePK(oDTItemCategories, "CATEGORY_UID")
 		oDTItemCategories:TableName := "FMItemCategories"
 		cXMLFile := Application.StartupPath + "\FMItemCategories.XML"
-		AADD(aFiles, cXMLFile)
+//		AADD(aFiles, cXMLFile)
+		aFiles:Add(cXMLFile)
 		oDTItemCategories:WriteXml(cXMLFile, XmlWriteMode.WriteSchema, FALSE)
 
 		cStatement:="SELECT FMReportTypes.*"+;
@@ -589,7 +619,8 @@ METHOD ExportTablesToAllVessels() AS VOID
 		oSoftway:CreatePK(oDTReportTypes, "REPORT_UID")
 		oDTReportTypes:TableName := "FMReportTypes"
 		cXMLFile := Application.StartupPath + "\FMReportTypes.XML"
-		AADD(aFiles, cXMLFile)
+//		AADD(aFiles, cXMLFile)
+		aFiles:Add(cXMLFile)
 		oDTReportTypes:WriteXml(cXMLFile, XmlWriteMode.WriteSchema, FALSE)
 
 		cStatement:="SELECT FMReportItems.*"+;
@@ -604,7 +635,8 @@ METHOD ExportTablesToAllVessels() AS VOID
 		oSoftway:CreatePK(oDTReportItems, "ITEM_UID")
 		oDTReportItems:TableName := "FMReportItems"
 		cXMLFile := Application.StartupPath + "\FMReportItems.XML"
-		AADD(aFiles, cXMLFile)
+//		AADD(aFiles, cXMLFile)
+		aFiles:Add(cXMLFile)
 		oDTReportItems:WriteXml(cXMLFile, XmlWriteMode.WriteSchema, FALSE)
 
 		LOCAL cZipFile := cFleetManagerVesselPath + "\FMDataSet_"+oSoftway:FileNameValidate(oDRVessel["VesselName"]:ToString())+"_"+TimeZoneInfo.ConvertTime(Datetime.Now, TimeZoneInfo.UTC):ToString("yyyy-MM-dd_HH-mm-ss")+".ZIP" AS STRING

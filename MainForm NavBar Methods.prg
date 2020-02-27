@@ -176,8 +176,8 @@ PRIVATE METHOD FMPorts_LinkClicked( sender AS System.Object, e AS DevExpress.Xtr
 	SELF:oNavBarForm:Enabled := FALSE
 	Application.DoEvents()
 
-	LOCAL oToolsForm := ToolsForm{} AS ToolsForm
-	oToolsForm:ShowDialog()
+	LOCAL oPortsForm := PortsForm{} AS PortsForm
+	oPortsForm:ShowDialog()
 
 	SELF:oNavBarForm:FMPorts:Enabled := TRUE
 RETURN

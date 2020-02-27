@@ -397,7 +397,12 @@ METHOD treeList1_DoubleClick( sender AS OBJECT,  e AS EventArgs) AS VOID
 					SELF:backBBI:Enabled := TRUE
 					SELF:Fill_TreeList_Reports()
 			   ENDIF
-            ENDIF
+			ENDIF
+			
+			LOCAL cVesselUID := SELF:TreeListVessels:FocusedNode:Tag:ToString() AS STRING
+			LOCAL cVoyageUID := tree:Selection:Item[0]:Data:ToString() AS STRING
+			LOCAL aForm := NewVoyageForm{SELF, cVesselUID, cVoyageUID} AS NewVoyageForm
+			aForm:Show()
 RETURN
 
 METHOD CheckForProgramVersions() AS VOID
@@ -660,6 +665,26 @@ ENDIF
 			RETURN FALSE
 		ENDIF
 	ENDIF
+	
+	IF ! oSoftway:TableExists(SELF:oGFH, SELF:oConn, "FMAlertsVessels")
+		SELF:CloseSplashScreen()
+		WarningBox("FM Alerts table is missing"+CRLF+;
+						"Press <OK> to create the Table.")
+		oSQLTablesCreator:=SQLTablesCreator{}
+		IF ! oSQLTablesCreator:CreateTables(SELF:oGFH, SELF:oConn)
+			RETURN FALSE
+		ENDIF
+	ENDIF
+	
+	IF ! oSoftway:TableExists(SELF:oGFH, SELF:oConn, "FMRelatedData")
+		SELF:CloseSplashScreen()
+		WarningBox("Related Data table is missing"+CRLF+;
+						"Press <OK> to create the Table.")
+		oSQLTablesCreator:=SQLTablesCreator{}
+		IF ! oSQLTablesCreator:CreateTables(SELF:oGFH, SELF:oConn)
+			RETURN FALSE
+		ENDIF
+	ENDIF
 
 	SELF:AddMissingColumns()
 
@@ -669,24 +694,31 @@ RETURN TRUE
 	//							ADDED BY KIRIAKOS
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 METHOD TransferHeadUserColumnData() AS VOID
-	LOCAL cStatement AS STRING
-	cStatement:="SELECT USER_UID, HeadUser, UserName FROM CrewUsers"
-	LOCAL oDTCrewUsers := oSoftway:ResultTable(SELF:oGFH, SELF:oConn, cStatement) AS DataTable
+	
+	TRY
+	
+		LOCAL cStatement AS STRING
+		cStatement:="SELECT USER_UID, HeadUser, UserName FROM CrewUsers"
+		LOCAL oDTCrewUsers := oSoftway:ResultTable(SELF:oGFH, SELF:oConn, cStatement) AS DataTable
 
-	IF oDTCrewUsers:Rows:Count == 0
-		RETURN
-	ENDIF
+		IF oDTCrewUsers:Rows:Count == 0
+			RETURN
+		ENDIF
 
-	LOCAL n AS INT
-	FOR n:=0 UPTO oDTCrewUsers:Rows:Count - 1
-		cStatement:="UPDATE FMUsers"+;
-					" SET IsHeadUser='"+oDTCrewUsers:Rows[n]:Item["HeadUser"]:ToString()+"'"+;
-					" WHERE USER_UNIQUEID="+oDTCrewUsers:Rows[n]:Item["USER_UID"]:ToString()
-		oSoftway:AdoCommand(SELF:oGFH, SELF:oConn, cStatement)
-		//IF oSoftway:AdoCommand(SELF:oGFH, SELF:oConn, cStatement)
-		//	ErrorBox("Could not Update User: ["+oDTCrewUsers:Rows[n]:Item["UserName"]:ToString():Trim()+"]")		
-		//ENDIF
-	NEXT
+		LOCAL n AS INT
+		FOR n:=0 UPTO oDTCrewUsers:Rows:Count - 1
+			cStatement:="UPDATE FMUsers"+;
+						" SET IsHeadUser='"+oDTCrewUsers:Rows[n]:Item["HeadUser"]:ToString()+"'"+;
+						" WHERE USER_UNIQUEID="+oDTCrewUsers:Rows[n]:Item["USER_UID"]:ToString()
+			oSoftway:AdoCommand(SELF:oGFH, SELF:oConn, cStatement)
+			//IF oSoftway:AdoCommand(SELF:oGFH, SELF:oConn, cStatement)
+			//	ErrorBox("Could not Update User: ["+oDTCrewUsers:Rows[n]:Item["UserName"]:ToString():Trim()+"]")		
+			//ENDIF
+		NEXT
+	
+	CATCH
+		
+	END
 RETURN
 
 METHOD SetCategoriesSortOrder() AS VOID
@@ -1320,6 +1352,10 @@ RETURN
 
 METHOD Fill_TreeListVessels(lLoad := FALSE AS LOGIC) AS VOID   
    
+	
+	IF ( SELF:TreeListVessels <> NULL || SELF:TreeListVessels:Nodes:Count<1 ) && !lLoad
+		Return
+	ENDIF
 	//LOCAL lLocallSuspendNotification as LOGIC
 	LOCAL cOldTag AS STRING
 	IF SELF:TreeListVessels:FocusedNode <> NULL
@@ -2981,6 +3017,7 @@ METHOD showGlobalSettingsForm AS VOID
 	ENDIF
 	
 	LOCAL oMatchSettings := MatchSettings{} AS MatchSettings
+	oMatchSettings:oParent := SELF
 	oMatchSettings:checkForCrewOwnedVessels()
 	LOCAL oDTUsers AS DataTable
 	LOCAL cStatement:="SELECT RTRIM(Vessels.VesselName) as VesselName , FMGlobalSettings.Vessel_UniqueID "+;
@@ -3970,6 +4007,25 @@ METHOD refreshMyApprovalsForm() AS VOID
 			
 RETURN
 
+METHOD bbiAlertsItemClick() AS VOID
+//		LOCAL oUserAlertsForm := FleetManager.Alerts.UserAlertsForm{} AS FleetManager.Alerts.UserAlertsForm
+//		oUserAlertsForm:ShowDialog()
+	LOCAL oUserAlertForm := UAlertForm{} AS UAlertForm
+	oUserAlertForm:ShowDialog()
+RETURN
+
+// 22.1.2019 simpler new voyage form
+METHOD AddNewVoyage() AS VOID
+	TRY
+		LOCAL cVesselUID := SELF:TreeListVessels:FocusedNode:Tag:ToString() AS STRING
+		LOCAL aForm := NewVoyageForm{SELF, cVesselUID, NULL} AS NewVoyageForm
+		aForm:Show()
+		
+	CATCH ex AS Exception
+		ErrorBox("Please select a vessel!")
+	END TRY		
+    
+RETURN
 
 END CLASS
    

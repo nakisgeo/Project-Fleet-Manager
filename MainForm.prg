@@ -1,7 +1,6 @@
-#Using System.Data
+USING System.Data
 PUBLIC PARTIAL CLASS MainForm ;
     INHERIT DevExpress.XtraEditors.XtraForm
-    
     PRIVATE defaultLookAndFeel AS DevExpress.LookAndFeel.DefaultLookAndFeel
     PRIVATE splitContainerControl_Main AS DevExpress.XtraEditors.SplitContainerControl
     PRIVATE splitContainerControl_LBC AS DevExpress.XtraEditors.SplitContainerControl
@@ -60,7 +59,6 @@ PUBLIC PARTIAL CLASS MainForm ;
     PRIVATE BBIAppove AS DevExpress.XtraBars.BarButtonItem
     PRIVATE BBSIStatus AS DevExpress.XtraBars.BarStaticItem
     PRIVATE BBIMyApprovals AS DevExpress.XtraBars.BarButtonItem
-    PRIVATE hideContainerLeft AS DevExpress.XtraBars.Docking.AutoHideContainer
     PRIVATE BBIReturn AS DevExpress.XtraBars.BarButtonItem
     PRIVATE popupMenu1 AS DevExpress.XtraBars.PopupMenu
     PRIVATE barButtonItem2 AS DevExpress.XtraBars.BarButtonItem
@@ -77,6 +75,9 @@ PUBLIC PARTIAL CLASS MainForm ;
     PRIVATE barButtonItem7 AS DevExpress.XtraBars.BarButtonItem
     PRIVATE BBIAppovalHistory AS DevExpress.XtraBars.BarButtonItem
     PRIVATE barButtonItemMRVReport AS DevExpress.XtraBars.BarButtonItem
+    PRIVATE bbiAlerts AS DevExpress.XtraBars.BarButtonItem
+    PRIVATE bbiNewVoyage AS DevExpress.XtraBars.BarButtonItem
+    PRIVATE hideContainerLeft AS DevExpress.XtraBars.Docking.AutoHideContainer
     PRIVATE components AS System.ComponentModel.IContainer
     CONSTRUCTOR()
       SUPER()
@@ -101,32 +102,32 @@ PROTECTED METHOD Dispose( disposing AS LOGIC ) AS VOID
 PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:components := System.ComponentModel.Container{}
     LOCAL resources := System.ComponentModel.ComponentResourceManager{typeof(MainForm)} AS System.ComponentModel.ComponentResourceManager
-    LOCAL superToolTip1 := DevExpress.Utils.SuperToolTip{} AS DevExpress.Utils.SuperToolTip
-    LOCAL toolTipTitleItem1 := DevExpress.Utils.ToolTipTitleItem{} AS DevExpress.Utils.ToolTipTitleItem
-    LOCAL toolTipItem1 := DevExpress.Utils.ToolTipItem{} AS DevExpress.Utils.ToolTipItem
-    LOCAL superToolTip2 := DevExpress.Utils.SuperToolTip{} AS DevExpress.Utils.SuperToolTip
-    LOCAL toolTipTitleItem2 := DevExpress.Utils.ToolTipTitleItem{} AS DevExpress.Utils.ToolTipTitleItem
-    LOCAL toolTipItem2 := DevExpress.Utils.ToolTipItem{} AS DevExpress.Utils.ToolTipItem
-    LOCAL superToolTip3 := DevExpress.Utils.SuperToolTip{} AS DevExpress.Utils.SuperToolTip
-    LOCAL toolTipTitleItem3 := DevExpress.Utils.ToolTipTitleItem{} AS DevExpress.Utils.ToolTipTitleItem
-    LOCAL toolTipItem3 := DevExpress.Utils.ToolTipItem{} AS DevExpress.Utils.ToolTipItem
-    LOCAL superToolTip4 := DevExpress.Utils.SuperToolTip{} AS DevExpress.Utils.SuperToolTip
-    LOCAL toolTipTitleItem4 := DevExpress.Utils.ToolTipTitleItem{} AS DevExpress.Utils.ToolTipTitleItem
-    LOCAL superToolTip5 := DevExpress.Utils.SuperToolTip{} AS DevExpress.Utils.SuperToolTip
-    LOCAL toolTipTitleItem5 := DevExpress.Utils.ToolTipTitleItem{} AS DevExpress.Utils.ToolTipTitleItem
-    LOCAL toolTipItem4 := DevExpress.Utils.ToolTipItem{} AS DevExpress.Utils.ToolTipItem
-    LOCAL superToolTip6 := DevExpress.Utils.SuperToolTip{} AS DevExpress.Utils.SuperToolTip
-    LOCAL toolTipTitleItem6 := DevExpress.Utils.ToolTipTitleItem{} AS DevExpress.Utils.ToolTipTitleItem
-    LOCAL superToolTip7 := DevExpress.Utils.SuperToolTip{} AS DevExpress.Utils.SuperToolTip
-    LOCAL toolTipTitleItem7 := DevExpress.Utils.ToolTipTitleItem{} AS DevExpress.Utils.ToolTipTitleItem
-    LOCAL superToolTip8 := DevExpress.Utils.SuperToolTip{} AS DevExpress.Utils.SuperToolTip
-    LOCAL toolTipTitleItem8 := DevExpress.Utils.ToolTipTitleItem{} AS DevExpress.Utils.ToolTipTitleItem
-    LOCAL toolTipItem5 := DevExpress.Utils.ToolTipItem{} AS DevExpress.Utils.ToolTipItem
-    LOCAL superToolTip9 := DevExpress.Utils.SuperToolTip{} AS DevExpress.Utils.SuperToolTip
-    LOCAL toolTipTitleItem9 := DevExpress.Utils.ToolTipTitleItem{} AS DevExpress.Utils.ToolTipTitleItem
-    LOCAL toolTipItem6 := DevExpress.Utils.ToolTipItem{} AS DevExpress.Utils.ToolTipItem
-    LOCAL superToolTip10 := DevExpress.Utils.SuperToolTip{} AS DevExpress.Utils.SuperToolTip
-    LOCAL toolTipTitleItem10 := DevExpress.Utils.ToolTipTitleItem{} AS DevExpress.Utils.ToolTipTitleItem
+    LOCAL superToolTip41 := DevExpress.Utils.SuperToolTip{} AS DevExpress.Utils.SuperToolTip
+    LOCAL toolTipTitleItem41 := DevExpress.Utils.ToolTipTitleItem{} AS DevExpress.Utils.ToolTipTitleItem
+    LOCAL toolTipItem25 := DevExpress.Utils.ToolTipItem{} AS DevExpress.Utils.ToolTipItem
+    LOCAL superToolTip42 := DevExpress.Utils.SuperToolTip{} AS DevExpress.Utils.SuperToolTip
+    LOCAL toolTipTitleItem42 := DevExpress.Utils.ToolTipTitleItem{} AS DevExpress.Utils.ToolTipTitleItem
+    LOCAL toolTipItem26 := DevExpress.Utils.ToolTipItem{} AS DevExpress.Utils.ToolTipItem
+    LOCAL superToolTip43 := DevExpress.Utils.SuperToolTip{} AS DevExpress.Utils.SuperToolTip
+    LOCAL toolTipTitleItem43 := DevExpress.Utils.ToolTipTitleItem{} AS DevExpress.Utils.ToolTipTitleItem
+    LOCAL toolTipItem27 := DevExpress.Utils.ToolTipItem{} AS DevExpress.Utils.ToolTipItem
+    LOCAL superToolTip44 := DevExpress.Utils.SuperToolTip{} AS DevExpress.Utils.SuperToolTip
+    LOCAL toolTipTitleItem44 := DevExpress.Utils.ToolTipTitleItem{} AS DevExpress.Utils.ToolTipTitleItem
+    LOCAL superToolTip45 := DevExpress.Utils.SuperToolTip{} AS DevExpress.Utils.SuperToolTip
+    LOCAL toolTipTitleItem45 := DevExpress.Utils.ToolTipTitleItem{} AS DevExpress.Utils.ToolTipTitleItem
+    LOCAL toolTipItem28 := DevExpress.Utils.ToolTipItem{} AS DevExpress.Utils.ToolTipItem
+    LOCAL superToolTip46 := DevExpress.Utils.SuperToolTip{} AS DevExpress.Utils.SuperToolTip
+    LOCAL toolTipTitleItem46 := DevExpress.Utils.ToolTipTitleItem{} AS DevExpress.Utils.ToolTipTitleItem
+    LOCAL superToolTip47 := DevExpress.Utils.SuperToolTip{} AS DevExpress.Utils.SuperToolTip
+    LOCAL toolTipTitleItem47 := DevExpress.Utils.ToolTipTitleItem{} AS DevExpress.Utils.ToolTipTitleItem
+    LOCAL superToolTip48 := DevExpress.Utils.SuperToolTip{} AS DevExpress.Utils.SuperToolTip
+    LOCAL toolTipTitleItem48 := DevExpress.Utils.ToolTipTitleItem{} AS DevExpress.Utils.ToolTipTitleItem
+    LOCAL toolTipItem29 := DevExpress.Utils.ToolTipItem{} AS DevExpress.Utils.ToolTipItem
+    LOCAL superToolTip49 := DevExpress.Utils.SuperToolTip{} AS DevExpress.Utils.SuperToolTip
+    LOCAL toolTipTitleItem49 := DevExpress.Utils.ToolTipTitleItem{} AS DevExpress.Utils.ToolTipTitleItem
+    LOCAL toolTipItem30 := DevExpress.Utils.ToolTipItem{} AS DevExpress.Utils.ToolTipItem
+    LOCAL superToolTip50 := DevExpress.Utils.SuperToolTip{} AS DevExpress.Utils.SuperToolTip
+    LOCAL toolTipTitleItem50 := DevExpress.Utils.ToolTipTitleItem{} AS DevExpress.Utils.ToolTipTitleItem
     SELF:defaultLookAndFeel := DevExpress.LookAndFeel.DefaultLookAndFeel{SELF:components}
     SELF:splitContainerControl_Main := DevExpress.XtraEditors.SplitContainerControl{}
     SELF:splitContainerControl_LBC := DevExpress.XtraEditors.SplitContainerControl{}
@@ -142,6 +143,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:MainBBIGlobal := DevExpress.XtraBars.BarButtonItem{}
     SELF:barEditItemDisplayMap := DevExpress.XtraBars.BarEditItem{}
     SELF:repositoryItemComboBox1 := DevExpress.XtraEditors.Repository.RepositoryItemComboBox{}
+    SELF:bbiAlerts := DevExpress.XtraBars.BarButtonItem{}
     SELF:BarStatus := DevExpress.XtraBars.Bar{}
     SELF:BarVesselReports := DevExpress.XtraBars.Bar{}
     SELF:backBBI := DevExpress.XtraBars.BarButtonItem{}
@@ -152,6 +154,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:BBITableReports := DevExpress.XtraBars.BarButtonItem{}
     SELF:barEditItemPeriod := DevExpress.XtraBars.BarEditItem{}
     SELF:repositoryItemComboBox2 := DevExpress.XtraEditors.Repository.RepositoryItemComboBox{}
+    SELF:bbiNewVoyage := DevExpress.XtraBars.BarButtonItem{}
     SELF:standaloneBarDockControl_VesselReports := DevExpress.XtraBars.StandaloneBarDockControl{}
     SELF:barMain := DevExpress.XtraBars.Bar{}
     SELF:BBISamosReports := DevExpress.XtraBars.BarSubItem{}
@@ -246,7 +249,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:splitContainerControl_Main:Panel2:Controls:Add(SELF:standaloneBarDockControl_Main)
     SELF:splitContainerControl_Main:Panel2:Text := "Panel2"
     SELF:splitContainerControl_Main:Size := System.Drawing.Size{1421, 641}
-    SELF:splitContainerControl_Main:SplitterPosition := 284
+    SELF:splitContainerControl_Main:SplitterPosition := 463
     SELF:splitContainerControl_Main:TabIndex := 0
     SELF:splitContainerControl_Main:Text := "splitContainerControl1"
     // 
@@ -261,7 +264,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:splitContainerControl_LBC:Panel1:Text := "Panel1"
     SELF:splitContainerControl_LBC:Panel2:Controls:Add(SELF:splitContainerControl_CheckedLBC)
     SELF:splitContainerControl_LBC:Panel2:Text := "Panel2"
-    SELF:splitContainerControl_LBC:Size := System.Drawing.Size{284, 637}
+    SELF:splitContainerControl_LBC:Size := System.Drawing.Size{463, 637}
     SELF:splitContainerControl_LBC:SplitterPosition := 178
     SELF:splitContainerControl_LBC:TabIndex := 0
     SELF:splitContainerControl_LBC:Text := "splitContainerControl1"
@@ -279,7 +282,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:TreeListVessels:OptionsView:ShowColumns := false
     SELF:TreeListVessels:OptionsView:ShowHorzLines := false
     SELF:TreeListVessels:OptionsView:ShowIndicator := false
-    SELF:TreeListVessels:Size := System.Drawing.Size{284, 152}
+    SELF:TreeListVessels:Size := System.Drawing.Size{463, 152}
     SELF:TreeListVessels:TabIndex := 52
     SELF:TreeListVessels:BeforeCheckNode += DevExpress.XtraTreeList.CheckNodeEventHandler{ SELF, @TreeListVessels_BeforeCheckNode() }
     SELF:TreeListVessels:AfterCheckNode += DevExpress.XtraTreeList.NodeEventHandler{ SELF, @TreeListVessels_AfterCheckNode() }
@@ -293,7 +296,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:standaloneBarDockControl_Vessels:Location := System.Drawing.Point{0, 0}
     SELF:standaloneBarDockControl_Vessels:Manager := SELF:barManager1
     SELF:standaloneBarDockControl_Vessels:Name := "standaloneBarDockControl_Vessels"
-    SELF:standaloneBarDockControl_Vessels:Size := System.Drawing.Size{284, 26}
+    SELF:standaloneBarDockControl_Vessels:Size := System.Drawing.Size{463, 26}
     SELF:standaloneBarDockControl_Vessels:Text := "standaloneBarDockControl1"
     // 
     // barManager1
@@ -308,9 +311,9 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:barManager1:DockControls:Add(SELF:standaloneBarDockControl_Main)
     SELF:barManager1:DockManager := SELF:dockManager1
     SELF:barManager1:Form := SELF
-    SELF:barManager1:Items:AddRange(<DevExpress.XtraBars.BarItem>{ SELF:BBICheckAll, SELF:BBIShowOnMap, SELF:BBIShowTabForm, SELF:BBIShowMessage, SELF:BBIIsmForm, SELF:BBIImportExcelData, SELF:BBICreateExcelReport, SELF:BBIShowVoyageOnNewMap_Main, SELF:BBIReportDefinition, SELF:barEditItemPeriod, SELF:backBBI, SELF:BBIEditReport, SELF:BBISave, SELF:BBIDelete, SELF:barEditItemDisplayMap, SELF:BBIRefreshReports, SELF:MainBBIGlobal, SELF:BBICreateReport, SELF:BBIFinalize, SELF:printButton, SELF:BBICancel, SELF:BBIAppove, SELF:BBISubmit, SELF:BBSIStatus, SELF:BBIMyApprovals, SELF:BBIReturn, SELF:barButtonItem2, SELF:barButtonItem3, SELF:BBITableReports, SELF:BBISamosReports, SELF:barButtonItem1, SELF:barButtonItem4, SELF:barButtonItem5, SELF:barButtonItem6, SELF:barButtonItem7, SELF:BBIAppovalHistory, SELF:barButtonItemMRVReport })
+    SELF:barManager1:Items:AddRange(<DevExpress.XtraBars.BarItem>{ SELF:BBICheckAll, SELF:BBIShowOnMap, SELF:BBIShowTabForm, SELF:BBIShowMessage, SELF:BBIIsmForm, SELF:BBIImportExcelData, SELF:BBICreateExcelReport, SELF:BBIShowVoyageOnNewMap_Main, SELF:BBIReportDefinition, SELF:barEditItemPeriod, SELF:backBBI, SELF:BBIEditReport, SELF:BBISave, SELF:BBIDelete, SELF:barEditItemDisplayMap, SELF:BBIRefreshReports, SELF:MainBBIGlobal, SELF:BBICreateReport, SELF:BBIFinalize, SELF:printButton, SELF:BBICancel, SELF:BBIAppove, SELF:BBISubmit, SELF:BBSIStatus, SELF:BBIMyApprovals, SELF:BBIReturn, SELF:barButtonItem2, SELF:barButtonItem3, SELF:BBITableReports, SELF:BBISamosReports, SELF:barButtonItem1, SELF:barButtonItem4, SELF:barButtonItem5, SELF:barButtonItem6, SELF:barButtonItem7, SELF:BBIAppovalHistory, SELF:barButtonItemMRVReport, SELF:bbiAlerts, SELF:bbiNewVoyage })
     SELF:barManager1:MainMenu := SELF:BarVessels
-    SELF:barManager1:MaxItemId := 41
+    SELF:barManager1:MaxItemId := 43
     SELF:barManager1:RepositoryItems:AddRange(<DevExpress.XtraEditors.Repository.RepositoryItem>{ SELF:repositoryItemComboBox2, SELF:repositoryItemComboBox1 })
     SELF:barManager1:StatusBar := SELF:BarStatus
     // 
@@ -321,7 +324,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:BarVessels:DockRow := 0
     SELF:BarVessels:DockStyle := DevExpress.XtraBars.BarDockStyle.Standalone
     SELF:BarVessels:FloatLocation := System.Drawing.Point{482, 366}
-    SELF:BarVessels:LinksPersistInfo:AddRange(<DevExpress.XtraBars.LinkPersistInfo>{ DevExpress.XtraBars.LinkPersistInfo{SELF:BBICheckAll}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBIShowOnMap}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBIImportExcelData}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBIRefreshReports}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBIMyApprovals}, DevExpress.XtraBars.LinkPersistInfo{SELF:MainBBIGlobal}, DevExpress.XtraBars.LinkPersistInfo{SELF:barEditItemDisplayMap} })
+    SELF:BarVessels:LinksPersistInfo:AddRange(<DevExpress.XtraBars.LinkPersistInfo>{ DevExpress.XtraBars.LinkPersistInfo{SELF:BBICheckAll}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBIShowOnMap}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBIImportExcelData}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBIRefreshReports}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBIMyApprovals}, DevExpress.XtraBars.LinkPersistInfo{SELF:MainBBIGlobal}, DevExpress.XtraBars.LinkPersistInfo{SELF:barEditItemDisplayMap}, DevExpress.XtraBars.LinkPersistInfo{DevExpress.XtraBars.BarLinkUserDefines.KeyTip, SELF:bbiAlerts, "", false, true, true, 0, NULL, DevExpress.XtraBars.BarItemPaintStyle.Standard, "SETUP ALERTS FOR USER", ""} })
     SELF:BarVessels:OptionsBar:AllowQuickCustomization := false
     SELF:BarVessels:OptionsBar:UseWholeRow := true
     SELF:BarVessels:StandaloneBarDockControl := SELF:standaloneBarDockControl_Vessels
@@ -333,12 +336,12 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:BBICheckAll:Id := 0
     SELF:BBICheckAll:ImageOptions:Image := ((System.Drawing.Image)(resources:GetObject("BBICheckAll.ImageOptions.Image")))
     SELF:BBICheckAll:Name := "BBICheckAll"
-    toolTipTitleItem1:Text := "Check all"
-    toolTipItem1:LeftIndent := 6
-    toolTipItem1:Text := "Check (select) all Vessels"
-    superToolTip1:Items:Add(toolTipTitleItem1)
-    superToolTip1:Items:Add(toolTipItem1)
-    SELF:BBICheckAll:SuperTip := superToolTip1
+    toolTipTitleItem41:Text := "Check all"
+    toolTipItem25:LeftIndent := 6
+    toolTipItem25:Text := "Check (select) all Vessels"
+    superToolTip41:Items:Add(toolTipTitleItem41)
+    superToolTip41:Items:Add(toolTipItem25)
+    SELF:BBICheckAll:SuperTip := superToolTip41
     SELF:BBICheckAll:Visibility := DevExpress.XtraBars.BarItemVisibility.Never
     SELF:BBICheckAll:ItemClick += DevExpress.XtraBars.ItemClickEventHandler{ SELF, @BBICheckAll_ItemClick() }
     // 
@@ -348,12 +351,12 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:BBIShowOnMap:Id := 1
     SELF:BBIShowOnMap:ImageOptions:Image := ((System.Drawing.Image)(resources:GetObject("BBIShowOnMap.ImageOptions.Image")))
     SELF:BBIShowOnMap:Name := "BBIShowOnMap"
-    toolTipTitleItem2:Text := "Show on Map"
-    toolTipItem2:LeftIndent := 6
-    toolTipItem2:Text := "Show selected Vessels on Map for the highlighted Report"
-    superToolTip2:Items:Add(toolTipTitleItem2)
-    superToolTip2:Items:Add(toolTipItem2)
-    SELF:BBIShowOnMap:SuperTip := superToolTip2
+    toolTipTitleItem42:Text := "Show on Map"
+    toolTipItem26:LeftIndent := 6
+    toolTipItem26:Text := "Show selected Vessels on Map for the highlighted Report"
+    superToolTip42:Items:Add(toolTipTitleItem42)
+    superToolTip42:Items:Add(toolTipItem26)
+    SELF:BBIShowOnMap:SuperTip := superToolTip42
     SELF:BBIShowOnMap:ItemClick += DevExpress.XtraBars.ItemClickEventHandler{ SELF, @BBIRefresh_ItemClick() }
     // 
     // BBIImportExcelData
@@ -362,12 +365,12 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:BBIImportExcelData:Id := 5
     SELF:BBIImportExcelData:ImageOptions:Image := ((System.Drawing.Image)(resources:GetObject("BBIImportExcelData.ImageOptions.Image")))
     SELF:BBIImportExcelData:Name := "BBIImportExcelData"
-    toolTipTitleItem3:Text := "Import Excel Data"
-    toolTipItem3:LeftIndent := 6
-    toolTipItem3:Text := "(Vamvaship only)"
-    superToolTip3:Items:Add(toolTipTitleItem3)
-    superToolTip3:Items:Add(toolTipItem3)
-    SELF:BBIImportExcelData:SuperTip := superToolTip3
+    toolTipTitleItem43:Text := "Import Excel Data"
+    toolTipItem27:LeftIndent := 6
+    toolTipItem27:Text := "(Vamvaship only)"
+    superToolTip43:Items:Add(toolTipTitleItem43)
+    superToolTip43:Items:Add(toolTipItem27)
+    SELF:BBIImportExcelData:SuperTip := superToolTip43
     SELF:BBIImportExcelData:ItemClick += DevExpress.XtraBars.ItemClickEventHandler{ SELF, @BBIImportExcelData_ItemClick() }
     // 
     // BBIRefreshReports
@@ -376,9 +379,9 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:BBIRefreshReports:Id := 17
     SELF:BBIRefreshReports:ImageOptions:Image := ((System.Drawing.Image)(resources:GetObject("BBIRefreshReports.ImageOptions.Image")))
     SELF:BBIRefreshReports:Name := "BBIRefreshReports"
-    toolTipTitleItem4:Text := "User Groups Setup"
-    superToolTip4:Items:Add(toolTipTitleItem4)
-    SELF:BBIRefreshReports:SuperTip := superToolTip4
+    toolTipTitleItem44:Text := "User Groups Setup"
+    superToolTip44:Items:Add(toolTipTitleItem44)
+    SELF:BBIRefreshReports:SuperTip := superToolTip44
     SELF:BBIRefreshReports:ItemClick += DevExpress.XtraBars.ItemClickEventHandler{ SELF, @BBIRefreshReports_ItemClick() }
     // 
     // BBIMyApprovals
@@ -417,6 +420,15 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:repositoryItemComboBox1:Name := "repositoryItemComboBox1"
     SELF:repositoryItemComboBox1:TextEditStyle := DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor
     // 
+    // bbiAlerts
+    // 
+    SELF:bbiAlerts:Caption := "Setup Alerts"
+    SELF:bbiAlerts:Id := 41
+    SELF:bbiAlerts:ImageOptions:Image := ((System.Drawing.Image)(resources:GetObject("bbiAlerts.ImageOptions.Image")))
+    SELF:bbiAlerts:ImageOptions:LargeImage := ((System.Drawing.Image)(resources:GetObject("bbiAlerts.ImageOptions.LargeImage")))
+    SELF:bbiAlerts:Name := "bbiAlerts"
+    SELF:bbiAlerts:ItemClick += DevExpress.XtraBars.ItemClickEventHandler{ SELF, @bbiAlerts_ItemClick() }
+    // 
     // BarStatus
     // 
     SELF:BarStatus:BarName := "Status bar"
@@ -437,7 +449,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:BarVesselReports:DockRow := 0
     SELF:BarVesselReports:DockStyle := DevExpress.XtraBars.BarDockStyle.Standalone
     SELF:BarVesselReports:FloatLocation := System.Drawing.Point{681, 695}
-    SELF:BarVesselReports:LinksPersistInfo:AddRange(<DevExpress.XtraBars.LinkPersistInfo>{ DevExpress.XtraBars.LinkPersistInfo{SELF:backBBI}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBIShowMessage}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBIShowTabForm}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBIIsmForm}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBICreateExcelReport}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBITableReports}, DevExpress.XtraBars.LinkPersistInfo{SELF:barEditItemPeriod} })
+    SELF:BarVesselReports:LinksPersistInfo:AddRange(<DevExpress.XtraBars.LinkPersistInfo>{ DevExpress.XtraBars.LinkPersistInfo{SELF:backBBI}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBIShowMessage}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBIShowTabForm}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBIIsmForm}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBICreateExcelReport}, DevExpress.XtraBars.LinkPersistInfo{SELF:BBITableReports}, DevExpress.XtraBars.LinkPersistInfo{SELF:barEditItemPeriod}, DevExpress.XtraBars.LinkPersistInfo{SELF:bbiNewVoyage} })
     SELF:BarVesselReports:OptionsBar:AllowQuickCustomization := false
     SELF:BarVesselReports:OptionsBar:UseWholeRow := true
     SELF:BarVesselReports:StandaloneBarDockControl := SELF:standaloneBarDockControl_VesselReports
@@ -458,12 +470,12 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:BBIShowMessage:Id := 3
     SELF:BBIShowMessage:ImageOptions:Image := ((System.Drawing.Image)(resources:GetObject("BBIShowMessage.ImageOptions.Image")))
     SELF:BBIShowMessage:Name := "BBIShowMessage"
-    toolTipTitleItem5:Text := "Show linked message"
-    toolTipItem4:LeftIndent := 6
-    toolTipItem4:Text := "Switch to Communicator and show the linked message"
-    superToolTip5:Items:Add(toolTipTitleItem5)
-    superToolTip5:Items:Add(toolTipItem4)
-    SELF:BBIShowMessage:SuperTip := superToolTip5
+    toolTipTitleItem45:Text := "Show linked message"
+    toolTipItem28:LeftIndent := 6
+    toolTipItem28:Text := "Switch to Communicator and show the linked message"
+    superToolTip45:Items:Add(toolTipTitleItem45)
+    superToolTip45:Items:Add(toolTipItem28)
+    SELF:BBIShowMessage:SuperTip := superToolTip45
     SELF:BBIShowMessage:ItemClick += DevExpress.XtraBars.ItemClickEventHandler{ SELF, @BBIShowMessage_ItemClick() }
     // 
     // BBIShowTabForm
@@ -472,9 +484,9 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:BBIShowTabForm:Id := 2
     SELF:BBIShowTabForm:ImageOptions:Image := ((System.Drawing.Image)(resources:GetObject("BBIShowTabForm.ImageOptions.Image")))
     SELF:BBIShowTabForm:Name := "BBIShowTabForm"
-    toolTipTitleItem6:Text := "Show Report Form"
-    superToolTip6:Items:Add(toolTipTitleItem6)
-    SELF:BBIShowTabForm:SuperTip := superToolTip6
+    toolTipTitleItem46:Text := "Show Report Form"
+    superToolTip46:Items:Add(toolTipTitleItem46)
+    SELF:BBIShowTabForm:SuperTip := superToolTip46
     SELF:BBIShowTabForm:ItemClick += DevExpress.XtraBars.ItemClickEventHandler{ SELF, @BBIShowTabForm_ItemClick() }
     // 
     // BBIIsmForm
@@ -483,9 +495,9 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:BBIIsmForm:Id := 4
     SELF:BBIIsmForm:ImageOptions:Image := ((System.Drawing.Image)(resources:GetObject("BBIIsmForm.ImageOptions.Image")))
     SELF:BBIIsmForm:Name := "BBIIsmForm"
-    toolTipTitleItem7:Text := e"Show message Body\r\n"
-    superToolTip7:Items:Add(toolTipTitleItem7)
-    SELF:BBIIsmForm:SuperTip := superToolTip7
+    toolTipTitleItem47:Text := e"Show message Body\r\n"
+    superToolTip47:Items:Add(toolTipTitleItem47)
+    SELF:BBIIsmForm:SuperTip := superToolTip47
     SELF:BBIIsmForm:ItemClick += DevExpress.XtraBars.ItemClickEventHandler{ SELF, @BBIIsmForm_ItemClick() }
     // 
     // BBICreateExcelReport
@@ -494,12 +506,12 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:BBICreateExcelReport:Id := 6
     SELF:BBICreateExcelReport:ImageOptions:Image := ((System.Drawing.Image)(resources:GetObject("BBICreateExcelReport.ImageOptions.Image")))
     SELF:BBICreateExcelReport:Name := "BBICreateExcelReport"
-    toolTipTitleItem8:Text := "Create Excel Report"
-    toolTipItem5:LeftIndent := 6
-    toolTipItem5:Text := "Export Items to Excel file"
-    superToolTip8:Items:Add(toolTipTitleItem8)
-    superToolTip8:Items:Add(toolTipItem5)
-    SELF:BBICreateExcelReport:SuperTip := superToolTip8
+    toolTipTitleItem48:Text := "Create Excel Report"
+    toolTipItem29:LeftIndent := 6
+    toolTipItem29:Text := "Export Items to Excel file"
+    superToolTip48:Items:Add(toolTipTitleItem48)
+    superToolTip48:Items:Add(toolTipItem29)
+    SELF:BBICreateExcelReport:SuperTip := superToolTip48
     SELF:BBICreateExcelReport:ItemClick += DevExpress.XtraBars.ItemClickEventHandler{ SELF, @BBICreateExcelReport_ItemClick() }
     // 
     // BBITableReports
@@ -530,6 +542,15 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:repositoryItemComboBox2:Name := "repositoryItemComboBox2"
     SELF:repositoryItemComboBox2:TextEditStyle := DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor
     // 
+    // bbiNewVoyage
+    // 
+    SELF:bbiNewVoyage:Caption := "Add New Voyage"
+    SELF:bbiNewVoyage:Id := 42
+    SELF:bbiNewVoyage:ImageOptions:Image := ((System.Drawing.Image)(resources:GetObject("bbiNewVoyage.ImageOptions.Image")))
+    SELF:bbiNewVoyage:ImageOptions:LargeImage := ((System.Drawing.Image)(resources:GetObject("bbiNewVoyage.ImageOptions.LargeImage")))
+    SELF:bbiNewVoyage:Name := "bbiNewVoyage"
+    SELF:bbiNewVoyage:ItemClick += DevExpress.XtraBars.ItemClickEventHandler{ SELF, @bbiNewVoyage_ItemClick() }
+    // 
     // standaloneBarDockControl_VesselReports
     // 
     SELF:standaloneBarDockControl_VesselReports:CausesValidation := false
@@ -537,7 +558,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:standaloneBarDockControl_VesselReports:Location := System.Drawing.Point{0, 0}
     SELF:standaloneBarDockControl_VesselReports:Manager := SELF:barManager1
     SELF:standaloneBarDockControl_VesselReports:Name := "standaloneBarDockControl_VesselReports"
-    SELF:standaloneBarDockControl_VesselReports:Size := System.Drawing.Size{284, 26}
+    SELF:standaloneBarDockControl_VesselReports:Size := System.Drawing.Size{463, 26}
     SELF:standaloneBarDockControl_VesselReports:Text := "standaloneBarDockControl2"
     // 
     // barMain
@@ -611,12 +632,12 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:BBIReportDefinition:Id := 7
     SELF:BBIReportDefinition:ImageOptions:Image := ((System.Drawing.Image)(resources:GetObject("BBIReportDefinition.ImageOptions.Image")))
     SELF:BBIReportDefinition:Name := "BBIReportDefinition"
-    toolTipTitleItem9:Text := "Custom Reports"
-    toolTipItem6:LeftIndent := 6
-    toolTipItem6:Text := "Custom Reports Definition and execution"
-    superToolTip9:Items:Add(toolTipTitleItem9)
-    superToolTip9:Items:Add(toolTipItem6)
-    SELF:BBIReportDefinition:SuperTip := superToolTip9
+    toolTipTitleItem49:Text := "Custom Reports"
+    toolTipItem30:LeftIndent := 6
+    toolTipItem30:Text := "Custom Reports Definition and execution"
+    superToolTip49:Items:Add(toolTipTitleItem49)
+    superToolTip49:Items:Add(toolTipItem30)
+    SELF:BBIReportDefinition:SuperTip := superToolTip49
     SELF:BBIReportDefinition:Visibility := DevExpress.XtraBars.BarItemVisibility.Never
     SELF:BBIReportDefinition:ItemClick += DevExpress.XtraBars.ItemClickEventHandler{ SELF, @BBIReportDefinition_ItemClick() }
     // 
@@ -626,9 +647,9 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:BBIShowVoyageOnNewMap_Main:Id := 14
     SELF:BBIShowVoyageOnNewMap_Main:ImageOptions:Image := ((System.Drawing.Image)(resources:GetObject("BBIShowVoyageOnNewMap_Main.ImageOptions.Image")))
     SELF:BBIShowVoyageOnNewMap_Main:Name := "BBIShowVoyageOnNewMap_Main"
-    toolTipTitleItem10:Text := e"Show selected Voyage routing on a new full functional Map\r\n"
-    superToolTip10:Items:Add(toolTipTitleItem10)
-    SELF:BBIShowVoyageOnNewMap_Main:SuperTip := superToolTip10
+    toolTipTitleItem50:Text := e"Show selected Voyage routing on a new full functional Map\r\n"
+    superToolTip50:Items:Add(toolTipTitleItem50)
+    SELF:BBIShowVoyageOnNewMap_Main:SuperTip := superToolTip50
     SELF:BBIShowVoyageOnNewMap_Main:Visibility := DevExpress.XtraBars.BarItemVisibility.Never
     SELF:BBIShowVoyageOnNewMap_Main:ItemClick += DevExpress.XtraBars.ItemClickEventHandler{ SELF, @BBIShowVoyageOnNewMap_Main_ItemClick() }
     // 
@@ -788,7 +809,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:standaloneBarDockControl_Main:Location := System.Drawing.Point{0, 0}
     SELF:standaloneBarDockControl_Main:Manager := SELF:barManager1
     SELF:standaloneBarDockControl_Main:Name := "standaloneBarDockControl_Main"
-    SELF:standaloneBarDockControl_Main:Size := System.Drawing.Size{1127, 26}
+    SELF:standaloneBarDockControl_Main:Size := System.Drawing.Size{948, 26}
     SELF:standaloneBarDockControl_Main:Text := "standaloneBarDockControl2"
     // 
     // barDockControlTop
@@ -858,7 +879,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     // 
     SELF:DockPanelProgramsBar_Container:Location := System.Drawing.Point{3, 25}
     SELF:DockPanelProgramsBar_Container:Name := "DockPanelProgramsBar_Container"
-    SELF:DockPanelProgramsBar_Container:Size := System.Drawing.Size{153, 613}
+    SELF:DockPanelProgramsBar_Container:Size := System.Drawing.Size{152, 613}
     SELF:DockPanelProgramsBar_Container:TabIndex := 0
     // 
     // splitContainerControl_CheckedLBC
@@ -873,7 +894,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:splitContainerControl_CheckedLBC:Panel2:Controls:Add(SELF:LBCVesselReports)
     SELF:splitContainerControl_CheckedLBC:Panel2:Controls:Add(SELF:standaloneBarDockControl_VesselReports)
     SELF:splitContainerControl_CheckedLBC:Panel2:Text := "Panel2"
-    SELF:splitContainerControl_CheckedLBC:Size := System.Drawing.Size{284, 453}
+    SELF:splitContainerControl_CheckedLBC:Size := System.Drawing.Size{463, 453}
     SELF:splitContainerControl_CheckedLBC:SplitterPosition := 133
     SELF:splitContainerControl_CheckedLBC:TabIndex := 2
     SELF:splitContainerControl_CheckedLBC:Text := "splitContainerControl1"
@@ -886,7 +907,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:ReportsTabUserControl:Location := System.Drawing.Point{0, 0}
     SELF:ReportsTabUserControl:Name := "ReportsTabUserControl"
     SELF:ReportsTabUserControl:SelectedIndex := 0
-    SELF:ReportsTabUserControl:Size := System.Drawing.Size{284, 133}
+    SELF:ReportsTabUserControl:Size := System.Drawing.Size{463, 133}
     SELF:ReportsTabUserControl:TabIndex := 1
     SELF:ReportsTabUserControl:SelectedIndexChanged += System.EventHandler{ SELF, @tabControl1_SelectedIndexChanged() }
     // 
@@ -896,7 +917,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:tabPage1:Location := System.Drawing.Point{4, 22}
     SELF:tabPage1:Name := "tabPage1"
     SELF:tabPage1:Padding := System.Windows.Forms.Padding{3}
-    SELF:tabPage1:Size := System.Drawing.Size{276, 107}
+    SELF:tabPage1:Size := System.Drawing.Size{455, 107}
     SELF:tabPage1:TabIndex := 0
     SELF:tabPage1:Text := "Vessel Reports"
     SELF:tabPage1:UseVisualStyleBackColor := true
@@ -911,7 +932,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:LBCReportsVessel:HorizontalScrollbar := true
     SELF:LBCReportsVessel:Location := System.Drawing.Point{3, 3}
     SELF:LBCReportsVessel:Name := "LBCReportsVessel"
-    SELF:LBCReportsVessel:Size := System.Drawing.Size{270, 101}
+    SELF:LBCReportsVessel:Size := System.Drawing.Size{449, 101}
     SELF:LBCReportsVessel:TabIndex := 0
     SELF:LBCReportsVessel:SelectedIndexChanged += System.EventHandler{ SELF, @LBCReports_SelectedIndexChanged() }
     SELF:LBCReportsVessel:DrawItem += DevExpress.XtraEditors.ListBoxDrawItemEventHandler{ SELF, @LBCReports_DrawItem() }
@@ -935,7 +956,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:tabPage2:Location := System.Drawing.Point{4, 22}
     SELF:tabPage2:Name := "tabPage2"
     SELF:tabPage2:Padding := System.Windows.Forms.Padding{3}
-    SELF:tabPage2:Size := System.Drawing.Size{276, 107}
+    SELF:tabPage2:Size := System.Drawing.Size{455, 107}
     SELF:tabPage2:TabIndex := 1
     SELF:tabPage2:Text := "Office Reports"
     SELF:tabPage2:UseVisualStyleBackColor := true
@@ -949,7 +970,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:LBCReportsOffice:HorizontalScrollbar := true
     SELF:LBCReportsOffice:Location := System.Drawing.Point{3, 3}
     SELF:LBCReportsOffice:Name := "LBCReportsOffice"
-    SELF:LBCReportsOffice:Size := System.Drawing.Size{270, 101}
+    SELF:LBCReportsOffice:Size := System.Drawing.Size{449, 101}
     SELF:LBCReportsOffice:TabIndex := 1
     SELF:LBCReportsOffice:SelectedIndexChanged += System.EventHandler{ SELF, @LBCReportsOffice_SelectedIndexChanged() }
     SELF:LBCReportsOffice:Enter += System.EventHandler{ SELF, @LBCReportsOffice_Enter() }
@@ -967,7 +988,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:TreeListVesselsReports:OptionsView:ShowHorzLines := false
     SELF:TreeListVesselsReports:OptionsView:ShowIndicator := false
     SELF:TreeListVesselsReports:OptionsView:ShowVertLines := false
-    SELF:TreeListVesselsReports:Size := System.Drawing.Size{284, 288}
+    SELF:TreeListVesselsReports:Size := System.Drawing.Size{463, 288}
     SELF:TreeListVesselsReports:TabIndex := 53
     SELF:TreeListVesselsReports:Visible := false
     SELF:TreeListVesselsReports:FocusedNodeChanged += DevExpress.XtraTreeList.FocusedNodeChangedEventHandler{ SELF, @TreeListVesselsReports_FocusedNodeChanged() }
@@ -981,7 +1002,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:LBCVesselReports:HorizontalScrollbar := true
     SELF:LBCVesselReports:Location := System.Drawing.Point{0, 26}
     SELF:LBCVesselReports:Name := "LBCVesselReports"
-    SELF:LBCVesselReports:Size := System.Drawing.Size{284, 288}
+    SELF:LBCVesselReports:Size := System.Drawing.Size{463, 288}
     SELF:LBCVesselReports:TabIndex := 1
     SELF:LBCVesselReports:DoubleClick += System.EventHandler{ SELF, @LBCVesselReports_DoubleClick() }
     // 
@@ -1003,7 +1024,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:splitMapForm:Panel2:Text := "Panel2"
     SELF:splitMapForm:Panel2:VisibleChanged += System.EventHandler{ SELF, @splitMapForm_Panel2_VisibleChanged() }
     SELF:splitMapForm:PanelVisibility := DevExpress.XtraEditors.SplitPanelVisibility.Panel2
-    SELF:splitMapForm:Size := System.Drawing.Size{1127, 611}
+    SELF:splitMapForm:Size := System.Drawing.Size{948, 611}
     SELF:splitMapForm:SplitterPosition := 0
     SELF:splitMapForm:TabIndex := 4
     SELF:splitMapForm:Text := "splitContainerControl1"
@@ -1015,7 +1036,7 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     SELF:panelControl_BingMaps:Dock := System.Windows.Forms.DockStyle.Fill
     SELF:panelControl_BingMaps:Location := System.Drawing.Point{0, 0}
     SELF:panelControl_BingMaps:Name := "panelControl_BingMaps"
-    SELF:panelControl_BingMaps:Size := System.Drawing.Size{1119, 603}
+    SELF:panelControl_BingMaps:Size := System.Drawing.Size{940, 603}
     SELF:panelControl_BingMaps:TabIndex := 2
     // 
     // reportsImageList
@@ -1091,15 +1112,12 @@ PRIVATE METHOD InitializeComponent() AS VOID STRICT
     ((System.ComponentModel.ISupportInitialize)(SELF:galleryDropDown1)):EndInit()
     SELF:ResumeLayout(false)
     SELF:PerformLayout()
-
 PRIVATE METHOD MainForm_Load( sender AS System.Object, e AS System.EventArgs ) AS System.Void
         SELF:MainForm_OnLoad()
         RETURN
-
 PRIVATE METHOD MainForm_Shown( sender AS System.Object, e AS System.EventArgs ) AS System.Void
         SELF:MainForm_OnShown()
         RETURN
-
 PRIVATE METHOD MainForm_FormClosing( sender AS System.Object, e AS System.Windows.Forms.FormClosingEventArgs ) AS System.Void
         LOCAL oSplit := DevExpress.XtraEditors.SplitContainerControl[]{3} AS DevExpress.XtraEditors.SplitContainerControl[]
         oSplit[1] := SELF:splitContainerControl_Main
@@ -1118,7 +1136,6 @@ PRIVATE METHOD MainForm_FormClosing( sender AS System.Object, e AS System.Window
             ENDIF
         ENDIF
         RETURN
-
 PRIVATE METHOD MainForm_FormClosed( sender AS System.Object, e AS System.Windows.Forms.FormClosedEventArgs ) AS System.Void
         TRY
         IF SELF:lUserLoggedOn
@@ -1146,7 +1163,6 @@ PRIVATE METHOD MainForm_FormClosed( sender AS System.Object, e AS System.Windows
             oSoftway:ClearDirectory(cTempDocDir, 3)
         END
     RETURN
-
 PRIVATE METHOD LBCReports_SelectedIndexChanged( sender AS System.Object, e AS System.EventArgs ) AS System.Void
         SELF:SelectedReportChanged()
         RETURN
@@ -1160,7 +1176,6 @@ PRIVATE METHOD LBCReports_SelectedIndexChanged( sender AS System.Object, e AS Sy
 PRIVATE METHOD BBICheckAll_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
         SELF:CheckAllVessels()
         RETURN
-
 PRIVATE METHOD BBIRefresh_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
         SELF:splitMapForm:PanelVisibility := DevExpress.XtraEditors.SplitPanelVisibility.Panel2
         SELF:barEditItemDisplayMap:Visibility := DevExpress.XtraBars.BarItemVisibility.Never
@@ -1180,32 +1195,25 @@ PRIVATE METHOD BBIRefresh_ItemClick( sender AS System.Object, e AS DevExpress.Xt
 PRIVATE METHOD LBCReports_DrawItem( sender AS System.Object, e AS DevExpress.XtraEditors.ListBoxDrawItemEventArgs ) AS System.Void
         SELF:DrawLBCReportsItem(e)
         RETURN
-
 PRIVATE METHOD LBCVesselReports_DoubleClick( sender AS System.Object, e AS System.EventArgs ) AS System.Void
         SELF:ShowReportForm(FALSE,FALSE)
         RETURN
-
 PRIVATE METHOD BBIShowMessage_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
         SELF:ShowLinkedMessage()
         RETURN
-
 PRIVATE METHOD BBIShowTabForm_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
         SELF:ShowReportForm(TRUE,FALSE)
         RETURN
-
 PRIVATE METHOD BBIIsmForm_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
         SELF:IsmFormBodyText()
         RETURN
-
 PRIVATE METHOD BBIImportExcelData_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
         SELF:ImportExcelData()
         //self:showSetupUsersForm()
         RETURN
-
 PRIVATE METHOD BBICreateExcelReport_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
         SELF:ExportItemsToExcelFile()
         RETURN
-
 PRIVATE METHOD barEditItemPeriod_EditValueChanged( sender AS System.Object, e AS System.EventArgs ) AS System.Void
         //wb("pause")
         SELF:barEditItemPeriod:Enabled := FALSE
@@ -1215,15 +1223,12 @@ PRIVATE METHOD barEditItemPeriod_EditValueChanged( sender AS System.Object, e AS
         // Focus to Items
         //SELF:LBCItems:Focus()
         RETURN
-
 PRIVATE METHOD BBIShowVoyageOnNewMap_Main_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
         SELF:ShowSelectedVoyageOnMap()
         RETURN
-
 PRIVATE METHOD BBIReportDefinition_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
         SELF:ReportDefinition()
         RETURN
-
 PRIVATE METHOD TreeListVessels_BeforeCheckNode( sender AS System.Object, e AS DevExpress.XtraTreeList.CheckNodeEventArgs ) AS System.Void
         //LOCAL cUID := e:Node:Tag:ToString() AS STRING
         // Allow checking a selected Node only and deny checking Fleet
@@ -1232,11 +1237,9 @@ PRIVATE METHOD TreeListVessels_BeforeCheckNode( sender AS System.Object, e AS De
         //    e:Node:Selected := TRUE
         //ENDIF
         RETURN
-
 PRIVATE METHOD TreeListVessels_AfterCheckNode( sender AS System.Object, e AS DevExpress.XtraTreeList.NodeEventArgs ) AS System.Void
         SELF:TreeListVessels_OnAfterCheckNode(e)
         RETURN
-
 PRIVATE METHOD TreeListVessels_FocusedNodeChanged( sender AS System.Object, e AS DevExpress.XtraTreeList.FocusedNodeChangedEventArgs ) AS System.Void
         //SELF:Text := e:Node:Level:ToString()
         IF e:Node <> NULL
@@ -1246,19 +1249,15 @@ PRIVATE METHOD TreeListVessels_FocusedNodeChanged( sender AS System.Object, e AS
             SELF:SelectedVesselChanged()
         ENDIF
         RETURN
-
 PRIVATE METHOD TreeListVesselsReports_FocusedNodeChanged( sender AS System.Object, e AS DevExpress.XtraTreeList.FocusedNodeChangedEventArgs ) AS System.Void
             SELF:TreeListReportsFocusChanged(sender) 
         RETURN
-
 PRIVATE METHOD TreeListVesselsReports_DoubleClick( sender AS System.Object, e AS System.EventArgs ) AS System.Void
             SELF:treeList1_DoubleClick(sender,e)
         RETURN
-
 PRIVATE METHOD backBBI_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
             SELF:backBBI_ItemClickMethod()
         RETURN
-
 EXPORT METHOD BBIEditReport_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
         TRY
             SELF:myReportTabForm:ReadOnlyControls(TRUE)
@@ -1271,7 +1270,6 @@ EXPORT METHOD BBIEditReport_ItemClick( sender AS System.Object, e AS DevExpress.
         CATCH
         END
         RETURN
-
 PRIVATE METHOD BBISave_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
         TRY
             SELF:myReportTabForm:saveNormalValues()
@@ -1285,53 +1283,41 @@ PRIVATE METHOD BBISave_ItemClick( sender AS System.Object, e AS DevExpress.XtraB
         CATCH
         END
         RETURN
-
 PRIVATE METHOD BBIDelete_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
             SELF:deleteDataPackage()
         RETURN
-
 PRIVATE METHOD barEditItemDisplay_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
         RETURN
-
 PRIVATE METHOD barEditItemDisplay_EditValueChanged( sender AS System.Object, e AS System.EventArgs ) AS System.Void
             SELF:barEditItemDisplayMap:Enabled := FALSE
             System.Windows.Forms.Application.DoEvents()
             SELF:LBCDisplayMapViewChanged()
             SELF:barEditItemDisplayMap:Enabled := TRUE
         RETURN
-
 PRIVATE METHOD splitMapForm_SplitGroupPanelCollapsed( sender AS System.Object, e AS DevExpress.XtraEditors.SplitGroupPanelCollapsedEventArgs ) AS System.Void
             SELF:barEditItemDisplayMap:Visibility := DevExpress.XtraBars.BarItemVisibility.Never
         RETURN
-
 PRIVATE METHOD splitMapForm_Panel2_VisibleChanged( sender AS System.Object, e AS System.EventArgs ) AS System.Void
             //WB("")
         RETURN
-
 PRIVATE METHOD splitMapForm_Panel1_VisibleChanged( sender AS System.Object, e AS System.EventArgs ) AS System.Void
             //WB("")
         RETURN
-
 PRIVATE METHOD splitMapForm_SplitterPositionChanged( sender AS System.Object, e AS System.EventArgs ) AS System.Void
             //SELF:splitterChanged(false)
         RETURN
-
 PRIVATE METHOD BBIRefreshReports_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
             SELF:showSetupUsersForm()
         RETURN
-
 PRIVATE METHOD BBIUserGroups_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
             SELF:ShowSetupUserGroupsForm()
         RETURN
-
 PRIVATE METHOD barButtonItem1_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
    
         RETURN
-
 PRIVATE METHOD MainBBIGlobal_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
             SELF:showGlobalSettingsForm()
         RETURN
-
 PRIVATE METHOD tabControl1_SelectedIndexChanged( sender AS System.Object, e AS System.EventArgs ) AS System.Void
             IF SELF:ReportsTabUserControl:SelectedIndex == 0
                 LBCReports := SELF:LBCReportsVessel
@@ -1351,31 +1337,24 @@ PRIVATE METHOD tabControl1_SelectedIndexChanged( sender AS System.Object, e AS S
             ENDIF    
             SELF:justTheReportChanged()
     RETURN
-
 PRIVATE METHOD BBICreateReport_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
         SELF:createNewReport()
     RETURN
-
 PRIVATE METHOD LBCReportsOffice_SelectedIndexChanged( sender AS System.Object, e AS System.EventArgs ) AS System.Void
         SELF:justTheReportChanged()
         RETURN
-
 PRIVATE METHOD LBCReportsOffice_Enter( sender AS System.Object, e AS System.EventArgs ) AS System.Void
          //SELF:SelectedReportChanged()
         RETURN
-
 PRIVATE METHOD BBIFinalize_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
             SELF:finalizeReport()
         RETURN
-
 PRIVATE METHOD print_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
             
         RETURN
-
 PRIVATE METHOD printReport_PrintPage(sender AS System.Object, e AS System.Drawing.Printing.PrintPageEventArgs ) AS VOID
         e:Graphics:DrawImage(memoryImage,0,0)
     RETURN
-
 PRIVATE METHOD TreeListVessels_Click( sender AS System.Object, e AS System.EventArgs ) AS System.Void
         
         /*LOCAL oTree AS DevExpress.XtraTreeList.TreeList
@@ -1395,39 +1374,31 @@ PRIVATE METHOD TreeListVessels_Click( sender AS System.Object, e AS System.Event
         //oInfo:Node <> oTree:FocusedNode*/
         
         RETURN
-
 PRIVATE METHOD BBICancel_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
             SELF:cancelChanges()
     RETURN
-
 PRIVATE METHOD BBISubmit_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
             SELF:submitCaseToManager()
             SELF:refreshMyApprovalsForm()
     RETURN
-
 PRIVATE METHOD BBIAppove_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
             SELF:approveCase()
             SELF:refreshMyApprovalsForm()
     RETURN
-
 PRIVATE METHOD barButtonItem2_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
             SELF:ShowApprovalsForm()
         RETURN
-
 PRIVATE METHOD BBSIStatus_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
             SELF:ShowApprovalsForFocusedReport()
         RETURN
-
 PRIVATE METHOD BBIReturn_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
             SELF:returnCaseToUser()
             SELF:refreshMyApprovalsForm()
         RETURN
-
 PRIVATE METHOD barButtonItem2_ItemClick_1( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
             SELF:print_ItemClickMethod()
             
         RETURN
-
 PRIVATE METHOD barButtonItem3_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
             LOCAL cReportUID := oMainForm:LBCReports:SelectedValue:ToString() AS STRING
             LOCAL cReportName := oMainForm:LBCReports:GetDisplayItemValue(oMainForm:LBCReports:SelectedIndex):ToString() AS STRING
@@ -1436,11 +1407,9 @@ PRIVATE METHOD barButtonItem3_ItemClick( sender AS System.Object, e AS DevExpres
             
             SELF:PrintFormToExcelFile(cReportUID,cReportName,FALSE, cVesselUID, cVesselName)
         RETURN
-
 PRIVATE METHOD BBITableReports_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
             SELF:showReportSelectionForm()
         RETURN
-
 PRIVATE METHOD ExportToExcelToolStripMenuItem_Click( sender AS System.Object, e AS System.EventArgs ) AS System.Void
         LOCAL cReportUID := oMainForm:LBCReportsVessel:SelectedValue:ToString() AS STRING
         LOCAL cReportName := oMainForm:LBCReportsVessel:GetDisplayItemValue(oMainForm:LBCReportsVessel:SelectedIndex):ToString() AS STRING
@@ -1459,33 +1428,32 @@ PRIVATE METHOD ExportToExcelToolStripMenuItem_Click( sender AS System.Object, e 
         ENDIF
         SELF:PrintFormToExcelFile(cReportUID,cReportName,TRUE, cVesselUID, cVesselName)
     RETURN
-
 PRIVATE METHOD DryBarButton_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
             showReportSelectionForm("18")
         RETURN
-
 PRIVATE METHOD WetBBI_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
             showReportSelectionForm("21")
         RETURN
-
 PRIVATE METHOD PerRoleWet_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
             showReportSelectionForm("21", TRUE)
         RETURN
-
 PRIVATE METHOD PerRoleDry_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
             showReportSelectionForm("18", TRUE)
         RETURN
-
 PRIVATE METHOD PerRoleAllFleet_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
             showReportSelectionForm("-", TRUE)
         RETURN
-
 PRIVATE METHOD BBIAppovalHistory_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
             SELF:showMyHistoryForm()
         RETURN
-
 PRIVATE METHOD barButtonItemMRVReport_ItemClick( sender AS System.Object, e AS DevExpress.XtraBars.ItemClickEventArgs ) AS System.Void
             SELF:barButtonItemMRVReportItemClick()
     RETURN
+PRIVATE METHOD bbiAlerts_ItemClick(sender AS OBJECT, e AS DevExpress.XtraBars.ItemClickEventArgs) AS VOID STRICT
+        bbiAlertsItemClick()
+    RETURN
+PRIVATE METHOD bbiNewVoyage_ItemClick(sender AS OBJECT, e AS DevExpress.XtraBars.ItemClickEventArgs) AS VOID STRICT
+        AddNewVoyage()
+    RETURN
 
-END CLASS
+END CLASS 

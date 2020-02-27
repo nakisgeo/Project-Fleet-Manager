@@ -49,9 +49,9 @@ RETURN
 METHOD CreateGridReports() AS VOID
 	LOCAL cStatement AS STRING
 
-	cStatement:="SELECT REPORT_UID, ReportName, ReportBaseNum, ReportColor, ReportType"+;
+	cStatement:="SELECT REPORT_UID, ReportName, ReportBaseNum, ReportColor, ReportType, FolderName"+;
 				" FROM FMReportTypes"+oMainForm:cNoLockTerm+;
-				" ORDER BY ReportBaseNum"
+				" where ReportBaseNum > 0 ORDER BY ReportBaseNum"
 	SELF:oDTReports:=oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement)
 	SELF:oDTReports:TableName:="Reports"
 	// Create Primary Key
@@ -108,6 +108,9 @@ LOCAL nVisible:=0, nAbsIndex:=0 AS INT
 																		nAbsIndex++, -1, -1, SELF:GridViewReports)
 	oColumn:Visible:=FALSE
 	//Self:GridViewReports:ColumnViewOptionsBehavior:Editable:=False
+	
+	oColumn:=oMainForm:CreateDXColumn("Folder Name", "FolderName",			FALSE, DevExpress.Data.UnboundColumnType.String, ;
+																		nAbsIndex++, nVisible++, 70, SELF:GridViewReports)
 RETURN
 
 
@@ -478,7 +481,7 @@ METHOD Reports_Edit(oRow AS DataRowView, oColumn AS GridColumn) AS VOID
 	ENDIF
 
 	LOCAL cField := oColumn:FieldName AS STRING
-	IF ! InListExact(cField, "ReportBaseNum", "ReportName", "uReportColor", "uReportType")
+	IF ! InListExact(cField, "ReportBaseNum", "ReportName", "uReportColor", "uReportType", "FolderName")
 		wb("The column '"+oColumn:Caption+"' is ReadOnly")
 		RETURN
 	ENDIF

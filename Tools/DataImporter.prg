@@ -75,7 +75,7 @@ METHOD ReadDataSet(cZipFile AS STRING, cDir AS STRING, cMsgUID AS STRING, cSkyFi
 			cGmtDiff := "2" 
 			cDateGMT := DateTime.Now:ToString("yyyy-MM-dd HH:mm:ss")
 		ENDIF
-
+		
 		// Read GPS coordinates
 		LOCAL cLatitude := SELF:GetFieldValue("Latitude", oRootNode) AS STRING
 		LOCAL cN_OR_S := SELF:GetFieldValue("N_OR_S", oRootNode) AS STRING
@@ -237,15 +237,107 @@ METHOD ReadDataSet(cZipFile AS STRING, cDir AS STRING, cMsgUID AS STRING, cSkyFi
 				system.IO.File.Delete(cTempDocDir+"\cImage.TXT")
 		END	TRY
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+
+
+		TRY
+		
+			// Locate the Voyage that will Show the report to it. Bring the most recent voyage
+		
+			LOCAL cFolderOfVoyage := "", cFolderOfReport:="" AS STRING
+		
+			cStatement:=" SELECT TOP 1 VOYAGE_UID, FM_FolderId FROM EconVoyages "+oMainForm:cNoLockTerm+;
+						" WHERE ( StartDateGMT <= '"+cDateGMT+"' AND ( EndDateGMT >= '"+cDateGMT+"' "+;
+						" OR EndDateGMT IS NULL ) ) AND VESSEL_UNIQUEID="+cVesselCode+ " ORDER BY VOYAGE_UID DESC"
+			LOCAL oDTVoyages := oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement) AS DataTable
+			IF oDTVoyages <> NULL && oDTVoyages:Rows:Count > 0
+				cFolderOfVoyage := oDTVoyages:Rows[0]["FM_FolderId"]:ToString()
+			ENDIF
+		
+			// Locate the Name of the Report to Search for child Folder
+			LOCAL oDTReports AS DataTable
+			
+			TRY
+				
+			cStatement:="SELECT ReportName, FolderName"+;
+					" FROM FMReportTypes"+oMainForm:cNoLockTerm+;
+					" WHERE REPORT_UID="+cReportUID
+			oDTReports := oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement)
+			
+			CATCH
+				cStatement:="SELECT ReportName,ReportName AS FolderName"+;
+						" FROM FMReportTypes"+oMainForm:cNoLockTerm+;
+						" WHERE REPORT_UID="+cReportUID
+				oDTReports := oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement)
+			END TRY
+			LOCAL cReportName := "", cReportFolderName := "" AS STRING
+			IF oDTReports <> NULL && oDTReports:Rows:Count>0
+				cReportFolderName :=oDTReports:Rows[0]["FolderName"]:ToString():Trim()
+				cReportName :=oDTReports:Rows[0]["ReportName"]:ToString():Trim()
+				IF cReportFolderName == ""
+					cReportFolderName := cReportName
+				ENDIF
+			ENDIF
+			// Search for Folder to put the Message In 
+			IF !cFolderOfVoyage:Equals("") && !cReportName:Equals("")
+				cStatement:="SELECT Folder_UniqueId"+;
+						" FROM Folders"+oMainForm:cNoLockTerm+;
+						" WHERE ParentFolder="+cFolderOfVoyage+;
+						" AND FolderName='"+oSoftway:ConvertWildcards(cReportFolderName, FALSE)+"'"
+				cFolderOfReport := oSoftway:RecordExists(oMainForm:oGFH, oMainForm:oConn, cStatement, "Folder_UniqueId") 
+			ENDIF
+		
+			// Insert MSG32 entry
+			LOCAL cMime := "" AS STRING
+			cMime := "From: fleetmanager@softway.gr"+CRLF+"To: fleetmanager@softway.gr"
+		
+			LOCAL cMemo := "" AS STRING
+			cMemo := CRLF + CRLF + "Report Manually Inserted by User :"+oUser:UserName+" on "+DateTime.Now:ToString("dd-MM-yyyy HH:mm:ss")+CRLF+CRLF
+			
+			LOCAL cEMail := "" AS STRING
+			LOCAL cBodyISM := SELF:ReadBodyISM(cReportUID, cEMail) AS STRING
+			cSkyFileBody := SELF:ReplaceBodyTextFields(cBodyISM, cVesselName, cReportUID, cPackageUID)
+			
+			cMemo += cSkyFileBody
+		
+			LOCAL cSubject := "" AS STRING
+			cSubject :=  oSoftway:ConvertWildcards(cVesselName:ToUpper() + "'s  " + cReportName+ "  ON "+ cDateGMT, FALSE)
+		
+			LOCAL cDep := "11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111" AS STRING 
+			LOCAL cRead := "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" AS STRING 
+		
+			cStatement := "INSERT INTO msg32 (Visible, IO, TDate, TimeMsg, MsgRefNo, MsgType, Dep, "+;
+			" USR, Line, USR_READ, Priority, Fax_Pages, MsgSize, Info, Comments,"+;
+			" Ans_Bc, Subject, Attachments, MimeHeader, Memo, DefaultHTML, CompName,"+;
+			" SMTPReturnReceipt, SendSingleMessage,"+;
+ 			" TStatus, Circular,Company_uniqueid) VALUES ('Y', 'I', '"+cDateGMT:Substring(0,10)+"', '"+cDateGMT:Substring(11,cDateGMT:Length-11)+"', '000000',"+;
+ 			" 'N','"+cDep+"','"+oUser:UserID+"',1,'"+cRead+"',1,0,0,'','','fleetmanager@softway.gr',"+;
+ 			" '"+cSubject+"',1,'"+cMime+"','"+oSoftway:ConvertWildcards(cMemo, FALSE)+"','','',0,0,NULL,0,0 )"
+			
+			IF ! oSoftway:AdoCommand(oMainForm:oGFH, oMainForm:oConn, cStatement)
+				wb("Cannot insert Msg32 entry for Vessel="+cVesselName+CRLF+CRLF+cStatement)
+				
+			ELSE
+				LOCAL cNewMsgUID := oSoftway:GetLastInsertedIdentityFromScope(oMainForm:oGFH, oMainForm:oConn, "MSG32", "Msg_UniqueId") AS STRING
+		
+				IF cFolderOfReport:Trim() <> ""
+					LOCAL cCreator := DateTime.Now:ToString("yyMMdd") + oUser:UserID + DateTime.Now:ToString("HHmm") AS STRING
+					
+					cStatement:= "INSERT INTO FolderLinks (FOLDER_UNIQUEID ,Visible, CreatorUser, TDate, MSG_UNIQUEID) "+;
+					"VALUES ( "+cFolderOfReport+",'Y','"+cCreator+"','"+cDateGMT:Substring(0,10)+"',"+cNewMsgUID+")"
+					
+					oSoftway:AdoCommand(oMainForm:oGFH, oMainForm:oConn, cStatement)
+				ENDIF
+			ENDIF
+		CATCH exc AS Exception
+		
+			wb("Exception : "+ exc:Message + CRLF+CRLF + cStatement )
+		
+		END TRY
+
+
 		System.IO.File.Delete(cXmlFile)
 		System.IO.File.Delete(cZipFile)
-
-//		IF cMailClient == "Skyfile"
-//			LOCAL cEMail := "" AS STRING
-//			LOCAL cBodyISM := SELF:ReadBodyISM(cReportUID, cEMail) AS STRING
-//			cSkyFileBody := SELF:ReplaceBodyTextFields(cBodyISM, cVesselName, cReportUID, cPackageUID)
-//		ENDIF
-
 		//InfoBox(nItems:ToString()+" Items imported")
 
 	CATCH e AS Exception

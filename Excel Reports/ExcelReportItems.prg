@@ -3,7 +3,10 @@
 #Using System.Data.Common
 #Using System.Windows.Forms
 #Using System.Drawing
+USING System.Collections
+USING System.Collections.Generic
 #Using System.IO
+USING System.Linq
 #Using System.Diagnostics
 #Using Microsoft.Office.Interop.Excel
 #USING System.Reflection
@@ -11,115 +14,153 @@
 
 PARTIAL CLASS MainForm INHERIT DevExpress.XtraEditors.XtraForm
 
+PUBLIC lIncludeRelativeData := FALSE AS LOGIC
+
 METHOD ExportItemsToExcelFile() AS VOID
-	//IF TRUE
-	//	wb("Under construction")
-	//	RETURN
-	//ENDIF
-	LOCAL cStatement, cSqlForSpecificItems := "" AS STRING
-	LOCAL cReportUID := SELF:LBCReports:SelectedValue:ToString() AS STRING
-	LOCAL cReportName := SELF:LBCReports:GetDisplayItemValue(SELF:LBCReports:SelectedIndex):ToString() AS STRING
-
-	LOCAL cVesselUID := oMainForm:GetVesselUID AS STRING
-	IF cVesselUID:StartsWith("Fleet") || cVesselUID =="0"
-		wb("Please select a Vessel")
-		RETURN
-	ENDIF
-	LOCAL cVesselName := oMainForm:GetVesselName AS STRING
-	//cVesselName := cVesselName
-
-	IF cReportName:ToUpper():StartsWith("MODE")
-		wb("You must select a specific report, current selection is: "+cReportName)
-		RETURN
-	ENDIF
-	//wb(cVesselName, cReportName)
-	cStatement:="SELECT DISTINCT FMReportItems.ITEM_UID, FMReportItems.ItemNo, FMReportItems.ItemName, FMReportItems.ItemType"+;
-				" FROM FMReportItems"+oMainForm:cNoLockTerm+;
-				" WHERE FMReportItems.ItemType NOT IN ('A','L') AND FMReportItems.REPORT_UID="+cReportUID+;
-				" ORDER BY FMReportItems.ItemNo"
+	TRY
 	
-	LOCAL oDTFMItems := oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement) AS DataTable
+		//IF TRUE
+		//	wb("Under construction")
+		//	RETURN
+		//ENDIF	
+	
+		LOCAL oDTVoyageDates AS DataTable
+		LOCAL cStatement, cSqlForSpecificItems := "" AS STRING
+		LOCAL cReportUID := SELF:LBCReports:SelectedValue:ToString() AS STRING
+		LOCAL cReportName := SELF:LBCReports:GetDisplayItemValue(SELF:LBCReports:SelectedIndex):ToString() AS STRING
+
+		#region Set Dates
+		VAR cVoyageUID := TreeListVesselsReports:FocusedNode:Tag
+		cStatement := i"select isnull(a.[StartDateGMT], GETUTCDATE()) StartDateGMT, isnull(a.[EndDateGMT], GETUTCDATE()) EndDateGMT from [EconVoyages] a where a.[VOYAGE_UID]={cVoyageUID}"
+		oDTVoyageDates := oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement)
+		#endregion
+
+		LOCAL cVesselUID := oMainForm:GetVesselUID AS STRING
+		IF cVesselUID:StartsWith("Fleet") || cVesselUID =="0"
+			wb("Please select a Vessel")
+			RETURN
+		ENDIF
+		LOCAL cVesselName := oMainForm:GetVesselName AS STRING
+		//cVesselName := cVesselName
+
+		IF cReportName:ToUpper():StartsWith("MODE")
+			wb("You must select a specific report, current selection is: "+cReportName)
+			RETURN
+		ENDIF
+		//wb(cVesselName, cReportName)
+		cStatement:="SELECT DISTINCT FMReportItems.ITEM_UID, FMReportItems.ItemNo, FMReportItems.ItemName, FMReportItems.ItemType, FMReportItems.ItemCaption, FMReportItems.ColumnColor"+;
+					" FROM FMReportItems"+oMainForm:cNoLockTerm+;
+					" WHERE FMReportItems.ItemType NOT IN ('A','L') AND FMReportItems.REPORT_UID="+cReportUID+;
+					" ORDER BY FMReportItems.ItemNo"
+	
+		LOCAL oDTFMItems := oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement) AS DataTable
 	
 
-	LOCAL oSelectDatesSimpleForm := SelectDatesAdvancedForm{} AS SelectDatesAdvancedForm
-	oSelectDatesSimpleForm:DateFrom:DateTime := Datetime.Today
-	oSelectDatesSimpleForm:DateTo:DateTime := TimeZoneInfo.ConvertTime(Datetime.Now, TimeZoneInfo.Utc)
-	oSelectDatesSimpleForm:oItemsTable := oDTFMItems
-	oSelectDatesSimpleForm:cReportUid := cReportUID
-	oSelectDatesSimpleForm:cVesselUid := cVesselUID
-	oSelectDatesSimpleForm:ShowDialog()
-	IF oSelectDatesSimpleForm:DialogResult <> DialogResult.OK
+		LOCAL oSelectDatesSimpleForm := SelectDatesAdvancedForm{} AS SelectDatesAdvancedForm
+	//	oSelectDatesSimpleForm:DateFrom:DateTime := Datetime.Today
+	//	oSelectDatesSimpleForm:DateTo:DateTime := TimeZoneInfo.ConvertTime(Datetime.Now, TimeZoneInfo.Utc)
+	
+		oSelectDatesSimpleForm:DateFrom:DateTime := Convert.ToDateTime(oDTVoyageDates:Rows[0]["StartDateGMT"]:ToString())
+		oSelectDatesSimpleForm:DateTo:DateTime := Convert.ToDateTime(oDTVoyageDates:Rows[0]["EndDateGMT"]:ToString())
+	
+		oSelectDatesSimpleForm:oItemsTable := oDTFMItems
+		oSelectDatesSimpleForm:cReportUid := cReportUID
+		oSelectDatesSimpleForm:cVesselUid := cVesselUID
+		oSelectDatesSimpleForm:ShowDialog()
+		IF oSelectDatesSimpleForm:DialogResult <> DialogResult.OK
+			RETURN
+		ENDIF
+		VAR dSqlUids := oSelectDatesSimpleForm:cSqlUids:Replace("(",""):Replace(")",""):Split(','):ToList():ToDictionary({i => i:Split('|')[1]}, {i => IIF(i:Contains("|"), Convert.ToInt32(i:Split('|')[2]), 999)})
+		IF oSelectDatesSimpleForm:cSqlUids <> ""
+			VAR lSqlUids := List<STRING>{dSqlUids:Keys}
+	//		cSqlForSpecificItems := " AND  FMReportItems.ITEM_UID IN"+ oSelectDatesSimpleForm:cSqlUids +" "
+			cSqlForSpecificItems := " AND  FMReportItems.ITEM_UID IN ("+ string.Join(",",lSqlUids) + ") "
+			cStatement:="SELECT DISTINCT FMReportItems.ITEM_UID, FMReportItems.ItemNo, FMReportItems.ItemName, FMReportItems.ItemType, FMReportItems.ItemCaption, FMReportItems.ColumnColor "+;
+					" FROM FMReportItems"+oMainForm:cNoLockTerm+;
+					" WHERE FMReportItems.ItemType NOT IN ('A','L') AND FMReportItems.REPORT_UID="+cReportUID+cSqlForSpecificItems+;
+					" ORDER BY FMReportItems.ItemNo"
+	
+			oDTFMItems := oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement)
+		ENDIF
+	
+		LOCAL dStart := oSelectDatesSimpleForm:DateFrom:DateTime AS DateTime
+		LOCAL dEnd := oSelectDatesSimpleForm:DateTo:DateTime AS DateTime
+
+
+
+	//------------------------------------------ 13-2-2020 JJV
+		LOCAL cFile AS STRING
+		cFile := cTempDocDir+"\FMData_"+cVesselName:Replace("/", "_")+"_"+Datetime.Now:ToString("dd_MM_yyyy__HH_mm_ss")+".XLSX"	
+		LOCAL xlg := ExcelGenerator{cVesselUID, cReportUID, dStart, dEnd, oDTFMItems, dSqlUids} AS ExcelGenerator
+		xlg:ExportFile(cFile, lIncludeRelativeData)
+		System.Diagnostics.Process.Start(cFile)
 		RETURN
-	ENDIF
-	IF oSelectDatesSimpleForm:cSqlUids <> ""
-		cSqlForSpecificItems := " AND  FMReportItems.ITEM_UID IN"+ oSelectDatesSimpleForm:cSqlUids +" "
+	//--------------------------------------------------------
+
+
+
+
+		// Select Items
+		/*
 		cStatement:="SELECT DISTINCT FMReportItems.ITEM_UID, FMReportItems.ItemNo, FMReportItems.ItemName, FMReportItems.ItemType"+;
-				" FROM FMReportItems"+oMainForm:cNoLockTerm+;
-				" WHERE FMReportItems.ItemType NOT IN ('A','L') AND FMReportItems.REPORT_UID="+cReportUID+cSqlForSpecificItems+;
-				" ORDER BY FMReportItems.ItemNo"
+					" FROM FMData"+oMainForm:cNoLockTerm+;
+					" INNER JOIN FMDataPackages ON FMDataPackages.PACKAGE_UID=FMData.PACKAGE_UID"+;
+					" INNER JOIN FMReportItems ON FMReportItems.ITEM_UID=FMData.ITEM_UID"+;
+					" WHERE FMDataPackages.VESSEL_UNIQUEID="+cVesselUID+;
+					" AND FMDataPackages.REPORT_UID="+cReportUID+;
+					" AND FMDataPackages.DateTimeGMT BETWEEN '"+dStart:ToString("yyyy-MM-dd HH:mm")+"' AND '"+dEnd:ToString("yyyy-MM-dd HH:mm")+"'"+;
+					" ORDER BY FMReportItems.ItemNo"
+		*/
 	
-		oDTFMItems := oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement)
-	ENDIF
+		oDTFMItems:TableName := "FMItems"
+		//oDTFMItems:WriteXml(cTempdocdir+"\FMItems.XML", XmlWriteMode.WriteSchema, FALSE)
+
+		// Select Dates
+		cStatement:="SELECT DISTINCT FMDataPackages.PACKAGE_UID, FMDataPackages.DateTimeGMT"+;
+					" FROM FMData"+oMainForm:cNoLockTerm+;
+					" INNER JOIN FMDataPackages ON FMDataPackages.PACKAGE_UID=FMData.PACKAGE_UID"+;
+					" INNER JOIN FMReportItems ON FMReportItems.ITEM_UID=FMData.ITEM_UID"+;
+					" WHERE FMDataPackages.VESSEL_UNIQUEID="+cVesselUID+;
+					" AND FMDataPackages.REPORT_UID="+cReportUID+;
+					" AND FMDataPackages.Visible=1 "+;
+					" AND FMDataPackages.DateTimeGMT BETWEEN '"+dStart:ToString("yyyy-MM-dd HH:mm")+"' AND '"+dEnd:ToString("yyyy-MM-dd HH:mm")+"'"+;
+					" ORDER BY FMDataPackages.DateTimeGMT"
+		LOCAL oDTFMDates := oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement) AS DataTable
+		oDTFMDates:TableName := "FMDates"
+		//oDTFMDates:WriteXml(cTempdocdir+"\FMDates.XML", XmlWriteMode.WriteSchema, FALSE)
+
+		// Select FMData
+		cStatement:="SELECT FMDataPackages.PACKAGE_UID, FMDataPackages.Memo, FMData.ITEM_UID, FMData.Data"+;
+					" FROM FMData"+oMainForm:cNoLockTerm+;
+					" INNER JOIN FMDataPackages ON FMDataPackages.PACKAGE_UID=FMData.PACKAGE_UID"+;
+					" INNER JOIN FMReportItems ON FMReportItems.ITEM_UID=FMData.ITEM_UID"+;
+					" WHERE FMDataPackages.VESSEL_UNIQUEID="+cVesselUID+;
+					" AND FMDataPackages.REPORT_UID="+cReportUID+;
+					" AND FMDataPackages.DateTimeGMT BETWEEN '"+dStart:ToString("yyyy-MM-dd HH:mm")+"' AND '"+dEnd:ToString("yyyy-MM-dd HH:mm")+"'"	//+;
+					//" ORDER BY FMDataPackages.DateTimeGMT"
+		LOCAL oDTFMData := oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement) AS DataTable
+		oDTFMData:TableName := "FMData"
+
+		LOCAL oPKs AS DataColumn[]
+		oPKs:=DataColumn[]{2}
+		oPKs[1]:=oDTFMData:Columns["PACKAGE_UID"]
+		oPKs[2]:=oDTFMData:Columns["ITEM_UID"]
+		oSoftway:CreatePK(oDTFMData, oPKs)
+
+		IF oDTFMData:Rows:Count == 0
+			wb("No Data found for the sepcified period")
+			RETURN
+		ENDIF
+
+		//oDTFMData:WriteXml(cTempdocdir+"\FMData.XML", XmlWriteMode.WriteSchema, FALSE)
+		//memowrit(cTempdocdir+"\st.txt", cStatement)
+
+		SELF:CreateExcelReportItems(cVesselName, oDTFMItems, oDTFMDates, oDTFMData, ".XLSX")
 	
-	LOCAL dStart := oSelectDatesSimpleForm:DateFrom:DateTime AS DateTime
-	LOCAL dEnd := oSelectDatesSimpleForm:DateTo:DateTime AS DateTime
-
-	// Select Items
-	/*
-	cStatement:="SELECT DISTINCT FMReportItems.ITEM_UID, FMReportItems.ItemNo, FMReportItems.ItemName, FMReportItems.ItemType"+;
-				" FROM FMData"+oMainForm:cNoLockTerm+;
-				" INNER JOIN FMDataPackages ON FMDataPackages.PACKAGE_UID=FMData.PACKAGE_UID"+;
-				" INNER JOIN FMReportItems ON FMReportItems.ITEM_UID=FMData.ITEM_UID"+;
-				" WHERE FMDataPackages.VESSEL_UNIQUEID="+cVesselUID+;
-				" AND FMDataPackages.REPORT_UID="+cReportUID+;
-				" AND FMDataPackages.DateTimeGMT BETWEEN '"+dStart:ToString("yyyy-MM-dd HH:mm")+"' AND '"+dEnd:ToString("yyyy-MM-dd HH:mm")+"'"+;
-				" ORDER BY FMReportItems.ItemNo"
-	*/
+	CATCH ex AS Exception
+		ErrorBox(ex:Message, "")
+	END TRY
 	
-	oDTFMItems:TableName := "FMItems"
-	//oDTFMItems:WriteXml(cTempdocdir+"\FMItems.XML", XmlWriteMode.WriteSchema, FALSE)
-
-	// Select Dates
-	cStatement:="SELECT DISTINCT FMDataPackages.PACKAGE_UID, FMDataPackages.DateTimeGMT"+;
-				" FROM FMData"+oMainForm:cNoLockTerm+;
-				" INNER JOIN FMDataPackages ON FMDataPackages.PACKAGE_UID=FMData.PACKAGE_UID"+;
-				" INNER JOIN FMReportItems ON FMReportItems.ITEM_UID=FMData.ITEM_UID"+;
-				" WHERE FMDataPackages.VESSEL_UNIQUEID="+cVesselUID+;
-				" AND FMDataPackages.REPORT_UID="+cReportUID+;
-				" AND FMDataPackages.Visible=1 "+;
-				" AND FMDataPackages.DateTimeGMT BETWEEN '"+dStart:ToString("yyyy-MM-dd HH:mm")+"' AND '"+dEnd:ToString("yyyy-MM-dd HH:mm")+"'"+;
-				" ORDER BY FMDataPackages.DateTimeGMT"
-	LOCAL oDTFMDates := oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement) AS DataTable
-	oDTFMDates:TableName := "FMDates"
-	//oDTFMDates:WriteXml(cTempdocdir+"\FMDates.XML", XmlWriteMode.WriteSchema, FALSE)
-
-	// Select FMData
-	cStatement:="SELECT FMDataPackages.PACKAGE_UID, FMDataPackages.Memo, FMData.ITEM_UID, FMData.Data"+;
-				" FROM FMData"+oMainForm:cNoLockTerm+;
-				" INNER JOIN FMDataPackages ON FMDataPackages.PACKAGE_UID=FMData.PACKAGE_UID"+;
-				" INNER JOIN FMReportItems ON FMReportItems.ITEM_UID=FMData.ITEM_UID"+;
-				" WHERE FMDataPackages.VESSEL_UNIQUEID="+cVesselUID+;
-				" AND FMDataPackages.REPORT_UID="+cReportUID+;
-				" AND FMDataPackages.DateTimeGMT BETWEEN '"+dStart:ToString("yyyy-MM-dd HH:mm")+"' AND '"+dEnd:ToString("yyyy-MM-dd HH:mm")+"'"	//+;
-				//" ORDER BY FMDataPackages.DateTimeGMT"
-	LOCAL oDTFMData := oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement) AS DataTable
-	oDTFMData:TableName := "FMData"
-
-	LOCAL oPKs AS DataColumn[]
-	oPKs:=DataColumn[]{2}
-	oPKs[1]:=oDTFMData:Columns["PACKAGE_UID"]
-	oPKs[2]:=oDTFMData:Columns["ITEM_UID"]
-	oSoftway:CreatePK(oDTFMData, oPKs)
-
-	IF oDTFMData:Rows:Count == 0
-		wb("No Data found for the sepcified period")
-		RETURN
-	ENDIF
-
-	//oDTFMData:WriteXml(cTempdocdir+"\FMData.XML", XmlWriteMode.WriteSchema, FALSE)
-	//memowrit(cTempdocdir+"\st.txt", cStatement)
-
-	SELF:CreateExcelReportItems(cVesselName, oDTFMItems, oDTFMDates, oDTFMData, ".XLSX")
 RETURN
 
 

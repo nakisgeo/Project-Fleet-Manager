@@ -73,25 +73,39 @@
     <Reference Include="AppModule.InterProcessComm, Version=1.0.0.23359, Culture=neutral, PublicKeyToken=null">
       <Name>AppModule.InterProcessComm</Name>
       <AssemblyName>AppModule.InterProcessComm.dll</AssemblyName>
-      <HintPath>..\SoftwayDlls\AppModule.InterProcessComm.dll</HintPath>
       <Private>True</Private>
+      <HintPath>..\SoftwayDlls\AppModule.InterProcessComm.dll</HintPath>
     </Reference>
     <Reference Include="AppModule.NamedPipes, Version=1.0.1.23359, Culture=neutral, PublicKeyToken=null">
       <Name>AppModule.NamedPipes</Name>
       <AssemblyName>AppModule.NamedPipes.dll</AssemblyName>
-      <HintPath>..\SoftwayDlls\AppModule.NamedPipes.dll</HintPath>
       <Private>True</Private>
+      <HintPath>..\SoftwayDlls\AppModule.NamedPipes.dll</HintPath>
     </Reference>
     <Reference Include="AutoUpdateLibrary, Version=1.4.0.0, Culture=neutral, PublicKeyToken=null">
       <Name>AutoUpdateLibrary</Name>
       <AssemblyName>AutoUpdateLibrary.dll</AssemblyName>
-      <HintPath>..\SoftwayDlls\AutoUpdateLibrary.dll</HintPath>
       <Private>True</Private>
+      <HintPath>..\SoftwayDlls\AutoUpdateLibrary.dll</HintPath>
     </Reference>
     <Reference Include="DevExpress.BonusSkins.v16.2, Version=16.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">
       <Name>DevExpress.BonusSkins.v16.2</Name>
       <AssemblyName>DevExpress.BonusSkins.v16.2.dll</AssemblyName>
       <HintPath>..\..\..\..\..\..\Program Files (x86)\DevExpress 16.2\Components\Bin\Framework\DevExpress.BonusSkins.v16.2.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.Charts.v16.2.Core, Version=16.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">
+      <Name>DevExpress.Charts.v16.2.Core</Name>
+      <SpecificVersion>False</SpecificVersion>
+      <AssemblyName>DevExpress.Charts.v16.2.Core.dll</AssemblyName>
+      <HintPath>..\..\..\..\..\Program Files (x86)\DevExpress 16.2\Components\Bin\Framework\DevExpress.Charts.v16.2.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.CodeParser.v16.2, Version=16.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">
+      <Name>DevExpress.CodeParser.v16.2</Name>
+      <SpecificVersion>False</SpecificVersion>
+      <AssemblyName>DevExpress.CodeParser.v16.2.dll</AssemblyName>
+      <HintPath>..\..\..\..\..\Program Files (x86)\DevExpress 16.2\Components\Bin\Framework\DevExpress.CodeParser.v16.2.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="DevExpress.Data.v16.2, Version=16.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">
@@ -100,11 +114,39 @@
       <HintPath>..\..\..\..\..\..\Program Files (x86)\DevExpress 16.2\Components\Bin\Framework\DevExpress.Data.v16.2.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="DevExpress.DemoData.v16.2, Version=16.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">
+      <Name>DevExpress.DemoData.v16.2</Name>
+      <SpecificVersion>False</SpecificVersion>
+      <AssemblyName>DevExpress.DemoData.v16.2.dll</AssemblyName>
+      <HintPath>..\..\..\..\..\Program Files (x86)\DevExpress 16.2\Components\Bin\Framework\DevExpress.DemoData.v16.2.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.Office.v16.2.Core, Version=16.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">
+      <Name>DevExpress.Office.v16.2.Core</Name>
+      <SpecificVersion>False</SpecificVersion>
+      <AssemblyName>DevExpress.Office.v16.2.Core.dll</AssemblyName>
+      <HintPath>..\..\..\..\..\Program Files (x86)\DevExpress 16.2\Components\Bin\Framework\DevExpress.Office.v16.2.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="DevExpress.Printing.v16.2.Core, Version=16.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">
       <Name>DevExpress.Printing.v16.2.Core</Name>
       <AssemblyName>DevExpress.Printing.v16.2.Core.dll</AssemblyName>
       <HintPath>..\..\..\..\..\..\Program Files (x86)\DevExpress 16.2\Components\Bin\Framework\DevExpress.Printing.v16.2.Core.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.RichEdit.v16.2.Core, Version=16.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">
+      <Name>DevExpress.RichEdit.v16.2.Core</Name>
+      <SpecificVersion>False</SpecificVersion>
+      <AssemblyName>DevExpress.RichEdit.v16.2.Core.dll</AssemblyName>
+      <HintPath>..\..\..\..\..\Program Files (x86)\DevExpress 16.2\Components\Bin\Framework\DevExpress.RichEdit.v16.2.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.Tutorials.v16.2, Version=16.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">
+      <Name>DevExpress.Tutorials.v16.2</Name>
+      <AssemblyName>DevExpress.Tutorials.v16.2.dll</AssemblyName>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
+      <HintPath>..\..\..\..\..\Program Files (x86)\DevExpress 16.2\Components\Bin\Framework\DevExpress.Tutorials.v16.2.dll</HintPath>
     </Reference>
     <Reference Include="DevExpress.Utils.v16.2, Version=16.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">
       <Name>DevExpress.Utils.v16.2</Name>
@@ -112,11 +154,32 @@
       <HintPath>..\..\..\..\..\..\Program Files (x86)\DevExpress 16.2\Components\Bin\Framework\DevExpress.Utils.v16.2.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="DevExpress.Utils.v16.2.UI, Version=16.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">
+      <Name>DevExpress.Utils.v16.2.UI</Name>
+      <SpecificVersion>False</SpecificVersion>
+      <AssemblyName>DevExpress.Utils.v16.2.UI.dll</AssemblyName>
+      <HintPath>..\..\..\..\..\Program Files (x86)\DevExpress 16.2\Components\Bin\Framework\DevExpress.Utils.v16.2.UI.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="DevExpress.XtraBars.v16.2, Version=16.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">
       <Name>DevExpress.XtraBars.v16.2</Name>
       <AssemblyName>DevExpress.XtraBars.v16.2.dll</AssemblyName>
       <HintPath>..\..\..\..\..\..\Program Files (x86)\DevExpress 16.2\Components\Bin\Framework\DevExpress.XtraBars.v16.2.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraCharts.v16.2, Version=16.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">
+      <Name>DevExpress.XtraCharts.v16.2</Name>
+      <SpecificVersion>False</SpecificVersion>
+      <AssemblyName>DevExpress.XtraCharts.v16.2.dll</AssemblyName>
+      <HintPath>..\..\..\..\..\Program Files (x86)\DevExpress 16.2\Components\Bin\Framework\DevExpress.XtraCharts.v16.2.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraCharts.v16.2.Wizard, Version=16.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">
+      <Name>DevExpress.XtraCharts.v16.2.Wizard</Name>
+      <AssemblyName>DevExpress.XtraCharts.v16.2.Wizard.dll</AssemblyName>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
+      <HintPath>..\..\..\..\..\Program Files (x86)\DevExpress 16.2\Components\Bin\Framework\DevExpress.XtraCharts.v16.2.Wizard.dll</HintPath>
     </Reference>
     <Reference Include="DevExpress.XtraEditors.v16.2, Version=16.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">
       <Name>DevExpress.XtraEditors.v16.2</Name>
@@ -166,23 +229,37 @@
       <HintPath>..\..\..\..\..\..\Program Files (x86)\DevExpress 16.2\Components\Bin\Framework\DevExpress.XtraTreeList.v16.2.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="DevExpress.XtraVerticalGrid.v16.2, Version=16.2.12.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">
+      <Name>DevExpress.XtraVerticalGrid.v16.2</Name>
+      <SpecificVersion>False</SpecificVersion>
+      <AssemblyName>DevExpress.XtraVerticalGrid.v16.2.dll</AssemblyName>
+      <HintPath>..\..\..\..\..\Program Files (x86)\DevExpress 16.2\Components\Bin\Framework\DevExpress.XtraVerticalGrid.v16.2.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPPlus, Version=4.5.3.3, Culture=neutral, PublicKeyToken=ea159fdaa78159a1">
+      <Name>EPPlus</Name>
+      <AssemblyName>EPPlus.dll</AssemblyName>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
+      <HintPath>packages\EPPlus.4.5.3.3\lib\net40\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73">
       <Name>ICSharpCode.SharpZipLib</Name>
       <AssemblyName>ICSharpCode.SharpZipLib.dll</AssemblyName>
-      <HintPath>..\SoftwayDlls\ICSharpCode.SharpZipLib.dll</HintPath>
       <Private>True</Private>
+      <HintPath>..\SoftwayDlls\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="License, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f80b1601a4d8a9dd">
       <Name>License</Name>
       <AssemblyName>License.dll</AssemblyName>
-      <HintPath>..\SoftwayDlls\License.dll</HintPath>
       <Private>True</Private>
+      <HintPath>..\SoftwayDlls\License.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Maps.MapControl.WPF, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
       <Name>Microsoft.Maps.MapControl.WPF</Name>
       <AssemblyName>Microsoft.Maps.MapControl.WPF.dll</AssemblyName>
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Bing Maps WPF Control\V1\Libraries\Microsoft.Maps.MapControl.WPF.dll</HintPath>
       <Private>True</Private>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Bing Maps WPF Control\V1\Libraries\Microsoft.Maps.MapControl.WPF.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
       <Name>Microsoft.Office.Interop.Excel</Name>
@@ -191,11 +268,18 @@
       <Private>True</Private>
       <HintPath>..\..\Projects2010\_Softway.Common\Microsoft.Office.Interop.Excel.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
+      <Name>Newtonsoft.Json</Name>
+      <AssemblyName>Newtonsoft.Json.dll</AssemblyName>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
+      <HintPath>packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="PdfSharp, Version=1.31.1789.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb">
       <Name>PdfSharp</Name>
       <AssemblyName>PdfSharp.dll</AssemblyName>
-      <HintPath>..\SoftwayDlls\PdfSharp.dll</HintPath>
       <Private>True</Private>
+      <HintPath>..\SoftwayDlls\PdfSharp.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
       <Name>PresentationCore</Name>
@@ -208,8 +292,8 @@
     <Reference Include="RemoteObjectLibrary, Version=1.5.0.0, Culture=neutral, PublicKeyToken=null">
       <Name>RemoteObjectLibrary</Name>
       <AssemblyName>RemoteObjectLibrary.dll</AssemblyName>
-      <HintPath>..\SoftwayDlls\RemoteObjectLibrary.dll</HintPath>
       <Private>True</Private>
+      <HintPath>..\SoftwayDlls\RemoteObjectLibrary.dll</HintPath>
     </Reference>
     <Reference Include="SocketTools.InternetMail, Version=9.3.9300.2758, Culture=neutral, PublicKeyToken=27cecfc1a941d5cd">
       <Name>SocketTools.InternetMail</Name>
@@ -218,16 +302,37 @@
       <Private>True</Private>
       <HintPath>..\..\Projects2010\_Softway.Common\SocketTools.InternetMail.dll</HintPath>
     </Reference>
-    <Reference Include="Softway.Common, Version=1.6.0.0, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="Softway.Common, Version=1.7.1.0, Culture=neutral, PublicKeyToken=null">
       <Name>Softway.Common</Name>
       <AssemblyName>Softway.Common.dll</AssemblyName>
-      <HintPath>..\SoftwayDlls\Softway.Common.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
       <Private>True</Private>
+      <HintPath>Debug\Softway.Common.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration">
+      <Name>System.configuration</Name>
+      <SpecificVersion>False</SpecificVersion>
+      <AssemblyName>System.Configuration.dll</AssemblyName>
+    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <Name>System.Data.DataSetExtensions</Name>
+      <AssemblyName>System.Data.DataSetExtensions.dll</AssemblyName>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="System.DirectoryServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <Name>System.DirectoryServices</Name>
+      <AssemblyName>System.DirectoryServices.dll</AssemblyName>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Security">
+      <Name>System.Security</Name>
+      <SpecificVersion>False</SpecificVersion>
+      <AssemblyName>System.Security.dll</AssemblyName>
+    </Reference>
     <Reference Include="System.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <Name>System.Web</Name>
       <AssemblyName>System.Web.dll</AssemblyName>
@@ -282,6 +387,31 @@
     <Compile Include="Alarms\Add_Alarm_Form.prg">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Alerts\CheckAlertsForm.Designer.prg">
+      <DependentUpon>CheckAlertsForm.prg</DependentUpon>
+    </Compile>
+    <Compile Include="Alerts\CheckAlertsForm.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Alerts\ConditionForm.Designer.prg">
+      <DependentUpon>ConditionForm.prg</DependentUpon>
+    </Compile>
+    <Compile Include="Alerts\ConditionForm.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Alerts\UAlertForm Methods.prg" />
+    <Compile Include="Alerts\UAlertForm.Designer.prg">
+      <DependentUpon>UAlertForm.prg</DependentUpon>
+    </Compile>
+    <Compile Include="Alerts\UAlertForm.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Alerts\UserAlertsForm.Designer.prg">
+      <DependentUpon>UserAlertsForm.prg</DependentUpon>
+    </Compile>
+    <Compile Include="Alerts\UserAlertsForm.prg">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Approval Form\Approval History\ApprovalHistoryForm.Methods.prg" />
     <Compile Include="Approval Form\Approval History\ApprovalHistoryForm.prg">
       <SubType>Form</SubType>
@@ -307,10 +437,18 @@
     <Compile Include="Cargoes\Cargoes Form.prg">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Excel Reports\ExcelExport_Classes.prg" />
     <Compile Include="Excel Reports\SelectDatesAdvancedForm.prg">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Files\ReportsTabForm.Files.prg" />
+    <Compile Include="Global Settings\FSHelpForm.Designer.prg">
+      <DependentUpon>FSHelpForm.prg</DependentUpon>
+    </Compile>
+    <Compile Include="Global Settings\FSHelpForm.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Helpers\FStructureController.prg" />
     <Compile Include="Items\Lists\DMFLists Methods.prg" />
     <Compile Include="Items\Lists\DMFLists.prg">
       <SubType>Form</SubType>
@@ -321,10 +459,18 @@
     <Compile Include="Items\Logs\ReportChangeLog.prg">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Items\RelatedItems\RLTItemsAddForm.Designer.prg">
+      <DependentUpon>RLTItemsAddForm.prg</DependentUpon>
+    </Compile>
+    <Compile Include="Items\RelatedItems\RLTItemsAddForm.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Items\RelatedItems\RLTItemsAddForm_Methods.prg" />
     <Compile Include="Items\SelectReportForm Methods.prg" />
     <Compile Include="Items\SelectReportForm.prg">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Models\Folder.prg" />
     <Compile Include="MRV Reporting\MRV.ResultForm.prg">
       <SubType>Form</SubType>
     </Compile>
@@ -374,6 +520,13 @@
     </Compile>
     <Compile Include="Match Methods\MatchForm Methods.prg" />
     <Compile Include="Match Methods\MatchForm.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ports\PortsForm Methods.prg" />
+    <Compile Include="Ports\PortsForm.Designer.prg">
+      <DependentUpon>PortsForm.prg</DependentUpon>
+    </Compile>
+    <Compile Include="Ports\PortsForm.prg">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Report Generators\Class CustomItems.prg" />
@@ -469,6 +622,13 @@
     </Compile>
     <Compile Include="Vessels\VesselsForm Methods.prg" />
     <Compile Include="Vessels\VesselsForm.prg">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Voyages\NewVoyageForm Methods.prg" />
+    <Compile Include="Voyages\NewVoyageForm.Designer.prg">
+      <DependentUpon>NewVoyageForm.prg</DependentUpon>
+    </Compile>
+    <Compile Include="Voyages\NewVoyageForm.prg">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Voyages\RoutingDetails.prg">
@@ -656,6 +816,7 @@
     <None Include="BingMaps\BingMapUserControl.txt" />
     <None Include="MainForm.txt" />
     <EmbeddedResource Include="Properties\licenses.licx" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
     </None>
@@ -675,10 +836,15 @@
     <Folder Include="Fleet" />
     <Folder Include="Items\Lists" />
     <Folder Include="Items\Logs" />
+    <Folder Include="Items\RelatedItems" />
     <Folder Include="Match Methods" />
     <Folder Include="Global Settings" />
     <Folder Include="Approval Form" />
     <Folder Include="MRV Reporting" />
+    <Folder Include="Alerts" />
+    <Folder Include="Models" />
+    <Folder Include="Helpers" />
+    <Folder Include="Ports" />
     <Folder Include="Reports\ComboboxColors" />
     <Folder Include="Samos.Reports" />
     <Folder Include="Reports\Forms" />
@@ -703,6 +869,56 @@
       <Project>{D7B63DA0-55B1-4427-B1A6-83D205B5E2AC}</Project>
       <Private>True</Private>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Alerts\UserAlertsForm.resx">
+      <DependentUpon>UserAlertsForm.prg</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Fleet\FleetForm.resx">
+      <DependentUpon>FleetForm.prg</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Voyages\NewVoyageForm.resx">
+      <DependentUpon>NewVoyageForm.prg</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Ports\PortsForm.resx">
+      <DependentUpon>PortsForm.prg</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Global Settings\FSHelpForm.resx">
+      <DependentUpon>FSHelpForm.prg</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Items\RelatedItems\RLTItemsAddForm.resx">
+      <DependentUpon>RLTItemsAddForm.prg</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Alerts\UAlertForm.resx">
+      <DependentUpon>UAlertForm.prg</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Alerts\ConditionForm.resx">
+      <DependentUpon>ConditionForm.prg</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Alerts\CheckAlertsForm.resx">
+      <DependentUpon>CheckAlertsForm.prg</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\XSharp\XSharp.targets" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">

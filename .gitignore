@@ -240,3 +240,6 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+/FleetManager-XS1.SLN
+/FleetManager1.xsproj
+/FleetManager1.sln

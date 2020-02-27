@@ -11,6 +11,7 @@
 #Using DevExpress.XtraEditors.Repository
 #using DevExpress.XtraPrinting
 #Using DevExpress.XtraPrintingLinks
+USING System.Collections.Generic
 
 PARTIAL CLASS VoyagesForm INHERIT System.Windows.Forms.Form
 	PRIVATE lSuspendNotification AS LOGIC
@@ -151,7 +152,7 @@ METHOD CreateGridVoyages() AS VOID
 
 
 	// Voyages
-	cStatement:="SELECT VOYAGE_UID, VoyageNo, EconVoyages.Description, CPDate, Charterers, Broker, StartDate, EndDate, StartDateGMT, EndDateGMT, LaytimeStartDate, LaytimeEndDate,"+;
+	cStatement:="SELECT VOYAGE_UID, VoyageNo, EconVoyages.Description, CPDate, Charterers, Broker, StartDate, EndDate, StartDateGMT, EndDateGMT, LaytimeStartDate, LaytimeEndDate, FM_FolderId,"+;
 				" CostOfBunkersUSD, CPMinSpeed, HFOConsumption, DGFOConsumption, EconVoyages.Type,"+;
 				" EconVoyages.PortFrom_UID, EconVoyages.PortTo_UID, EconVoyages.Distance, RTrim(Users.UserName) AS UserName,"+;
 				" RTrim(VEPortsFrom.Port) AS PortFrom, VEPortsFrom.EUPort AS FromEU , RTrim(VEPortsTo.Port) AS PortTo, VEPortsTo.EUPort AS ToEU,"+;
@@ -312,8 +313,13 @@ LOCAL nVisible:=0, nAbsIndex:=0 AS INT
 	//oMainForm:CreateDXColumn("Cost of Bunkers (USD)", "CostOfBunkersUSD",	FALSE, DevExpress.Data.UnboundColumnType.Integer, ;
 	//																nAbsIndex++, nVisible++, 84, SELF:GridViewVoyages)
 
+	oMainForm:CreateDXColumn("Folder Id", "FM_FolderId",			FALSE, DevExpress.Data.UnboundColumnType.Integer, ;
+																	nAbsIndex++, nVisible++, 70, SELF:GridViewVoyages)
+																	
+																	
 	oMainForm:CreateDXColumn("Modified by", "UserName",				FALSE, DevExpress.Data.UnboundColumnType.String, ;
-																	nAbsIndex++, nVisible++, 80, SELF:GridViewVoyages)
+																	nAbsIndex++, nVisible++, 80, SELF:GridViewVoyages)														
+
 
 
 // Hidden columns
@@ -938,7 +944,7 @@ METHOD Voyages_Edit(oRow AS DataRowView, oColumn AS GridColumn) AS VOID
 
 	LOCAL cField := oColumn:FieldName AS STRING
 	IF ! InListExact(cField, "VoyageNo", "Description", "CPDate", "Charterers", "Broker", "PortFrom", "PortTo", "Distance", "StartDate", "EndDate", "StartDateGMT", "EndDateGMT", ;
-								"uPortFromGMT_DIFF", "uPortToGMT_DIFF", "CostOfBunkersUSD", "CPMinSpeed", "HFOConsumption", "DGFOConsumption", "uType", "LaytimeStartDate", "LaytimeEndDate")
+								"uPortFromGMT_DIFF", "uPortToGMT_DIFF", "CostOfBunkersUSD", "CPMinSpeed", "HFOConsumption", "DGFOConsumption", "uType", "LaytimeStartDate", "LaytimeEndDate", "FM_FolderId")
 		wb("The column '"+oColumn:Caption+"' is ReadOnly")
 		RETURN
 	ENDIF
@@ -1090,6 +1096,7 @@ METHOD Voyages_Save(e AS DevExpress.XtraGrid.Views.Base.CellValueChangedEventArg
 				SELF:Voyages_Refresh()
 				RETURN
 			ENDIF
+		
 		ENDCASE
 
 		IF cValue == ""
@@ -1237,7 +1244,6 @@ METHOD Voyages_Save(e AS DevExpress.XtraGrid.Views.Base.CellValueChangedEventArg
 				SELF:DisplayGMT(oRow, cReplace, "PortTo", "Voyage")
 			ENDIF
 		ENDIF
-
 	CASE InListExact(cField, "uPortFromGMT_DIFF")
 		// Check Port existence
 		cPortUID := oRow:Item["PortFrom_UID"]:ToString()
@@ -1333,6 +1339,11 @@ METHOD Voyages_Save(e AS DevExpress.XtraGrid.Views.Base.CellValueChangedEventArg
 			//cReplace := "'"+Datetime.Parse(cValue):ToString("yyyy-MM-dd HH:mm")+"'"
 			lEndDateGMTModified := TRUE
 		ENDIF
+	CASE cField == "FM_FolderId" .AND. !FStructureController.FolderIdExists(cValue)
+		//Folder Structure
+		ErrorBox("The field '"+e:Column:Caption+"' must contain the folder id of an existing non system folder", "Editing aborted")
+		SELF:Voyages_Refresh()
+		RETURN
 	ENDCASE
 
 	// Update UserVoyages
@@ -1410,6 +1421,11 @@ METHOD Voyages_Save(e AS DevExpress.XtraGrid.Views.Base.CellValueChangedEventArg
 					" WHERE VOYAGE_UID="+cUID
 		//cDone := cField+"="+cValue_Dec
 
+	CASE cField == "FromEU"
+		cStatement := "update VEPorts set EUPort=" + IIF(Convert.ToBoolean(cValue), "1", "0") + " where PORT_UID=(select PortFrom_UID from EconVoyages where VOYAGE_UID=" + cUID + ")"
+	CASE cField == "ToEU"
+		cStatement := "update VEPorts set EUPort=" + IIF(Convert.ToBoolean(cValue), "1", "0") + " where PORT_UID=(select PortTo_UID from EconVoyages where VOYAGE_UID=" + cUID + ")"
+	
 	OTHERWISE
 		cStatement:="UPDATE EconVoyages"+" SET"+;
 					" "+cField+"='"+oSoftway:ConvertWildcards(cValue, FALSE)+"'"+;
@@ -2874,6 +2890,8 @@ METHOD Change_BarSetup_ToolTips_Voyages() AS VOID
 	SELF:BBIMWA:Visibility := DevExpress.XtraBars.BarItemVisibility.Never
 	SELF:BBIMWD:Visibility := DevExpress.XtraBars.BarItemVisibility.Never
 	SELF:BBICalculateROB:Visibility := DevExpress.XtraBars.BarItemVisibility.Never
+	
+	SELF:BBICreateFolders:Visibility := DevExpress.XtraBars.BarItemVisibility.Always
 RETURN
 
 
@@ -2912,6 +2930,8 @@ METHOD Change_BarSetup_ToolTips_Routings() AS VOID
 	SELF:BBIMWD:Visibility := DevExpress.XtraBars.BarItemVisibility.Always
 	
 	SELF:BBICalculateROB:Visibility := DevExpress.XtraBars.BarItemVisibility.Always
+	
+	SELF:BBICreateFolders:Visibility := DevExpress.XtraBars.BarItemVisibility.Never
 RETURN
 
 EXPORT METHOD showMatchForm(cType AS STRING) AS VOID
@@ -3095,6 +3115,35 @@ RETURN
 
 #ENDREGION
 
-
+PRIVATE METHOD AddNewVoyage() AS VOID //Folder Structure
+	TRY
+		LOCAL cVesselUID := oMainForm:TreeListVessels:FocusedNode:Tag:ToString() AS STRING
+		LOCAL aForm := NewVoyageForm{SELF, cVesselUID, NULL} AS NewVoyageForm
+		aForm:Show()
+		Voyages_Refresh()
+	CATCH ex AS Exception
+		ErrorBox("Please select a vessel!")
+	END TRY
+	RETURN
+PRIVATE METHOD CreateFolders AS VOID //Folder Structure
+	LOCAL cVesselUID := oMainForm:TreeListVessels:FocusedNode:Tag:ToString() AS STRING
+	LOCAL nRowHandle := SELF:GridViewVoyages:FocusedRowHandle AS INT
+	LOCAL oRow := (DataRowView)SELF:GridViewVoyages:GetRow(nRowHandle) AS DataRowView
+	IF oRow == NULL
+		RETURN
+	ENDIF
+	LOCAL cFolderId := Convert.ToInt32(oRow:Item["FM_FolderId"]:ToString()) AS INT
+	IF cFolderId > 0
+		ErrorBox("Voyage's 'Folder Id' is not empty." + CRLF + "The operation stoped.")
+		RETURN 
+	ENDIF
+	
+	LOCAL cVoyageUID := oRow:Item["VOYAGE_UID"]:ToString() AS STRING
+	LOCAL fsController := FStructureController{} AS FStructureController
+	LOCAL folderId := fsController:CreateVoyageFolder(cVesselUID, cVoyageUID, List<STRING>{}) AS STRING
+	MessageBox.Show("Folder structure created for voyage.")
+	Voyages_Refresh()
+	RETURN
+	
 
 END CLASS

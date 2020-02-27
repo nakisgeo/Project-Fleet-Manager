@@ -11,12 +11,18 @@
 #Using DevExpress.XtraEditors.Repository
 #using DevExpress.XtraPrinting
 #Using DevExpress.XtraPrintingLinks
+USING System.Collections.Generic
 
 PARTIAL CLASS MatchSettings INHERIT System.Windows.Forms.Form
+	PUBLIC PROPERTY oParent AS Form AUTO
+
+	PRIVATE _FSHasChanged AS LOGIC
+
 	PRIVATE oDTVessels, oDTCrewVessels AS DataTable
 	PRIVATE oDTUsers AS System.Data.DataTable
     PRIVATE lSuspendNotification AS System.Boolean
 	PRIVATE lGlobalSettingsExist := FALSE AS LOGIC
+	PRIVATE oFStrController AS FStructureController
 
 PRIVATE METHOD MatchSettingsLoad() AS System.Void
 	SELF:loadSmtpSettings()
@@ -265,11 +271,132 @@ PRIVATE METHOD loadSmtpSettings() AS System.Void
 			LOCAL cSecureString := drSetting:Item["SMTP_Secure"]:toString() AS STRING
 			IF cSecureString:ToUpper()=="TRUE"
 				SELF:checkBoxSMTPSecure:Checked := TRUE
-			ENDIF
+			ENDIF			
 		NEXT
 
 	ENDIF
 RETURN
 
+
+//Folder Structure
+
+PRIVATE METHOD LoadFStructureData() AS VOID
+	oFStrController := FStructureController{}
+	
+	readOnlyChk:Checked := FALSE
+	
+	fStrJSONRtb:Text := oFStrController:ToFormatedJSON()
+	fStrTextRtb:Text := oFStrController:ToPlainText()
+	
+	readOnlyChk:Checked := TRUE
+	
+	voyageFlrNmTb:Text := oFStrController:VoyageFolderName
+	
+	LOCAL nRed, nGreen, nBlue AS INT
+	oMainForm:SplitColorToRGB(oFStrController:ReportFolderColor:ToString(), nRed, nGreen, nBlue)
+	
+	folderColorPE:Color := Color.FromArgb(nRed, nGreen, nBlue)
+	
+	IF oFStrController:AutoCreateStructure > 0
+		autoCreateStructureChk:Checked := TRUE
+	ENDIF
+	_FSHasChanged := FALSE
+RETURN
+PRIVATE METHOD ChangePlainText() AS VOID
+	IF !readOnlyChk:Checked
+		RETURN
+	END IF
+	oFStrController:ChangeText(fStrTextRtb:Text, TextType.PlainText)
+	fStrJSONRtb:Text := oFStrController:ToFormatedJSON()
+RETURN
+PRIVATE METHOD ChangeJSON() AS VOID
+	IF readOnlyChk:Checked
+		RETURN
+	END IF
+	
+	oFStrController:ChangeText(fStrJSONRtb:Text, TextType.Json)
+	fStrTextRtb:Text := oFStrController:ToPlainText()
+RETURN
+PRIVATE METHOD SetReadOnly() AS VOID
+	IF readOnlyChk:Checked
+        fStrJSONRtb:Enabled := FALSE
+        fStrTextRtb:Enabled := TRUE
+    ELSE
+        fStrJSONRtb:Enabled := TRUE
+        fStrTextRtb:Enabled := FALSE
+    ENDIF
+	RETURN
+	
+PRIVATE METHOD SaveFolderStructure() AS VOID
+	TRY
+		IF !oFStrController:IsValidStructure
+			THROW Exception{"Invalid Folder Structure"}
+		ENDIF
+		
+		LOCAL cStatement AS STRING
+		LOCAL cJson AS STRING
+		LOCAL cSettingUID := oFStrController:SettingUID AS STRING
+		LOCAL cVoyageFolderName := voyageFlrNmTb:Text AS STRING
+		LOCAL cAutoCreateFolder AS INT
+		IF autoCreateStructureChk:Checked
+			cAutoCreateFolder := 1
+		ENDIF
+		
+		cJson := oFStrController:ToJSON()
+		
+		VAR dict := Dictionary<STRING, OBJECT>{}
+		dict:Add("cJson", cJson)
+		dict:Add("cVoyageFolderName", cVoyageFolderName)
+		dict:Add("cAutoCreateFolder", cAutoCreateFolder)
+		dict:Add("cReportFolderColor", RGB(folderColorPE:Color:R, folderColorPE:Color:G, folderColorPE:Color:B))
+		
+		IF string.IsNullOrEmpty(cSettingUID)
+			cStatement := i"insert into [FMTrueGlobalSettings]([FolderStructureJSON], [VoyageFolderName], [AutoCreateStructure], [ReportFolderColor]) " +;
+						  i" values (@cJson, @cVoyageFolderName, @cAutoCreateFolder, @cReportFolderColor)"
+			LOCAL cUID := oSoftway:Exec(oMainForm:oGFH, oMainForm:oConn, cStatement, dict, TRUE):ToString() AS STRING
+			IF !oSoftway:IsValidIdentity(cUID)
+				ErrorBox("Insert failed!", "")
+				bbiFSRefresh:PerformClick()
+				RETURN
+			ENDIF
+		ELSE
+			cStatement := i"update [FMTrueGlobalSettings] set " +;
+						  i"[FolderStructureJSON]=@cJson, " +;
+						  i"[VoyageFolderName]=@cVoyageFolderName, " +;
+						  i"[AutoCreateStructure]=@cAutoCreateFolder, " +;
+						  i"[ReportFolderColor]=@cReportFolderColor " +;
+						  i"where [Setting_UNIQUEID]={cSettingUID}"
+			IF oSoftway:Exec(oMainForm:oGFH, oMainForm:oConn, cStatement, dict, FALSE) < 1
+				errorbox("Update failed!", "")
+				bbiFSRefresh:PerformClick()
+				RETURN
+			ENDIF			
+		ENDIF
+		
+		/*oSoftway:Exec(oMainForm:oGFH, oMainForm:oConn, cStatement, dict, TRUE)*/
+//		oSoftway:AdoCommand(oMainForm:oGFH, oMainForm:oConn, cStatement)
+		wb("Folder structure saved")
+		bbiFSRefresh:PerformClick()
+	CATCH ex AS Exception
+		ErrorBox(ex:Message)
+	END TRY
+	
+	RETURN
+	
+PRIVATE METHOD ShowHelpForFolderStructure() AS VOID
+//	LOCAL msg AS STRING
+//	msg += "$VoyageDescription : Description" + Environment.NewLine
+//	msg += "$VoyageNo : VoyageNo" + Environment.NewLine
+//	msg += "$Charterers : Charterers" + Environment.NewLine
+//	msg += "$Broker : Broker" + Environment.NewLine
+//	msg += "$PortFrom : PortFrom" + Environment.NewLine
+//	msg += "$PortTo : PortTo" + Environment.NewLine
+//	System.Windows.Forms.MessageBox.Show(msg)
+	VAR form := FSHelpForm{SELF}
+	form:Show()
+	RETURN
+	
+
+//---------------------------------------
 
 END CLASS

@@ -1,5 +1,6 @@
 PUBLIC GLOBAL cProgramVersion:="1.2.1.09" AS STRING
 PUBLIC GLOBAL cMyDatabaseVersion := 1 AS INT
+//PUBLIC GLOBAL CRLF := e"\r\n" AS STRING
 
 PUBLIC GLOBAL oSoftway AS Softway
 PUBLIC GLOBAL oMainForm AS MainForm

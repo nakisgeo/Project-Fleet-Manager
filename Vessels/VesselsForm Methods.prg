@@ -42,7 +42,7 @@ METHOD CreateGridVessels() AS VOID
 	LOCAL cStatement AS STRING
 
 	cStatement:="SELECT SupVessels.Active, Vessels.VESSEL_UNIQUEID, Vessels.VesselName, Vessels.Alias, SupVessels.VslCode, SupVessels.PropellerPitch,"+;
-				" SupVessels.FLEET_UID, EconFleet.Description AS Fleet"+;
+				" SupVessels.FLEET_UID, EconFleet.Description AS Fleet, SupVessels.FM_FolderId"+;
 				" FROM Vessels"+oMainForm:cNoLockTerm+;
 				" INNER JOIN SupVessels ON SupVessels.VESSEL_UNIQUEID=VESSELS.VESSEL_UNIQUEID"+;
 				" LEFT OUTER JOIN EconFleet ON EconFleet.FLEET_UID=SupVessels.FLEET_UID"+;
@@ -99,6 +99,7 @@ ENDIF
 RETURN
 
 METHOD CreateGridVessels_Columns() AS VOID
+    
 LOCAL oColumn AS GridColumn
 Local nVisible:=0, nAbsIndex:=0 as int
 
@@ -143,6 +144,8 @@ Local nVisible:=0, nAbsIndex:=0 as int
 	oColumn:=oMainForm:CreateDXColumn("Alias", "Alias",		FALSE, DevExpress.Data.UnboundColumnType.String, ;
 															nAbsIndex++, nVisible++, 200, SELF:GridViewVessels)
 	
+    oColumn:=oMainForm:CreateDXColumn("Folder Id", "FM_FolderId",		FALSE, DevExpress.Data.UnboundColumnType.Integer, ;
+																		nAbsIndex++, nVisible++, 70, SELF:GridViewVessels) //Folder Structure
 
 	// Invisible
 	oColumn:=oMainForm:CreateDXColumn("VESSEL_UNIQUEID","VESSEL_UNIQUEID",FALSE, DevExpress.Data.UnboundColumnType.Integer, ;
@@ -334,7 +337,7 @@ METHOD Vessels_Edit(oRow AS DataRowView, oColumn AS GridColumn) AS VOID
 	ENDIF
 
 	LOCAL cField := oColumn:FieldName AS STRING
-	IF ! InListExact(cField, "Active", "VslCode", "VesselName", "PropellerPitch", "uFleet", "Alias")
+	IF ! InListExact(cField, "Active", "VslCode", "VesselName", "PropellerPitch", "uFleet", "Alias", "FM_FolderId")
 		wb("The column '"+oColumn:Caption+"' is ReadOnly")
 		RETURN
 	ENDIF
@@ -495,6 +498,12 @@ Local cStatement, cUID, cField, cValue, cReplace, cDuplicate as string
 	CASE cField == "PropellerPitch"
 		cReplace := cValue:Replace(",", ".")
 
+	CASE cField == "FM_FolderId" .AND. !FStructureController.FolderIdExists(cValue)
+		//Folder Structure
+		ErrorBox("The field '"+e:Column:Caption+"' must contain the folder id of an existing non system folder", "Editing aborted")
+		SELF:Vessels_Refresh()
+		RETURN
+        
 	OTHERWISE
 		cReplace := cValue
 	ENDCASE
@@ -526,7 +535,19 @@ Local cStatement, cUID, cField, cValue, cReplace, cDuplicate as string
 	SELF:GridViewVessels:Invalidate()
 RETURN
 
-
+//METHOD FolderIdExists(folderId as string) AS LOGIC
+//    LOCAL folderExists:=false AS LOGIC
+//    LOCAL cStatement AS STRING
+//    LOCAL oDTResult AS DataTable
+//
+//	cStatement:="select FolderName from FOLDERS where SystemFolder=0 and FOLDER_UNIQUEID=" + folderId
+//    oDTResult:=oSoftway:ResultTable(oMainForm:oGFH, oMainForm:oConn, cStatement)
+//    IF oDTResult:Rows:Count > 0
+//        folderExists:=true
+//    ENDIF
+//    
+//RETURN folderExists
+    
 Method Vessels_Refresh() as void
 Local cUID as string
 

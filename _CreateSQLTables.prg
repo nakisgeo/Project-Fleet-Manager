@@ -165,8 +165,8 @@ METHOD CreateTables(oGFH AS GenericFactoryHelper, oConn AS DBConnection) AS LOGI
 			cStatement:="CREATE INDEX FMReportsItems ON FMReportItems (REPORT_UID, ITEM_UID)"
 			oSoftway:AdoCommand(oGFH, oConn, cStatement)
 
-			cStatement:="CREATE UNIQUE INDEX FMItemName ON FMReportItems (REPORT_UID, ItemName)"
-			oSoftway:AdoCommand(oGFH, oConn, cStatement)
+			//cStatement:="CREATE UNIQUE INDEX FMItemName ON FMReportItems (REPORT_UID, ItemName)"
+			//oSoftway:AdoCommand(oGFH, oConn, cStatement)
 
 			cStatement:="CREATE UNIQUE INDEX FMItemNo ON FMReportItems (ItemNo)"
 			oSoftway:AdoCommand(oGFH, oConn, cStatement)
@@ -607,7 +607,69 @@ METHOD CreateTables(oGFH AS GenericFactoryHelper, oConn AS DBConnection) AS LOGI
 			oSoftway:AdoCommand(oGFH, oConn, cStatement)
 		
 		ENDIF
+		
+		IF ! oSoftway:TableExists(oGFH, oConn, "FMAlerts")
+			cStatement:="CREATE TABLE "+oSoftway:cTableOwner+" FMAlerts ("+;
+						"AlertUid		  "+oSoftway:cIdentity+","+;
+						"AlertDescription "+oSoftway:FieldNVarChar+" (512) NULL,"+;
+						"AlertUpdatedDateTime Datetime NULL,"+;
+						"AlertCreatorUID int NOT NULL,"+;
+						"AlertReportUID int NOT NULL Default 0,"+;
+						"AlertApplyAllConditions bit NOT NULL Default 1,"+;
+						"PRIMARY KEY (AlertUid) "+;
+			") "+oSoftway:cTableDefaults
+			oSoftway:AdoCommand(oGFH, oConn, cStatement)
+		
+		ENDIF
+		
+		IF ! oSoftway:TableExists(oGFH, oConn, "FMAlertsVessels")
+			cStatement:="CREATE TABLE "+oSoftway:cTableOwner+" FMAlertsVessels ("+;
+						"AlertVesselUid		  "+oSoftway:cIdentity+","+;
+						"FK_VesselUid int NOT NULL,"+;
+						"FK_AlertUid int NOT NULL,"+;
+						"PRIMARY KEY (AlertVesselUid) "+;
+			") "+oSoftway:cTableDefaults
+			oSoftway:AdoCommand(oGFH, oConn, cStatement)
+		
+		ENDIF
+		
+		
+		IF ! oSoftway:TableExists(oGFH, oConn, "FMAlertsConditions")
+			cStatement:="CREATE TABLE "+oSoftway:cTableOwner+" FMAlertsConditions ("+;
+						"ConditionUid		  "+oSoftway:cIdentity+","+;
+						"ConditionDescription "+oSoftway:FieldNVarChar+" (512) NULL,"+;
+						"ConditionAlertUid int NOT NULL,"+;
+						"ConditionItemUid int NOT NULL Default 0,"+; 
+						"ConditionType		"+oSoftway:FieldNVarChar+" (32) NULL,"+;
+						"ConditionOperator  "+oSoftway:FieldNVarChar+" (32) NULL,"+;
+						"ConditionValue "+oSoftway:FieldNVarChar+" (512) NULL,"+;
+						"PRIMARY KEY (ConditionUid) "+;
+			") "+oSoftway:cTableDefaults
+			oSoftway:AdoCommand(oGFH, oConn, cStatement)
+		
+		ENDIF
+		
+		IF ! oSoftway:TableExists(oGFH, oConn, "FMAlertsConditionsTypes")
+			cStatement:="CREATE TABLE "+oSoftway:cTableOwner+" FMAlertsConditionsTypes ("+;
+						"ConditionTypeUid		  "+oSoftway:cIdentity+","+;
+						"ConditionTypeDescription "+oSoftway:FieldNVarChar+" (512) NULL,"+;
+						"ConditionTypeText "+oSoftway:FieldNVarChar+" (32) NULL,"+;
+						"PRIMARY KEY (ConditionTypeUid) "+;
+			") "+oSoftway:cTableDefaults
+			oSoftway:AdoCommand(oGFH, oConn, cStatement)
+		
+		ENDIF
 
+		IF ! oSoftway:TableExists(oGFH, oConn, "FMRelatedData")
+			cStatement:="CREATE TABLE "+oSoftway:cTableOwner+" FMRelatedData ("+;
+						"FMRD_UID		  "+oSoftway:cIdentity+","+;
+						"Item1UID int NOT NULL,"+;
+						"Item2UID int NOT NULL,"+;
+						"PRIMARY KEY (FMRD_UID) "+;
+			") "+oSoftway:cTableDefaults
+			oSoftway:AdoCommand(oGFH, oConn, cStatement)
+		ENDIF
+		
 	CATCH e AS Exception
 		ErrorBox(e:Message)
 		RETURN FALSE
