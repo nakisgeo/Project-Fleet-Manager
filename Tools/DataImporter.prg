@@ -7,6 +7,8 @@
 #USING System.Xml
 #Using System.Drawing
 #Using System.Collections
+#USING ICSharpCode.SharpZipLib.Core
+#USING ICSharpCode.SharpZipLib.Zip
 
 CLASS FleetManagerDataImporter
 	PRIVATE nLine AS SHORT
@@ -20,7 +22,49 @@ CONSTRUCTOR()
 RETURN
 
 
+METHOD extractTheFile(cFileToUnzip AS STRING) AS STRING
+	
+	LOCAL cReturn :="" AS STRING
+	LOCAL zf := NULL AS ZipFile 
+    TRY
+		
+		LOCAL outFolder := Path.GetDirectoryName(cFileToUnzip)  AS STRING
+        LOCAL fs := File.OpenRead(cFileToUnzip) AS FileStream 
+        zf := ZipFile{fs}
+        
+        FOREACH zipEntry AS ZipEntry IN zf
+            IF !zipEntry:IsFile 		
+                LOOP
+			ENDIF
+			
+            LOCAL entryFileName := zipEntry:Name AS STRING
 
+            LOCAL buffer :=  BYTE[]{4095} AS BYTE[]	
+            LOCAL zipStream:= zf:GetInputStream(zipEntry) AS Stream 
+
+            
+            LOCAL fullZipToPath := Path.Combine(outFolder, entryFileName) AS STRING
+            LOCAL directoryName := Path.GetDirectoryName(fullZipToPath) AS STRING 
+			
+            IF directoryName:Length > 0 
+                Directory.CreateDirectory(directoryName)
+            ENDIF
+           
+            LOCAL streamWriter  := File.Create(fullZipToPath) AS FileStream
+            StreamUtils.Copy(zipStream, streamWriter, buffer)
+			cReturn := fullZipToPath
+			streamWriter:Close()
+		NEXT
+		
+    FINALLY
+        IF zf <> NULL 
+            zf:IsStreamOwner := TRUE		
+            zf:Close()
+        END IF
+    END TRY
+	
+	
+RETURN cReturn
 
 
 
@@ -34,11 +78,13 @@ METHOD ReadDataSet(cZipFile AS STRING, cDir AS STRING, cMsgUID AS STRING, cSkyFi
 		IF ! oSoftway:UnZip(cZipFile, cDir)
 			RETURN
 		ENDIF
+		
+		LOCAL cFileLocatedInZip := SELF:extractTheFile(cZipFile) AS STRING
 
 		// Create XmlDocument
 		LOCAL oXmlDocument := XmlDocument{} AS XmlDocument	
 		// Fill XmlDocument
-		oXmlDocument:Load(cXmlFile)
+		oXmlDocument:Load(cFileLocatedInZip)
 
 		// Read RootNode (ModbusData)
 		LOCAL oRootNode := oXmlDocument:DocumentElement AS XmlElement

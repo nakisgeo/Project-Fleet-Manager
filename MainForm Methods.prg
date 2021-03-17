@@ -195,6 +195,10 @@ METHOD MainForm_OnLoad() AS VOID
 	IF ! SELF:CreateBingMapUserControl()
 		SELF:Close()
 	ENDIF
+	
+	IF !oUser:lMasterUser
+		SELF:MainBBIGlobal:Visibility := DevExpress.XtraBars.BarItemVisibility.Never
+	ENDIF
 	// Vamvaship only:
 	//SELF:BBIImportExcelData:Visibility := DevExpress.XtraBars.BarItemVisibility.Never
 
